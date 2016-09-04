@@ -1,0 +1,8 @@
+1. Register new controller
+
+======================================
+
+1. Registering a new controller
+    a. Create file in style of [controller.py]
+    b. Add app.register_blueprint(controllers.new_controller) to app.py
+    c. Add imports to __init.py__
