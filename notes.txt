@@ -1,4 +1,5 @@
 1. Register new controller
+2. Get ssh keys working on vagrant machine 
 
 ======================================
 
@@ -6,3 +7,9 @@
     a. Create file in style of [controller.py]
     b. Add app.register_blueprint(controllers.new_controller) to app.py
     c. Add imports to __init.py__
+
+2. Getting ssh keys working on vagrant machine
+    a. In git bash, start ssh-agent with "eval `ssh-agent -s`"
+    b. If not already added, add the desired key with "ssh-add <key_name>"
+    c. Add line "config.ssh.forward_agent = true" to Vagrantfile
+    d. Edit ~/.ssh/config to contain "Host 127.0.0.1\n\tForwardAgent yes"
