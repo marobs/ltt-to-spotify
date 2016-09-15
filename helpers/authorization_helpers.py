@@ -35,3 +35,12 @@ def getTokenRequestData(code):
 	form["client_secret"] = getClientSecret()
 
 	return form
+
+def getAccessTokenRequestData(refreshToken, clientId, clientSecret):
+	form = {}
+	form["grant_type"]    = "refresh_token"
+	form["refresh_token"] = refreshToken
+	form["client_id"]     = clientId
+	form["client_secret"] = clientSecret
+
+	return form

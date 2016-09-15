@@ -1,5 +1,6 @@
 import os
 import requests
+from authorization_helpers import *
 
 ## Globals
 
@@ -72,19 +73,43 @@ def initializeRefreshToken(basePath):
 		print "  Found refresh token file. RT: " + refreshToken
 
 def saveRefreshToken(token):
+	if token == None:
+		return
+
 	global refreshToken 
 	refreshToken = token
+	print "Saving refresh token: " + token
 	with open(basePath + "/../secrets/refresh_token.txt", 'w') as f:
 		f.write(token)
 
 def initializeAccessToken():
 	print "Initializing Access Token"
+	if accessToken != None:
+		print "Already intitialized!"
+		return
+
 	refreshToken = getRefreshToken()
-	queryForAccessToken(refreshToken)	
+	queryForAccessToken(refreshToken)		
 
 def queryForAccessToken(refreshToken):
 	print "Querying for Access Token"
-	return 0
+	if refreshToken == None:
+		print "Invalid refresh token"
+		return None
+
+	global clientId
+	global clientSecret
+	postData = getAccessTokenRequestData(refreshToken, clientId, clientSecret)
+	response = requests.post("https://accounts.spotify.com/api/token", data=postData)
+	setAccessToken(response.json().get("access_token"))
+
+def setAccessToken(token):
+	if token == None:
+		return 
+
+	global accessToken
+	print "Setting access token: " + token
+	accessToken = token
 
 ##
 ## Initialization
@@ -98,6 +123,7 @@ def initializeHelpers():
 	initializeClientSecret(basePath)
 	initializeFlaskSecret(basePath)
 	initializeRefreshToken(basePath)
+	initializeAccessToken()
 
 def checkAuthenticated():
 	return (refreshToken != None) or (accessToken != None)

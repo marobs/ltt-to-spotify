@@ -4,6 +4,7 @@ import helpers
 import ltt
 import os
 import requests
+import json
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -27,15 +28,10 @@ def login_route():
 	# Generate data and post to token endpoint to get access and refresh tokens
 	postData = helpers.getTokenRequestData(request.args.get("code"))
 	response = requests.post("https://accounts.spotify.com/api/token", data=postData)
-	json = helpers.checkTokenArgs(response)
-
-
-	print "DONE CHECKING ARS"
-
-	ltt.getRedditPosts()
-
-	#helpers.saveRefreshToken(json)
-	#helpers.setAccessToken(json)
+	
+	jsonData = response.json()
+	helpers.saveRefreshToken(jsonData.get('refresh_token'))
+	helpers.setAccessToken(jsonData.get('access_token'))
 
 	return render_template("message.html", message="Done")
 
