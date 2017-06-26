@@ -3,6 +3,6 @@ from authorization_helpers import *
 from session_helpers import *
 from flask_helpers import *
 
-import os 
+print "In helpers init--calling initializeHelpers"
 
 initializeHelpers()
