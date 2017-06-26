@@ -1,5 +1,6 @@
 import os
 import requests
+from url_helpers import *
 
 ## Globals
 
@@ -76,7 +77,7 @@ def initializeRefreshToken(bPath):
         with open(bPath + "/../secrets/refresh_token.txt") as f:
             refreshToken = f.read().rstrip("\n")
 
-        print "  Found refresh token file. refreshToken: " + refreshToken
+        print "Found refresh token file. refreshToken"
 
 def saveRefreshToken(token):
     if token is None:
@@ -106,7 +107,7 @@ def queryForAccessToken(refreshToken):
 
     global clientId
     global clientSecret
-    postData = getAccessTokenRequestData(refreshToken, clientId, clientSecret)
+    postData = composeAccessTokenRequestData(refreshToken, clientId, clientSecret)
     response = requests.post("https://accounts.spotify.com/api/token", data=postData)
     setAccessToken(response.json().get("access_token"))
 
@@ -116,7 +117,7 @@ def setAccessToken(token):
         return 
 
     global accessToken
-    print "Setting access token: " + token
+    print "Setting access token"
     accessToken = token
 
 ##

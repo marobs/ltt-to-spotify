@@ -4,7 +4,6 @@ import helpers
 import ltt
 import os
 import requests
-import json
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -16,7 +15,8 @@ def main_route():
         return redirect(helpers.getAuthorizationUrl())
 
     else:
-        print "Found access or refresh token!"
+        print "Found access or refresh token! Making reddit request"
+        ltt.getRedditPosts()
         return "Found AT!"
 
 
