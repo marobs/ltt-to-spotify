@@ -14,6 +14,7 @@ def main_route():
     if not helpers.checkAuthenticated():
         print "Must authenticate!"
         return redirect(helpers.getAuthorizationUrl())
+
     else:
         print "Found access or refresh token!"
         return "Found AT!"
@@ -28,7 +29,10 @@ def login_route():
         return render_template("404.html", error="Different states found"), 404
 
     # Generate data and post to token endpoint to get access and refresh tokens
-    postData = helpers.getTokenRequestData(request.args.get("code"))
+    clientId = helpers.getClientId()
+    clientSecret = helpers.getClientSecret()
+    spotifyCode = request.args.get("code")
+    postData = helpers.getTokenRequestData(spotifyCode, clientId, clientSecret)
     response = requests.post("https://accounts.spotify.com/api/token", data=postData)
 
     jsonData = response.json()
