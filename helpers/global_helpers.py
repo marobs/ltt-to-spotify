@@ -1,6 +1,5 @@
 import os
 import requests
-from authorization_helpers import *
 
 ## Globals
 
@@ -124,6 +123,8 @@ def setAccessToken(token):
 ## Initialization
 ##
 def initializeHelpers():
+    print "Initializing helpers"
+
     global clientSecret
     global flaskSecret
     if clientSecret is not None or flaskSecret is not None:
@@ -136,6 +137,7 @@ def initializeHelpers():
     initializeAccessToken()
 
 def checkAuthenticated():
-    return (refreshToken is not None) or (accessToken is not None)
+    print "Checking authenticated"
+    return refreshToken is not None
      
 
