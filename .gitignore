@@ -4,3 +4,4 @@ Vagrantfile
 vagrant.sh
 /secrets
 *.pyc
+.idea/

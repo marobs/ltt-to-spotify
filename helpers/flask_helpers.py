@@ -1,24 +1,24 @@
 from flask import *
 
 def checkLoginArgs(request):
-	code = request.args.get("code")
-	if not code:
-		return False
+    code = request.args.get("code")
+    if not code:
+        return False
 
-	state = request.args.get("state")
-	if not state:
-		return False
+    state = request.args.get("state")
+    if not state:
+        return False
 
-	error = request.args.get("error")
-	if error != None:
-		return False
+    error = request.args.get("error")
+    if error is not None:
+        return False
 
-	return True
+    return True
 
 def checkTokenArgs(response):
-	print "CHECKING JSON"
-	json = response.json()
+    print "CHECKING JSON"
+    responsejson = response.json()
 
-	print json
+    print responsejson
 
-	return json
+    return responsejson
