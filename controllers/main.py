@@ -29,10 +29,7 @@ def login_route():
         return render_template("404.html", error="Different states found"), 404
 
     # Generate data and post to token endpoint to get access and refresh tokens
-    clientId = helpers.getClientId()
-    clientSecret = helpers.getClientSecret()
-    spotifyCode = request.args.get("code")
-    postData = helpers.getTokenRequestData(spotifyCode, clientId, clientSecret)
+    postData = helpers.getTokenRequestData(request.args.get("code"))
     response = requests.post("https://accounts.spotify.com/api/token", data=postData)
 
     jsonData = response.json()
