@@ -5,3 +5,4 @@ vagrant.sh
 /secrets
 *.pyc
 .idea/
+.DS_Store
