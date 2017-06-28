@@ -71,14 +71,10 @@ def generateSongData(post):
 
 def printPostList(postList):
     for post in postList:
-        print type(post["rawTitle"])
-        decodedRT = post["rawTitle"].decode("utf-8", "replace")
-        print "RT"
-        print str(decodedRT)
+        print str(post["rawTitle"].encode("utf-8"))
 
         for attribute in post:
             if attribute != "rawTitle":
-                print "hu"
-                #print "\t" + str(post[attribute].decode(encoding="UTF-8", errors="replace"))
+                print "\t" + str(post[attribute].encode("utf-8"))
 
         print "\n"
