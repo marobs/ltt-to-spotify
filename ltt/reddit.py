@@ -3,6 +3,7 @@ import re
 
 def getRedditPosts():
     response = requests.get("http://reddit.com/r/listentothis/hot.json", headers={'User-agent': 'ltts bot 0.1'})
+    print "Response type: " + str(response.encoding)
     jData = response.json()
 
     # Not sure what kind of error checking needs to occur here
@@ -26,12 +27,13 @@ def getRedditPosts():
         # Otherwise, grab song data and append it to the post list
         post = {}
         if "title" in childData:
-            post["rawTitle"] = childData["title"].encode('utf-8')
+            print "TYPEOF TITLE: " + str(type(childData["title"]))
+            post["rawTitle"] = childData["title"]
         else:
             print "No title in child"
 
         if "url" in childData:
-            post["url"] = childData["url"].encode('utf-8')
+            post["url"] = childData["url"]
 
         generateSongData(post)
         print "Appending to post list: " + str(len(postList))
@@ -69,10 +71,14 @@ def generateSongData(post):
 
 def printPostList(postList):
     for post in postList:
-        print "RawTitle: " + str(post["rawTitle"])
+        print type(post["rawTitle"])
+        decodedRT = post["rawTitle"].decode("utf-8", "replace")
+        print "RT"
+        print str(decodedRT)
 
         for attribute in post:
             if attribute != "rawTitle":
-                print "\t" + str(post[attribute])
+                print "hu"
+                #print "\t" + str(post[attribute].decode(encoding="UTF-8", errors="replace"))
 
         print "\n"
