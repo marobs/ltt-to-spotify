@@ -1,0 +1,40 @@
+/
+  Main route for navigation. Splash screen for login, checks authenticated to spotify when on startup.
+
+/ltt
+  r/listentothis to Spotify page. Allows adding reddit songs to a playlist. Full features:
+    - List all playlists, allow specification of which playlist to add to
+    - Check if:
+        > Artist/song is present on the playlist
+        > If it's liked
+        > If the song has been listened to before, etc.
+    - Display album art for songs
+    - List ltt song plus artist's top song
+    - Display color-coded genre of songs, artist
+    - Only add non-duplicates to playlist
+    - Organize by genre
+    - Support multiple reddit searches
+        > Top, Hot, etc.
+        > Filter by genre (ltt-specific tags)
+    - STRETCH GOAL: Be able to stream found songs?
+
+/playlists
+  List all playlists with images, descriptions, etc.
+
+/playlist
+  Visualize data of specified playlist. Possible data to display:
+    - Genre composition
+    - Average plays
+    - History
+    - Graph of when songs were added?
+    - See what other data is exposed by Spotify
+
+/history
+  Visualize data for last X songs listened to--could mirror playlist data visualization. Include if song is part of a playlist?
+
+/search
+  Search across all playlists (and maybe on spotify?)
+  Search for keywords across all playlists
+    - See if song is in a playlist/which playlist
+    - Elastic search, attempt at responsiveness
+
