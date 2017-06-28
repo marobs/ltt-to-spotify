@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ListenToThis Song List</title>
+</head>
+<body>
+    <ul>
+    {% for entry in songList %}
+        <li><a href="{{ entry["url"] }}">{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

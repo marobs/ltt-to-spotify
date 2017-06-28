@@ -41,6 +41,8 @@ def getRedditPosts():
     print "Generated all posts! List size: " + str(len(postList))
     printPostList(postList)
 
+    return postList
+
 def generateSongData(post):
     print "Generating song data: " + str(post)
 

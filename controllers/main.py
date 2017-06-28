@@ -16,8 +16,8 @@ def main_route():
 
     else:
         print "Found access or refresh token! Making reddit request"
-        ltt.getRedditPosts()
-        return "Found AT!"
+        songList = ltt.getRedditPosts()
+        return render_template("songlist.html", songList=songList)
 
 
 @main.route('/login')
