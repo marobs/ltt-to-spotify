@@ -1,10 +1,10 @@
 # ltt-to-spotify
 A web app that adds a little bit of functionality and integration between the front page of reddit.com/r/listentothis and Spotify.
 
-### Features and Routes
+## Features and Routes
 
 
-#### ltt-to-spotify
+### ltt-to-spotify
 
 r/listentothis to Spotify page, which allows the user to add songs from reddit.com/r/listentothis to their spotify playlists. This page works by querying reddit for songs from the subreddit (query will be specifiable), displaying these songs and associated data (if the user has saved the song, its genre, if it is already part of the selected paylist, etc.). Full features hoping to be included are:
 
@@ -23,7 +23,7 @@ r/listentothis to Spotify page, which allows the user to add songs from reddit.c
 6. **Stretch Goal**: Give ability to stream related songs from Spotify
 
 
-#### playlists
+### playlists
 
 List all playlists with images, descriptions, etc., allowing selection of one playlist. Selecting a playlist brings up a page giving a visualization of the playlist, including:
 
@@ -34,11 +34,11 @@ List all playlists with images, descriptions, etc., allowing selection of one pl
 5. Anything else exposed by Spotify
 
 
-#### history
+### history
 
 Visualize data for last X songs listened to--could mirror playlist data visualization. Possibly includes which playlists the song is part of in the user's library.
 
 
-#### search
+### search
 
 Allows the user to search across all of their playlists, hopefully using elastic search for responsive, flexibile searching. Searches for all possible Spotify entities like song, artist, etc. to determine which playlists include that artist/song/etc.
