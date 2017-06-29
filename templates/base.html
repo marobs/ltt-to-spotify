@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="static/css/base_style.css" />
+    {% block stylesheet %}{% endblock %}
+    {% block title %}{% endblock %}
+</head>
+<body>
+  <div class="wrapper">
+      <div class="header">
+          {% block content %}{% endblock %}
+      </div>
+      <div class="main-content">
+          {% block content %}{% endblock %}
+      </div>
+  </div>
+</body>
+</html>
+

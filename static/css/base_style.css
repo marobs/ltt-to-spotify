@@ -1,0 +1,13 @@
+.wrapper {
+    height: 100vh;
+    display: flex;
+}
+
+.header {
+    height: 30px;
+    background-color: #3B666B;
+}
+
+.main-content {
+    flex: 1;
+}

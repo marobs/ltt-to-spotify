@@ -1,0 +1,10 @@
+.left {
+    margin-right: 200px;
+    background-color: #9C1A1C;
+}
+
+.right {
+    width: 200px;
+    float: right;
+    background-color: #3A7734;
+}

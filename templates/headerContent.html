@@ -1,0 +1,25 @@
+{% macro addHeaderContent(selected) %}
+    {% if selected=="home" %}
+        <a href="/" class="selected">Home</a>
+    {% else %}
+        <a href="/">Home</a>
+    {% endif %}
+
+    {% if selected=="home" %}
+        <a href="/ltt" class="selected">ltt</a>
+    {% else %}
+        <a href="/ltt">ltt</a>
+    {% endif %}
+
+    {% if selected=="home" %}
+        <a href="/playlist" class="selected">playlists</a>
+    {% else %}
+        <a href="/playlist">playlists</a>
+    {% endif %}
+
+    {% if selected=="home" %}
+        <a href="/history" class="selected">history</a>
+    {% else %}
+        <a href="/history">history</a>
+    {% endif %}
+{%- endmacro %}
