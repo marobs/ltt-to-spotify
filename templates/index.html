@@ -1,0 +1,26 @@
+{% extends base.html %}
+{% import 'headerContents.html' as hc %}
+{% block title %}
+    <title>ltt-to-spotify: home</title>
+    <meta name="description" content="Adding functionality between r/listentothis and Spotify">
+{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="/static/css/index_style.css" />
+{% endblock %}
+{% block headerContent %}
+    {{ hc.addHeaderContent("home") }}
+{% endblock %}
+
+{% block content %}
+    <div class="index-left">
+        <img src="/static/images/index.png" id="index-image" />
+    </div>
+    <div class="index-right">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/ltt">ltt</a></li>
+            <li><a href="/playlists">playlists</a></li>
+            <li><a href="/history">history</a></li>
+        </ul>
+    </div>
+{% endblock %}
