@@ -6,10 +6,7 @@ A web app that adds a little bit of functionality and integration between the fr
 
 #### ltt-to-spotify
 
-r/listentothis to Spotify page, which allows the user to add songs from reddit.com/r/listentothis to their spotify playlists.\
-This page works by querying reddit for songs from the subreddit (query will be specifiable), displaying these songs and \
-associated data (if the user has saved the song, its genre, if it is already part of the selected paylist, etc.). \
-Full features hoping to be included are:
+r/listentothis to Spotify page, which allows the user to add songs from reddit.com/r/listentothis to their spotify playlists. This page works by querying reddit for songs from the subreddit (query will be specifiable), displaying these songs and associated data (if the user has saved the song, its genre, if it is already part of the selected paylist, etc.). Full features hoping to be included are:
 
 1. List all user playlists along with associated data (image, name, description, etc.)
 2. Display songs from r/listentothis with associated data, including:
@@ -28,8 +25,7 @@ Full features hoping to be included are:
 
 #### playlists
 
-List all playlists with images, descriptions, etc., allowing selection of one playlist. Selecting a playlist brings \
-up a page giving a visualization of the playlist, including:
+List all playlists with images, descriptions, etc., allowing selection of one playlist. Selecting a playlist brings up a page giving a visualization of the playlist, including:
 
 1. Genre composition
 2. Average plays
@@ -45,5 +41,4 @@ Visualize data for last X songs listened to--could mirror playlist data visualiz
 
 #### search
 
-Allows the user to search across all of their playlists, hopefully using elastic search for responsive, flexibile searching. \
-Searches for all possible Spotify entities like song, artist, etc. to determine which playlists include that artist/song/etc.
+Allows the user to search across all of their playlists, hopefully using elastic search for responsive, flexibile searching. Searches for all possible Spotify entities like song, artist, etc. to determine which playlists include that artist/song/etc.
