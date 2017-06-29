@@ -1,0 +1,38 @@
+/
+  Front End:
+    1. Create header
+    2. Draft detailed design of splash page
+    3. Implement by creating template
+  Back End:
+    1. Look to see what Spotify exposes fro the current user (in terms of determining authentication)
+    2. Define/create routes for navigating to
+    3. Push required data to template
+    4. Ensure authentication on page load
+
+/ltt
+  Front End:
+    1. Merge header with template
+    2. Investigate how to create split-pane template
+    3. Design playlist, song list
+    4. Create samples of playlist and song list items
+    5. Populate template with pushed data
+    6. Work on genre styling
+    7. Make page functional
+      a. Add/reove song
+      b. Change playlist
+      c. Check in playlist, liked, followed, played before, etc.
+      d. Add all songs button
+      e. Order by genre/query
+      f. Switch type of reddit query
+  Back End:
+    1. Decide how/when to do Spotify querying
+      a. All playlists (description, artwork, etc.)
+      b. Songs/data of currently selected playlist
+      c. Song, artist of LTT songs
+        - Song data (including genre)
+        - Associated artist data
+        - Top song of artist
+    2. Check if possible to get album art
+    3. Implement queries/data congolmeration
+    4. Push data to template
+    5. Get list of all possible genres from Spotify, Reddit, personal knowledge, implement matching through regex or string searching
