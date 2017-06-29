@@ -13,13 +13,13 @@ Full features hoping to be included are:
 
 1. List all user playlists along with associated data (image, name, description, etc.)
 2. Display songs from r/listentothis with associated data, including:
-  1. Artist/song is present on the playlist
-  2. If if the song is saved
-  3. If the song has been listened to before
-  4. Album art
-  5. Genre
-  6. Artist genre, description, if followed by user, etc.
-  7. Top song by artist
+   1. Artist/song is present on the playlist
+   2. If if the song is saved
+   3. If the song has been listened to before
+   4. Album art
+   5. Genre
+   6. Artist genre, description, if followed by user, etc.
+   7. Top song by artist
 3. Color-coding/styling of genre tags
 4. Ability to organize r/listentothis songs by genre or reddit order
 5. Support multiple reddit searches (based on reddit API)
