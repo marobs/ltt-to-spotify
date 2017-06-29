@@ -36,3 +36,7 @@
     3. Implement queries/data congolmeration
     4. Push data to template
     5. Get list of all possible genres from Spotify, Reddit, personal knowledge, implement matching through regex or string searching
+
+
+
+POSSIBLE FRONT-END LAYOUT IDEAS: https://css-tricks.com/snippets/css/complete-guide-grid/
