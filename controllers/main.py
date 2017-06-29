@@ -1,8 +1,5 @@
-import urllib
 from flask import *
 import helpers
-import ltt
-import os
 import requests
 
 main = Blueprint('main', __name__, template_folder='templates')
@@ -15,9 +12,8 @@ def main_route():
         return redirect(helpers.getAuthorizationUrl())
 
     else:
-        print "Found access or refresh token! Making reddit request"
-        songList = ltt.getRedditPosts()
-        return render_template("songlist.html", songList=songList)
+        print "Found access or refresh token!"
+        return render_template("index.html")
 
 
 @main.route('/login')
@@ -36,4 +32,4 @@ def login_route():
     helpers.saveRefreshToken(jsonData.get('refresh_token'))
     helpers.setAccessToken(jsonData.get('access_token'))
 
-    return render_template("message.html", message="Done")
+    return render_template("index.html")
