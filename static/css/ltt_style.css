@@ -1,10 +1,12 @@
 .left {
-    margin-right: 200px;
-    background-color: #9C1A1C;
+    background-color: aliceblue;
+    overflow: hidden;
+    height: 100%;
 }
 
 .right {
     width: 200px;
+    height: 100%;
     float: right;
     background-color: #3A7734;
 }

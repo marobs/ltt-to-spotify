@@ -4,7 +4,6 @@ import requests
 
 main = Blueprint('main', __name__, template_folder='templates')
 
-
 @main.route('/')
 def main_route():
     if not helpers.checkAuthenticated():

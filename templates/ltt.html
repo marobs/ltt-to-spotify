@@ -1,5 +1,5 @@
-{% extends base.html %}
-{% import 'headerContents.html' as hc %}
+{% extends 'base.html' %}
+{% import 'headerContent.html' as hc %}
 {% block title %}
     <title>ltt-to-spotify: ltt</title>
     <meta name="description" content="Adding functionality between r/listentothis and Spotify">
@@ -12,6 +12,12 @@
 {% endblock %}
 
 {% block content %}
-    <div class="left"></div>
     <div class="right"></div>
+    <div class="left">
+        <ul>
+        {% for entry in songList %}
+            <li><a href="{{ entry["url"] }}">{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
+        {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
