@@ -32,25 +32,10 @@ def printSpotifyData(spotifyData):
 
 
 def searchForPost(post, accessToken):
-    requestHeader = {'Authorization': accessToken}
-    searchParams = generateSearchParams(post)
-    searchResults = requests.get("https://api.spotify.com/v1/search", params=searchParams, headers=requestHeader)
-
-    if searchResults.status_code != requests.codes.ok:
-        print "Error: search status code not ok! Status code: " + str(searchResults.status_code)
-
+    searchResults = helpers.queryForSearch(post['title'], post['artist'])
     return getMatchingTracks(searchResults)
-    # Find matching artist and song
-    # Search for artist, get genre and top song
 
-def generateSearchParams(post):
-    keyword = "track:" + post["title"].encode('utf-8') + " artist:" + post["artist"].encode('utf-8')
-    keyword = urllib.quote(keyword)
-    type = urllib.quote("track,artist")
 
-    return {'q': keyword,
-            'type': type,
-            'limit': '10'}
 
 def getMatchingTracks(searchResults):
     tracks, artists = splitTracksAndArtists(searchResults)

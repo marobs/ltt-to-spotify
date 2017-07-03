@@ -145,3 +145,26 @@ def checkAuthenticated():
     return refreshToken is not None
      
 
+##
+## Queries
+##
+def query_get(url, parameters, reqType):
+    global accessToken
+    global refreshToken
+    requestHeader = {'Authorization': accessToken}
+
+    response = requests.get(url, params=parameters, headers=requestHeader)
+    if response.status_code == 400:
+        queryForAccessToken(refreshToken)
+
+    response = requests.get(url, params=parameters, headers=requestHeader)
+
+    if response.status_code != requests.codes.ok:
+        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
+        searchResults = response.json()
+        for key in searchResults:
+            print "  " + str(key) + ": " + str(searchResults[key])
+
+        return None
+
+    return response.json()
