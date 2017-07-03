@@ -45,7 +45,7 @@ def queryForFullTrackObjects(initialSpotifyData):
             ids += result['track']['id'] + ","
 
     params = {'ids': ids[:-1]}
-    url = "https://developer.spotify.com/web-api/get-several-tracks/"
+    url = "https://api.spotify.com/v1/tracks"
     return global_helpers.query_get(url, params, "Full Track Query")
 
 

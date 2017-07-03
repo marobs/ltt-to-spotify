@@ -42,8 +42,6 @@ def getMatchingTracks(searchResults):
         if 'items' in searchResults['tracks']:
             tracks = searchResults['tracks']['items']
 
-    print "Tracks: " + str(tracks)
-
     match = {}
     if len(tracks):
         match['track'] = tracks[0]
