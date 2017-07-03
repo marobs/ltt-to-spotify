@@ -32,6 +32,9 @@ def getRefreshToken():
 
 def getAccessToken():
     global accessToken
+    if accessToken is None:
+        return queryForAccessToken()
+
     return accessToken
 
 ##

@@ -14,6 +14,8 @@ def ltt_route():
         return redirect(helpers.getAuthorizationUrl())
 
     else:
+        accessToken = helpers.getAccessToken()
         songList = ltt.getRedditPosts()
+        ltt.searchSpotify(songList, accessToken)
         return render_template("ltt.html", songList=songList)
 

@@ -35,17 +35,14 @@ def getRedditPosts():
         if "url" in childData:
             post["url"] = childData["url"]
 
-        generateSongData(post)
-        print "Appending to post list: " + str(len(postList))
-        postList.append(post)
-        print " - now " + str(len(postList))
+        generateAndAppendSongData(post, postList)
 
     print "Generated all posts! List size: " + str(len(postList))
     printPostList(postList)
 
     return postList
 
-def generateSongData(post):
+def generateAndAppendSongData(post, postList):
     print "Generating song data: " + str(post)
 
     regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\].*(\d\d\d\d)", post["rawTitle"])
@@ -53,7 +50,7 @@ def generateSongData(post):
         regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\]", post["rawTitle"])
 
     if regexGroups is None:
-        print "Malformed title: " + str(post["rawTitle"]) + " -- Moving on."
+        print "Malformed title: " + post["rawTitle"].encode("utf-8") + " -- Moving on."
         return
 
     regexGroups = regexGroups.groups()
@@ -66,6 +63,8 @@ def generateSongData(post):
     post["genre"] = regexGroups[2]
     if len(regexGroups) == 4:
         post["year"] = regexGroups[3]
+
+    postList.append(post)
 
     print "\n"
 
