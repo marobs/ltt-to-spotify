@@ -7,16 +7,6 @@ def searchSpotify(postList, accessToken):
     for post in postList:
         spotifyData.append(searchForPost(post))
 
-
-    print "SpotifyData:"
-    for data in spotifyData:
-        print "Item: "
-        for i in data:
-            print "\t" + i + ":"
-            for j in data[i]:
-                print "\t\t" + j + ": " + str(data[i][j])
-
-
     replaceTrackObjects(spotifyData)
     fillWithArtistTopSongs(spotifyData)
 
@@ -26,19 +16,19 @@ def searchSpotify(postList, accessToken):
 def printSpotifyData(spotifyData):
     for data in spotifyData:
         if 'track' in data:
-            helpers.printTrack(data['track'], 'track')
+            helpers.printTrack(data['track'], 'track').encode('utf-8')
 
         if 'matchingAritst' in data:
-            helpers.printArtist(data['matchingArtist'], 'matchingArtist')
+            helpers.printArtist(data['matchingArtist'], 'matchingArtist').encode('utf-8')
 
         if 'matchingTrack' in data:
-            helpers.printTrack(data['matchingTrack'], 'matchingTrack')
+            helpers.printTrack(data['matchingTrack'], 'matchingTrack').encode('utf-8')
 
         if 'otherArtist' in data:
-            helpers.printArist(data['otherArtist'], 'otherArtist')
+            helpers.printArist(data['otherArtist'], 'otherArtist').encode('utf-8')
 
         if 'otherTrack' in data:
-            helpers.printTrack(data['otherTrack'], 'otherTrack')
+            helpers.printTrack(data['otherTrack'], 'otherTrack').encode('utf-8')
 
 
 def searchForPost(post):
