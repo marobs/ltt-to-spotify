@@ -33,8 +33,11 @@ def printSpotifyData(spotifyData):
 
 def searchForPost(post, accessToken):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
-    return getMatchingTracks(searchResults)
 
+    print "SEARCH RESULTS: "
+    print str(searchResults)
+
+    return getMatchingTracks(searchResults)
 
 
 def getMatchingTracks(searchResults):
@@ -59,18 +62,8 @@ def getMatchingTracks(searchResults):
         matches['otherArtist'] = artists[0]
 
 def splitTracksAndArtists(searchResults):
-    tracks = []
-    artists = []
-
-    for result in searchResults:
-        if result['type'] == 'track':
-            tracks.append(result)
-
-        elif result['type'] == 'artist':
-            artists.append(result)
-
-        else:
-            print "Error: Unknown type of result found"
+    tracks = searchResults['tracks']['items']
+    artists = searchResults['artists']['items']
 
     return tracks, artists
 
