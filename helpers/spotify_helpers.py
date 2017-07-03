@@ -26,7 +26,7 @@ def printArtist(artist, extraData=None):
 # Given artist and song, search Spotify for top artist and song results
 def queryForSearch(title, artist):
     searchParams = generateSearchParams(title, artist)
-    return global_helpers.query_get("https://api.spotify.com/v1/search", searchParams)
+    return global_helpers.query_get("https://api.spotify.com/v1/search", searchParams, "Search query")
 
 def generateSearchParams(title, artist):
     keyword = "track:" + \
