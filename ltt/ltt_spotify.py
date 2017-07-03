@@ -12,7 +12,9 @@ def searchSpotify(postList, accessToken):
     for data in spotifyData:
         print "Item: "
         for i in data:
-            print "  " + i + ": " + data[i]
+            print "\t" + i + ":"
+            for j in data[i]:
+                print "\t\t" + j + ": " + str(data[i][j])
 
 
     replaceTrackObjects(spotifyData)
@@ -45,34 +47,18 @@ def searchForPost(post):
 
 
 def getMatchingTracks(searchResults):
-    tracks, artists = splitTracksAndArtists(searchResults)
+    tracks = None
+    if 'tracks' in searchResults:
+        if 'items' in searchResults['tracks']:
+            tracks = searchResults['tracks']['items']
 
-    matches = {}
+    print "Tracks: " + str(tracks)
+
+    match = {}
     if len(tracks):
-        matches['track'] = tracks[0]
+        match['track'] = tracks[0]
 
-        for artist in artists:
-            if artist['id'] == tracks[0]['artists'][0]['id']:
-                matches['matchingArtist'] = tracks[0]['artists'][0]['id']
-                matches['matchingArtist']
-
-    if len(artists):
-        # All results artists or no matching artists found for track
-        if 'track' in matches:
-            if 'matchingArtist' in matches:
-                if artists[0]['id'] == matches['matchingArtist']:
-                    return matches
-
-        matches['otherArtist'] = artists[0]
-
-    return matches
-
-def splitTracksAndArtists(searchResults):
-    tracks = searchResults['tracks']['items']
-    artists = searchResults['artists']['items']
-
-    return tracks, artists
-
+    return match
 
 def replaceTrackObjects(initialResults):
     trackResults = helpers.queryForFullTrackObjects(initialResults)
@@ -86,15 +72,8 @@ def replaceTrackObjects(initialResults):
                 initialResult['track'] = trackResult
 
 
-def fillWithArtistTopSongs(initialResults, accessToken):
+def fillWithArtistTopSongs(initialResults):
     for result in initialResults:
-        if 'matchingArtist' in result:
-            result['matchingTrack'] = helpers.queryForArtistTopSong(result['matchingArtist']['id'], accessToken)
-
-        if 'otherArtist' in result:
-            result['otherTrack'] = helpers.queryForArtistTopSong(result['otherArtist']['id'], accessToken)
-
-
-
-
-
+        if 'track' in result:
+            if 'artists' in result['track'] and len(result['track']['artists']):
+                result['top'] = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])

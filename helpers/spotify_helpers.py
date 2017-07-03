@@ -30,7 +30,7 @@ def queryForSearch(title, artist):
 
 def generateSearchParams(title, artist):
     keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
-    type = "track,artist"
+    type = "track"
 
     return {'q': keyword,
             'type': type,

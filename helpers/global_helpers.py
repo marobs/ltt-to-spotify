@@ -154,11 +154,11 @@ def query_get(url, parameters, reqType):
 
     requestHeader = {'Authorization': "Bearer " + accessToken}
     response = requests.get(url, params=parameters, headers=requestHeader)
-    if response.status_code == 400:
-        "Invalid access token found. Refreshing!"
+    if response.status_code != requests.codes.ok:
+        print "Invalid access token found. Refreshing!"
         queryForAccessToken(refreshToken)
 
-        requestHeader = {'Authorization': accessToken}
+        requestHeader = {'Authorization': "Bearer " + accessToken}
         response = requests.get(url, params=parameters, headers=requestHeader)
 
     if response.status_code != requests.codes.ok:
