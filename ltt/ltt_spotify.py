@@ -5,10 +5,18 @@ import helpers
 def searchSpotify(postList, accessToken):
     spotifyData = []
     for post in postList:
-        spotifyData.append(searchForPost(post, accessToken))
+        spotifyData.append(searchForPost(post))
 
-    replaceTrackObjects(spotifyData, accessToken)
-    fillWithArtistTopSongs(spotifyData, accessToken)
+
+    print "SpotifyData:"
+    for data in spotifyData:
+        print "Item: "
+        for i in data:
+            print "  " + i + ": " + data[i]
+
+
+    replaceTrackObjects(spotifyData)
+    fillWithArtistTopSongs(spotifyData)
 
     printSpotifyData(spotifyData)
 
@@ -31,12 +39,8 @@ def printSpotifyData(spotifyData):
             helpers.printTrack(data['otherTrack'], 'otherTrack')
 
 
-def searchForPost(post, accessToken):
+def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
-
-    print "SEARCH RESULTS: "
-    print str(searchResults)
-
     return getMatchingTracks(searchResults)
 
 
@@ -61,6 +65,8 @@ def getMatchingTracks(searchResults):
 
         matches['otherArtist'] = artists[0]
 
+    return matches
+
 def splitTracksAndArtists(searchResults):
     tracks = searchResults['tracks']['items']
     artists = searchResults['artists']['items']
@@ -68,8 +74,8 @@ def splitTracksAndArtists(searchResults):
     return tracks, artists
 
 
-def replaceTrackObjects(initialResults, accessToken):
-    trackResults = helpers.queryForFullTrackObjects(initialResults, accessToken)
+def replaceTrackObjects(initialResults):
+    trackResults = helpers.queryForFullTrackObjects(initialResults)
     if trackResults is None:
         return
 

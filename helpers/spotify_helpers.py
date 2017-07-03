@@ -38,7 +38,7 @@ def generateSearchParams(title, artist):
 
 
 # Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
-def queryForFullTrackObjects(initialSpotifyData, accessToken):
+def queryForFullTrackObjects(initialSpotifyData):
     ids = ""
     for result in initialSpotifyData:
         if 'track' in result:
