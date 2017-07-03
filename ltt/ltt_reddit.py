@@ -3,7 +3,6 @@ import re
 
 def getRedditPosts():
     response = requests.get("http://reddit.com/r/listentothis/hot.json", headers={'User-agent': 'ltts bot 0.1'})
-    print "Response type: " + str(response.encoding)
     jData = response.json()
 
     # Not sure what kind of error checking needs to occur here
@@ -21,13 +20,11 @@ def getRedditPosts():
 
         # If stickied post, not a song so continue
         if "stickied" in childData and childData["stickied"]:
-            print "Stickied, continuing"
             continue
 
         # Otherwise, grab song data and append it to the post list
         post = {}
         if "title" in childData:
-            print "TYPEOF TITLE: " + str(type(childData["title"]))
             post["rawTitle"] = childData["title"]
         else:
             print "No title in child"
@@ -37,14 +34,9 @@ def getRedditPosts():
 
         generateAndAppendSongData(post, postList)
 
-    print "Generated all posts! List size: " + str(len(postList))
-    printPostList(postList)
-
     return postList
 
 def generateAndAppendSongData(post, postList):
-    print "Generating song data: " + str(post)
-
     regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\].*(\d\d\d\d)", post["rawTitle"])
     if regexGroups is None:
         regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\]", post["rawTitle"])

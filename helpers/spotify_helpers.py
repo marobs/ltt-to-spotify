@@ -29,16 +29,8 @@ def queryForSearch(title, artist):
     return global_helpers.query_get("https://api.spotify.com/v1/search", searchParams, "Search query")
 
 def generateSearchParams(title, artist):
-    keyword = "track:" + \
-              urllib.quote(title.encode('utf-8')) + \
-              urllib.quote(" ") + \
-              "artist:" + \
-              urllib.quote(artist.encode('utf-8'))
+    keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
     type = "track,artist"
-
-    print "Search params: "
-    print "  q: " + keyword
-    print "  type: " + type
 
     return {'q': keyword,
             'type': type,
