@@ -151,15 +151,19 @@ def checkAuthenticated():
 def query_get(url, parameters, reqType):
     global accessToken
     global refreshToken
-    requestHeader = {'Authorization': accessToken}
 
+    print "Original access token: " + str(accessToken)
+
+    requestHeader = {'Authorization': "Bearer " + accessToken}
     response = requests.get(url, params=parameters, headers=requestHeader)
     if response.status_code == 400:
         "Invalid access token found. Refreshing!"
         queryForAccessToken(refreshToken)
 
-    requestHeader = {'Authorization': accessToken}
-    response = requests.get(url, params=parameters, headers=requestHeader)
+        print "New access token: " + str(accessToken)
+
+        requestHeader = {'Authorization': accessToken}
+        response = requests.get(url, params=parameters, headers=requestHeader)
 
     if response.status_code != requests.codes.ok:
         print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
