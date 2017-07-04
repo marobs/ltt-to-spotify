@@ -16,6 +16,6 @@ def ltt_route():
     else:
         accessToken = helpers.getAccessToken()
         songList = ltt.getRedditPosts()
-        ltt.searchSpotify(songList, accessToken)
+        ltt.searchSpotify(songList)
         return render_template("ltt.html", songList=songList)
 

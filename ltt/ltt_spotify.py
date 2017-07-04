@@ -2,7 +2,7 @@ import requests
 import urllib
 import helpers
 
-def searchSpotify(postList, accessToken):
+def searchSpotify(postList):
     spotifyData = []
     for post in postList:
         spotifyData.append(searchForPost(post))
