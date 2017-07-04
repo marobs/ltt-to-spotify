@@ -12,8 +12,8 @@ def printTrack(track, extraData=None):
         artistString.append("," + track['artists'][i]['name'])
     print "\t  Artist(s): " + artistString
 
-    print "\t  Album: " + track['album']
-    print "\t  Duration: " + str(track['duration'])
+    print "\t  Album: " + str(track['album']['name'])
+    print "\t  Duration: " + str(track['duration_ms'])
 
 
 # Print artist information given artist object
@@ -50,12 +50,12 @@ def queryForFullTrackObjects(initialSpotifyData):
 
 
 # Given an artist id, get full track data for that artist's top song
-def queryForArtistTopSong(artistId, accessToken):
+def queryForArtistTopSong(artistId):
     url = "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks"
-    result = global_helpers.query_get(url, None, "Top tracks query")
+    params = {'country': 'US'}
+    result = global_helpers.query_get(url, params, "Top tracks query")
 
     if 'tracks' in result and len(result['tracks']) >= 1:
         return result['tracks'][0]
 
-    else:
-        return None
+    return None

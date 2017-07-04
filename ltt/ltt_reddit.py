@@ -58,8 +58,6 @@ def generateAndAppendSongData(post, postList):
 
     postList.append(post)
 
-    print "\n"
-
 def printPostList(postList):
     for post in postList:
         print str(post["rawTitle"].encode("utf-8"))
@@ -67,5 +65,3 @@ def printPostList(postList):
         for attribute in post:
             if attribute != "rawTitle":
                 print "\t" + str(post[attribute].encode("utf-8"))
-
-        print "\n"

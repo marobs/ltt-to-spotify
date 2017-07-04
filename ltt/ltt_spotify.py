@@ -14,22 +14,17 @@ def searchSpotify(postList, accessToken):
 
 
 def printSpotifyData(spotifyData):
+
+    print "Printing Spotify Data"
+
     for data in spotifyData:
         if 'track' in data:
-            helpers.printTrack(data['track'], 'track').encode('utf-8')
+            helpers.printTrack(data['track'], 'track')
 
-        if 'matchingAritst' in data:
-            helpers.printArtist(data['matchingArtist'], 'matchingArtist').encode('utf-8')
+        if 'top' in data:
+            helpers.printTrack(data['top'], 'top')
 
-        if 'matchingTrack' in data:
-            helpers.printTrack(data['matchingTrack'], 'matchingTrack').encode('utf-8')
-
-        if 'otherArtist' in data:
-            helpers.printArist(data['otherArtist'], 'otherArtist').encode('utf-8')
-
-        if 'otherTrack' in data:
-            helpers.printTrack(data['otherTrack'], 'otherTrack').encode('utf-8')
-
+        print "\n"
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
@@ -54,7 +49,7 @@ def replaceTrackObjects(initialResults):
         return
 
     # TODO: Horrible runtime, improve if motivated
-    for trackResult in trackResults:
+    for trackResult in trackResults['tracks']:
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
                 initialResult['track'] = trackResult
@@ -64,4 +59,6 @@ def fillWithArtistTopSongs(initialResults):
     for result in initialResults:
         if 'track' in result:
             if 'artists' in result['track'] and len(result['track']['artists']):
-                result['top'] = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])
+                topSong = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])
+                if topSong['id'] != result['track']['id']:
+                    result['top'] = topSong
