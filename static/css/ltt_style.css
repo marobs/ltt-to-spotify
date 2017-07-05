@@ -1,12 +1,23 @@
 .left {
     background-color: aliceblue;
     overflow: hidden;
+    float: left;
     height: 100%;
+    width: 10%;
+    max-width: 100px;
+}
+
+.middle {
+    background-color: beige;
+    overflow: scroll;
+    height: 100%;
+    width: 45%;
+
 }
 
 .right {
-    width: 200px;
-    height: 100%;
-    float: right;
     background-color: #3A7734;
+    float: left;
+    height: 100%;
+    width: 45%;
 }

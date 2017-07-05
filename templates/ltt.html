@@ -12,8 +12,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="right"></div>
-    <div class="left">
+    <div class="left"></div>
+    <div class="middle"></div>
+    <div class="right">
         <ul>
         {% for entry in songList %}
             <li><a href="{{ entry["url"] }}">{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
