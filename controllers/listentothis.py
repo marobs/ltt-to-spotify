@@ -14,8 +14,20 @@ def ltt_route():
         return redirect(helpers.getAuthorizationUrl())
 
     else:
-        accessToken = helpers.getAccessToken()
-        songList = ltt.getRedditPosts()
-        ltt.searchSpotify(songList)
-        return render_template("ltt.html", songList=songList)
+        redditPosts = ltt.getRedditPosts()
+        #spotifyTracks = ltt.searchSpotify(redditPosts)
+        userPlaylists = ltt.getUserPlaylists()
+
+        selectedPlaylist = None
+
+
+
+        if userPlaylists is not None and len(userPlaylists) > 0:
+            print "Grabbing selected playlist"
+            selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
+        else:
+            print "nah"
+
+
+        return render_template("ltt.html", songList=redditPosts)
 

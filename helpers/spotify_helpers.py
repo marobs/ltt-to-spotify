@@ -1,6 +1,5 @@
-import requests
 import global_helpers
-import urllib
+import json
 
 # Print track information given (full) track object
 def printTrack(track, extraData=None):
@@ -59,3 +58,30 @@ def queryForArtistTopSong(artistId):
         return result['tracks'][0]
 
     return None
+
+
+def queryForUserPlaylists():
+    url = "https://api.spotify.com/v1/me/playlists"
+    params = {'limit': 50}
+    result = global_helpers.query_get(url, params, "Get my playlists query")
+    playlists = result['items']
+
+    iteration = 1
+    while len(playlists) == 50 * iteration:
+        params = {'limit': 50, 'offset': 50 * iteration}
+        result = global_helpers.query_get(url, params, "Get my playlists query")
+
+        if 'items' in result:
+            playlists = playlists + result['items']
+
+        iteration += 1
+
+    return playlists
+
+
+def queryForSelectedPlaylist(playlistId, userId):
+    url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
+    params = {'fields': 'name,description,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
+    result = global_helpers.query_get(url, params, "Get selected playlist query")
+
+    print str(result)

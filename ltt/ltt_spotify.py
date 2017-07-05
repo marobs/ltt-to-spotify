@@ -2,6 +2,12 @@ import requests
 import urllib
 import helpers
 
+#############################################################
+#                                                           #
+#                   Track Data                              #
+#                                                           #
+#############################################################
+
 def searchSpotify(postList):
     spotifyData = []
     for post in postList:
@@ -12,6 +18,7 @@ def searchSpotify(postList):
 
     printSpotifyData(spotifyData)
 
+    return spotifyData
 
 def printSpotifyData(spotifyData):
 
@@ -29,7 +36,6 @@ def printSpotifyData(spotifyData):
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
     return getMatchingTracks(searchResults)
-
 
 def getMatchingTracks(searchResults):
     tracks = None
@@ -54,7 +60,6 @@ def replaceTrackObjects(initialResults):
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
                 initialResult['track'] = trackResult
 
-
 def fillWithArtistTopSongs(initialResults):
     for result in initialResults:
         if 'track' in result:
@@ -62,3 +67,33 @@ def fillWithArtistTopSongs(initialResults):
                 topSong = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])
                 if topSong['id'] != result['track']['id']:
                     result['top'] = topSong
+
+#############################################################
+#                                                           #
+#                   Playlist Data                           #
+#                                                           #
+#############################################################
+
+def getUserPlaylists():
+    playlists = helpers.queryForUserPlaylists()
+    return playlists
+
+
+def printUserPlaylists(playlists):
+    for playlist in playlists:
+        if 'name' in playlist:
+            print "   " + playlist['name'].encode('utf8')
+
+        if 'tracks' in playlist:
+            print "   " + str(playlist['tracks'])
+
+        print "\n"
+
+
+def getSelectedPlaylist(playlist):
+    if 'id' in playlist and 'owner' in playlist and 'id' in playlist['owner']:
+        playlistId = playlist['id']
+        userId = playlist['owner']['id']
+        return helpers.queryForSelectedPlaylist(playlistId, userId)
+
+    return None
