@@ -12,8 +12,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="left"></div>
-    <div class="middle"></div>
+    <div class="left">
+        <ul>
+        {% for playlist in playlists %}
+            <li {% if playlist["id"] == selected["id"] %} class="selected"{% endif %}>
+                {{ playlist["name"] }}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="middle">
+        <ul>
+        {% for track in selected["tracks"]["items"] %}
+            <li>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</li>
+        {% endfor %}
+        </ul>
+    </div>
     <div class="right">
         <ul>
         {% for entry in songList %}

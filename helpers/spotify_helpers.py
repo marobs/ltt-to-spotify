@@ -4,22 +4,22 @@ import json
 # Print track information given (full) track object
 def printTrack(track, extraData=None):
     print "\tTrack (" + str(extraData) + ")"
-    print "\t  Name: " + track['name']
+    print "\t  Name: " + track['name'].encode("utf8")
 
-    artistString = track['artists'][0]['name']
+    artistString = track['artists'][0]['name'].encode("utf8")
     for i in xrange(1, len(track['artists']) - 1):
-        artistString.append("," + track['artists'][i]['name'])
+        artistString = artistString + "," + track['artists'][i]['name'].encode("utf8")
     print "\t  Artist(s): " + artistString
 
-    print "\t  Album: " + str(track['album']['name'])
+    print "\t  Album: " + str(track['album']['name'].encode("utf8"))
     print "\t  Duration: " + str(track['duration_ms'])
 
 
 # Print artist information given artist object
 def printArtist(artist, extraData=None):
     print "Artist (" + str(extraData) + ")"
-    print "\tArtist: " + artist['name']
-    print "\t  Genres: " + artist['genres']
+    print "\tArtist: " + artist['name'].encode("utf8")
+    print "\t  Genres: " + artist['genres'].encode("utf8")
 
 
 # Given artist and song, search Spotify for top artist and song results
@@ -81,7 +81,7 @@ def queryForUserPlaylists():
 
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
-    params = {'fields': 'name,description,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
+    params = {'fields': 'name,description,id,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
     result = global_helpers.query_get(url, params, "Get selected playlist query")
 
-    print str(result)
+    return result

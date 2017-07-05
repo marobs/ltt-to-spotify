@@ -16,8 +16,6 @@ def searchSpotify(postList):
     replaceTrackObjects(spotifyData)
     fillWithArtistTopSongs(spotifyData)
 
-    printSpotifyData(spotifyData)
-
     return spotifyData
 
 def printSpotifyData(spotifyData):
@@ -65,7 +63,7 @@ def fillWithArtistTopSongs(initialResults):
         if 'track' in result:
             if 'artists' in result['track'] and len(result['track']['artists']):
                 topSong = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])
-                if topSong['id'] != result['track']['id']:
+                if topSong is not None and topSong['id'] != result['track']['id']:
                     result['top'] = topSong
 
 #############################################################
