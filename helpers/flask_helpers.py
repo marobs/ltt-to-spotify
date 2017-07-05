@@ -1,5 +1,3 @@
-from flask import *
-
 def checkLoginArgs(request):
     code = request.args.get("code")
     if not code:
@@ -15,10 +13,10 @@ def checkLoginArgs(request):
 
     return True
 
-def checkTokenArgs(response):
-    print "CHECKING JSON"
-    responsejson = response.json()
+def checkArgs(argList, request):
+    for arg in argList:
+        argument = request.args.get(arg)
+        if not argument:
+            return False
 
-    print responsejson
-
-    return responsejson
+    return True

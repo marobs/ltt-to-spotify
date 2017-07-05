@@ -73,8 +73,7 @@ def fillWithArtistTopSongs(initialResults):
 #############################################################
 
 def getUserPlaylists():
-    playlists = helpers.queryForUserPlaylists()
-    return playlists
+    return helpers.queryForUserPlaylists()
 
 
 def printUserPlaylists(playlists):

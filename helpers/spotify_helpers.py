@@ -29,14 +29,15 @@ def queryForSearch(title, artist):
 
 def generateSearchParams(title, artist):
     keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
-    type = "track"
+    spotifyType = "track"
 
     return {'q': keyword,
-            'type': type,
+            'type': spotifyType,
             'limit': '10'}
 
-
-# Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
+##
+## [GET] Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
+##
 def queryForFullTrackObjects(initialSpotifyData):
     ids = ""
     for result in initialSpotifyData:
@@ -48,7 +49,9 @@ def queryForFullTrackObjects(initialSpotifyData):
     return global_helpers.query_get(url, params, "Full Track Query")
 
 
-# Given an artist id, get full track data for that artist's top song
+##
+## [GET] Given an artist id, get full track data for that artist's top song
+##
 def queryForArtistTopSong(artistId):
     url = "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks"
     params = {'country': 'US'}
@@ -60,6 +63,9 @@ def queryForArtistTopSong(artistId):
     return None
 
 
+##
+## [GET] Get user playlists
+##
 def queryForUserPlaylists():
     url = "https://api.spotify.com/v1/me/playlists"
     params = {'limit': 50}
@@ -79,9 +85,34 @@ def queryForUserPlaylists():
     return playlists
 
 
+##
+## [GET] Get specific playlist data
+##
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
     params = {'fields': 'name,description,id,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
     result = global_helpers.query_get(url, params, "Get selected playlist query")
 
+    return result
+
+##
+## [POST] Add track to playlist
+##
+def postAddTrackRequest(playlistId, userId, trackURI):
+    url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId) + "/tracks"
+    params = {'uris': [trackURI]}
+    requestHeader = {'Content-Type': 'application/json'}
+
+    result = global_helpers.query_post(url, params, requestHeader, "Add track post")
+    return result
+
+##
+## [DELETE] Remove track from playlist
+##
+def deleteRemoveTrackRequest(playlistId, userId, trackURI):
+    url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId) + "/tracks"
+    params = {'uris': [trackURI]}
+    requestHeader = {'Content-Type': 'application/json'}
+
+    result = global_helpers.query_delete(url, params, requestHeader, "Add track post")
     return result

@@ -143,10 +143,10 @@ def initializeHelpers():
 def checkAuthenticated():
     print "Checking authenticated"
     return refreshToken is not None
-     
+
 
 ##
-## Queries
+## [GET]
 ##
 def query_get(url, parameters, reqType):
     global accessToken
@@ -169,4 +169,72 @@ def query_get(url, parameters, reqType):
 
         return None
 
+    return response.json()
+
+##
+## [POST]
+##
+def query_post(url, parameters, requestHeader, reqType):
+    global accessToken
+    global refreshToken
+
+    if requestHeader is None:
+        requestHeader = {}
+    requestHeader['Authorization'] = "Bearer " + str(accessToken)
+
+    # Post query
+    response = requests.post(url, data=parameters, headers=requestHeader)
+
+    # Check status code; if not ok, try refreshing access token
+    if response.status_code != requests.codes.ok:
+        print "Invalid access token found. Refreshing!"
+        queryForAccessToken(refreshToken)
+
+        requestHeader = {'Authorization': "Bearer " + accessToken}
+        response = requests.post(url, params=parameters, headers=requestHeader)
+
+    # If still not ok, print error and return
+    if response.status_code != requests.codes.ok:
+        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
+        searchResults = response.json()
+        for key in searchResults:
+            print "  " + str(key) + ": " + str(searchResults[key])
+
+        return None
+
+    # Return json response
+    return response.json()
+
+
+##
+## [DELETE]
+##
+def query_delete(url, parameters, requestHeader, reqType):
+    global accessToken
+    global refreshToken
+
+    if requestHeader is None:
+        requestHeader = {}
+    requestHeader['Authorization'] = "Bearer " + str(accessToken)
+
+    # Send DELETE query
+    response = requests.delete(url, data=parameters, headers=requestHeader)
+
+    # Check status code; if not ok, try refreshing access token
+    if response.status_code != requests.codes.ok:
+        print "Invalid access token found. Refreshing!"
+        queryForAccessToken(refreshToken)
+        requestHeader = {'Authorization': "Bearer " + accessToken}
+        response = requests.delete(url, params=parameters, headers=requestHeader)
+
+    # If still not ok, print error and return
+    if response.status_code != requests.codes.ok:
+        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
+        searchResults = response.json()
+        for key in searchResults:
+            print "  " + str(key) + ": " + str(searchResults[key])
+
+        return None
+
+    # Return json response
     return response.json()
