@@ -1,0 +1,76 @@
+redditPosts: [
+  {
+    artist,
+    title,
+    genre,
+    year,
+    rawtitle,
+    url
+  }
+]
+
+spotifyData: [
+  {
+    track, top: {
+      album {
+          album_type:        "album", "single", or "compilation"
+          artists:           {external_urls, href, id, name, type, uri}
+          available_markets: array of strings
+          external_urls:     external URL object
+          href:              string
+          id:                string
+          images:            array of {height, url, width}
+          name:              string
+          type:              string
+          uri:               string
+      },
+      artists:           {external_urls, href, id, name, type, uri}
+      available_markets: array of strings
+      disc_number:       int
+      duration_ms:       int
+      explicit:          bool
+      external_ids:      array of objs
+      external_urls:     obj
+      href:              string
+      id:                string
+      is_playable:       bool
+      linked_from:       obj
+      name:              string
+      popularity:        int
+      preview_url:       string
+      track_number:      int
+      type:              string
+      uri:               string
+    }
+  }
+]
+
+playlists: [
+  {
+      collaborative: bool
+      external_urls: obj
+      href:          string
+      id:            string
+      images:        array of {height, url, width}
+      name:          string
+      owner:         {display_name, external_urls, followers, href, id, images, type, uri}
+      public:        bool or null
+      snapshot_id:   string
+      tracks:        {total, href}
+      type:          string
+      uri:           string
+  }
+]
+
+playlist: {
+  name:        string
+  description: string
+  tracks       {items{
+                  name,
+                  href,
+                  id,
+                  album{name, href, id},
+                  artists{name, href, id}
+                }
+               }
+}
