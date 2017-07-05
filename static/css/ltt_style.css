@@ -1,17 +1,23 @@
+.main-content {
+    display: flex;
+    flex-direction: row;
+}
+
 .left {
     background-color: aliceblue;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     float: left;
     height: 100%;
-    width: 10%;
-    max-width: 100px;
+    width: 200px;
 }
 
 .middle {
     background-color: beige;
     overflow: scroll;
+    float: left;
     height: 100%;
-    width: 45%;
+    flex: 1
 
 }
 
@@ -19,5 +25,5 @@
     background-color: #3A7734;
     float: left;
     height: 100%;
-    width: 45%;
+    flex: 1
 }
