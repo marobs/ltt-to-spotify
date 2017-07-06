@@ -2,6 +2,12 @@ import os
 import requests
 from url_helpers import *
 
+#############################################################################
+#                                                                           #
+#                           Authentication                                  #
+#                                                                           #
+#############################################################################
+
 ## Globals
 
 clientId = "8467851f4c30445dbf7f0d4d1c0f019a";
@@ -144,6 +150,12 @@ def checkAuthenticated():
     print "Checking authenticated"
     return refreshToken is not None
 
+
+#############################################################################
+#                                                                           #
+#                               Queries                                     #
+#                                                                           #
+#############################################################################
 
 ##
 ## [GET/POST/PUT/DELETE] Queries

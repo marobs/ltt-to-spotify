@@ -133,3 +133,13 @@ def putSaveTrackRequest(ids):
     requestHeader = {'Content-Type': 'application/json'}
 
     return global_helpers.query_http(url, params, requestHeader, "Save track put", 'PUT')
+
+##
+## [DELETE] Unsave track
+##
+def deleteUnsaveTrackRequest(ids):
+    url = "https://api.spotify.com/v1/me/tracks"
+    params = {'ids': ids}
+    requestHeader = {'Content-Type': 'application/json'}
+
+    return global_helpers.query_http(url, params, requestHeader, "Unsave track delete", 'DELETE')

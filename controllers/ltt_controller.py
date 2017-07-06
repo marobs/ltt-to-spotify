@@ -1,6 +1,7 @@
 from flask import *
 import helpers
 import ltt
+import requests
 
 listentothis = Blueprint('ltt', __name__, template_folder='templates')
 
@@ -75,10 +76,30 @@ def ltt_removetrack_route():
 ###
 @listentothis.route("/ltt/saveTrack", methods=['PUT'])
 def ltt_savetrack_route():
-    if not helpers.checkArgs(['ids']):
+    if not helpers.checkArgs(['ids'], request):
         return jsonify({'Error': "Malformed save track request"})
 
     ids = request.args['ids']
 
     response = helpers.putSaveTrackRequest(ids)
+    if response.status_code != requests.codes.ok:
+        return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
+
     return response  # Success 203
+
+
+###
+### [DELETE] Remove saved track for user
+###
+@listentothis.route("/ltt/saveTrack", methods=['DELETE'])
+def ltt_unsavetrack_route():
+    if not helpers.checkArgs(['ids'], request):
+        return jsonify({'Error': "Malformed unsave track request"})
+
+    ids = request.args['ids']
+
+    response = helpers.deleteUnsaveTrackRequest(ids)
+    if response.status_code != requests.codes.ok:
+        return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
+
+    return response # Success 200
