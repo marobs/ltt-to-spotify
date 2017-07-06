@@ -23,7 +23,7 @@ def ltt_route():
         if userPlaylists is not None and len(userPlaylists) > 0:
             selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
 
-        print "selected playlist: " + str(selectedPlaylist["tracks"]["items"][0])
+        ltt.trimLTTObjects(spotifyTracks, userPlaylists, selectedPlaylist)
 
         return render_template("ltt.html", songList=redditPosts, playlists=userPlaylists, selected=selectedPlaylist)
 

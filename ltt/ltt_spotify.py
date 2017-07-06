@@ -61,6 +61,29 @@ def replaceTrackObjects(initialResults):
                 initialResult['track'] = trackResult
                 continue
 
+def fillWithArtistTopSongs(spotifyData):
+    albumList = []
+
+    # For each track, save album to albumList and query for the corresponding artist's top song
+    for entry in spotifyData:
+        if 'track' in entry:
+            if 'album' in entry['track']:
+                albumList.append(entry['track']['album']['id'])
+
+            # If artist exists, query for top song
+            if 'artists' in entry['track'] and len(entry['track']['artists']):
+                topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
+
+                # If top song is different than reddit track, save to entry['top'] and save album id
+                if topSong is not None and topSong['id'] != entry['track']['id']:
+                    entry['top'] = topSong
+
+                    if 'album' in topSong and topSong['album']['id'] not in albumList:
+                        albumList.append(topSong['album']['id'])
+
+    return albumList
+
+# Given a list of albums in spotifyData, replace spotifyData album objects with corresponding full album objects
 def replaceAlbumObjects(spotifyData, albumList):
     index = 0
     while (index + 20) < len(albumList):
@@ -70,35 +93,24 @@ def replaceAlbumObjects(spotifyData, albumList):
             continue
 
         for albumResult in albumResults:
-            for spotifyObj in spotifyData:
-                if 'track' in spotifyObj:
-                    if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
-                        spotifyObj['track']['album'] = albumResult
-                        continue
-
-                if 'top' in spotifyObj:
-                    if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
-                        spotifyObj['top']['album'] = albumResult
+            emplaceAlbumResult(albumResult, spotifyData)
 
         index += 20
 
-def fillWithArtistTopSongs(spotifyData):
-    albumList = []
+# Given a full album object, replace the corresponding simple album object in the spotifyData
+def emplaceAlbumResult(albumResult, spotifyData):
+    for spotifyObj in spotifyData:
 
-    for entry in spotifyData:
-        if 'track' in entry:
-            if 'album' in entry['track']:
-                albumList.append(entry['track']['album']['id'])
+        # Check if album corresponds to reddit suggestion
+        if 'track' in spotifyObj:
+            if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
+                spotifyObj['track']['album'] = albumResult
+                continue
 
-            if 'artists' in entry['track'] and len(entry['track']['artists']):
-                topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
-                if topSong is not None and topSong['id'] != entry['track']['id']:
-                    entry['top'] = topSong
-
-                    if 'album' in topSong and topSong['album']['id'] not in albumList:
-                        albumList.append(topSong['album']['id'])
-
-    return albumList
+        # Check if labum corresponds to artist top song
+        if 'top' in spotifyObj:
+            if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
+                spotifyObj['top']['album'] = albumResult
 
 #############################################################
 #                                                           #
@@ -128,4 +140,33 @@ def getSelectedPlaylist(playlist):
         return helpers.queryForSelectedPlaylist(playlistId, userId)
 
     return None
+
+
+#############################################################
+#                                                           #
+#                      Trim Data                            #
+#                                                           #
+#############################################################
+def trimLTTObjects(spotifyTracks, userPlaylists, selectedPlaylist):
+    for spotifyObj in spotifyTracks:
+        if 'track' in spotifyObj:
+            trimTrackObject(spotifyObj['track'])
+
+        if 'top' in spotifyObj:
+            trimTrackObject(spotifyObj['top'])
+
+    for playlist in userPlaylists:
+        del (playlist['external_urls'])
+
+def trimTrackObject(trackObj):
+    del (trackObj['album']['available_markets'])
+    del (trackObj['album']['copyrights'])
+    del (trackObj['album']['external_ids'])
+    del (trackObj['album']['external_urls'])
+    del (trackObj['album']['tracks'])
+    del (trackObj['album']['type'])
+    del (trackObj['available_markets'])
+    del (trackObj['external_ids'])
+    del (trackObj['external_urls'])
+    del (trackObj['linked_from'])
 

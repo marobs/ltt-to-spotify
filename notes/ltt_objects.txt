@@ -9,6 +9,12 @@ redditPosts: [
   }
 ]
 
+##############################################
+##                                          ##
+##             Before trim                  ##
+##                                          ##
+##############################################
+
 spotifyData: [
   {
     track, top: {
@@ -16,11 +22,19 @@ spotifyData: [
           album_type:        "album", "single", or "compilation"
           artists:           {external_urls, href, id, name, type, uri}
           available_markets: array of strings
+          copyrights:        array of copyright objects,
+          external_ids:      external id object
+          genres:            array of strings
           external_urls:     external URL object
           href:              string
           id:                string
           images:            array of {height, url, width}
+          label:             string
           name:              string
+          popularity:        integer
+          release_date:      string
+          release_date_prec: string
+          tracks:            [array of simplified track objects]
           type:              string
           uri:               string
       },
@@ -35,6 +49,46 @@ spotifyData: [
       id:                string
       is_playable:       bool
       linked_from:       obj
+      name:              string
+      popularity:        int
+      preview_url:       string
+      track_number:      int
+      type:              string
+      uri:               string
+    }
+  }
+]
+
+##############################################
+##                                          ##
+##             Sent to client               ##
+##                                          ##
+##############################################
+
+spotifyData: [
+  {
+    track, top: {
+      album {
+          album_type:        "album", "single", or "compilation"
+          artists:           {external_urls, href, id, name, type, uri}
+          genres:            array of strings
+          href:              string
+          id:                string
+          images:            array of {height, url, width}
+          label:             string
+          name:              string
+          popularity:        integer
+          release_date:      string
+          release_date_prec: string
+          uri:               string
+      },
+      artists:           {external_urls, href, id, name, type, uri}
+      disc_number:       int
+      duration_ms:       int
+      explicit:          bool
+      href:              string
+      id:                string
+      is_playable:       bool
       name:              string
       popularity:        int
       preview_url:       string
