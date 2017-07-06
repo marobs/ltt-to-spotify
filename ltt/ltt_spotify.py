@@ -94,3 +94,4 @@ def getSelectedPlaylist(playlist):
         return helpers.queryForSelectedPlaylist(playlistId, userId)
 
     return None
+

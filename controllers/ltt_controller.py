@@ -40,7 +40,9 @@ def ltt_playlist_route():
 
     return jsonify(playlist)
 
-
+###
+### [POST] Add track to playlist
+###
 @listentothis.route("/ltt/addTrack", methods=['POST'])
 def ltt_addtrack_route():
     if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
@@ -53,7 +55,9 @@ def ltt_addtrack_route():
     response = helpers.postAddTrackRequest(playlistId, userId, trackURI)
     return response # Success = {'snapshot_id': xxx} 201
 
-
+###
+### [DELETE] Remove track from playlist
+###
 @listentothis.route("/ltt/removeTrack", methods=['DELETE'])
 def ltt_removetrack_route():
     if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
@@ -63,5 +67,18 @@ def ltt_removetrack_route():
     userId = request.args['userId']
     trackURI = request.args['trackURI']
 
-    response = helpers.postRemoveTrackRequest(playlistId, userId, trackURI)
+    response = helpers.deleteRemoveTrackRequest(playlistId, userId, trackURI)
     return response  # Success = {'snapshot_id': xxx} 201
+
+###
+### [PUT] Save track for user
+###
+@listentothis.route("/ltt/saveTrack", methods=['PUT'])
+def ltt_savetrack_route():
+    if not helpers.checkArgs(['ids']):
+        return jsonify({'Error': "Malformed save track request"})
+
+    ids = request.args['ids']
+
+    response = helpers.putSaveTrackRequest(ids)
+    return response  # Success 203

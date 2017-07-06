@@ -25,7 +25,10 @@ def printArtist(artist, extraData=None):
 # Given artist and song, search Spotify for top artist and song results
 def queryForSearch(title, artist):
     searchParams = generateSearchParams(title, artist)
-    return global_helpers.query_get("https://api.spotify.com/v1/search", searchParams, "Search query")
+
+    url = "https://api.spotify.com/v1/search"
+    requestHeader = None
+    return global_helpers.query_http(url, searchParams, requestHeader, "Search query", "GET")
 
 def generateSearchParams(title, artist):
     keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
@@ -46,7 +49,9 @@ def queryForFullTrackObjects(initialSpotifyData):
 
     params = {'ids': ids[:-1]}
     url = "https://api.spotify.com/v1/tracks"
-    return global_helpers.query_get(url, params, "Full Track Query")
+    requestHeader = None
+
+    return global_helpers.query_http(url, params, requestHeader, "Full Track Query", 'GET')
 
 
 ##
@@ -55,7 +60,9 @@ def queryForFullTrackObjects(initialSpotifyData):
 def queryForArtistTopSong(artistId):
     url = "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks"
     params = {'country': 'US'}
-    result = global_helpers.query_get(url, params, "Top tracks query")
+    requestHeader = None
+
+    result = global_helpers.query_http(url, params, requestHeader, "Top tracks query", "GET")
 
     if 'tracks' in result and len(result['tracks']) >= 1:
         return result['tracks'][0]
@@ -69,13 +76,15 @@ def queryForArtistTopSong(artistId):
 def queryForUserPlaylists():
     url = "https://api.spotify.com/v1/me/playlists"
     params = {'limit': 50}
-    result = global_helpers.query_get(url, params, "Get my playlists query")
+    requestHeader = None
+
+    result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
     playlists = result['items']
 
     iteration = 1
     while len(playlists) == 50 * iteration:
         params = {'limit': 50, 'offset': 50 * iteration}
-        result = global_helpers.query_get(url, params, "Get my playlists query")
+        result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
 
         if 'items' in result:
             playlists = playlists + result['items']
@@ -91,9 +100,9 @@ def queryForUserPlaylists():
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
     params = {'fields': 'name,description,id,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
-    result = global_helpers.query_get(url, params, "Get selected playlist query")
+    requestHeader = None
 
-    return result
+    return global_helpers.query_http(url, params, requestHeader, "Get selected playlist query", 'GET')
 
 ##
 ## [POST] Add track to playlist
@@ -103,8 +112,7 @@ def postAddTrackRequest(playlistId, userId, trackURI):
     params = {'uris': [trackURI]}
     requestHeader = {'Content-Type': 'application/json'}
 
-    result = global_helpers.query_post(url, params, requestHeader, "Add track post")
-    return result
+    return global_helpers.query_http(url, params, requestHeader, "Add track post", 'POST')
 
 ##
 ## [DELETE] Remove track from playlist
@@ -114,5 +122,14 @@ def deleteRemoveTrackRequest(playlistId, userId, trackURI):
     params = {'uris': [trackURI]}
     requestHeader = {'Content-Type': 'application/json'}
 
-    result = global_helpers.query_delete(url, params, requestHeader, "Add track post")
-    return result
+    return global_helpers.query_http(url, params, requestHeader, "Add track post", 'DELETE')
+
+##
+## [PUT] Save track
+##
+def putSaveTrackRequest(ids):
+    url = "https://api.spotify.com/v1/me/tracks"
+    params = {'ids': ids}
+    requestHeader = {'Content-Type': 'application/json'}
+
+    return global_helpers.query_http(url, params, requestHeader, "Save track put", 'PUT')

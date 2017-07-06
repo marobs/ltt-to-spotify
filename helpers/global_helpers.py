@@ -146,70 +146,9 @@ def checkAuthenticated():
 
 
 ##
-## [GET]
+## [GET/POST/PUT/DELETE] Queries
 ##
-def query_get(url, parameters, reqType):
-    global accessToken
-    global refreshToken
-
-    requestHeader = {'Authorization': "Bearer " + accessToken}
-    response = requests.get(url, params=parameters, headers=requestHeader)
-    if response.status_code != requests.codes.ok:
-        print "Invalid access token found. Refreshing!"
-        queryForAccessToken(refreshToken)
-
-        requestHeader = {'Authorization': "Bearer " + accessToken}
-        response = requests.get(url, params=parameters, headers=requestHeader)
-
-    if response.status_code != requests.codes.ok:
-        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
-        searchResults = response.json()
-        for key in searchResults:
-            print "  " + str(key) + ": " + str(searchResults[key])
-
-        return None
-
-    return response.json()
-
-##
-## [POST]
-##
-def query_post(url, parameters, requestHeader, reqType):
-    global accessToken
-    global refreshToken
-
-    if requestHeader is None:
-        requestHeader = {}
-    requestHeader['Authorization'] = "Bearer " + str(accessToken)
-
-    # Post query
-    response = requests.post(url, data=parameters, headers=requestHeader)
-
-    # Check status code; if not ok, try refreshing access token
-    if response.status_code != requests.codes.ok:
-        print "Invalid access token found. Refreshing!"
-        queryForAccessToken(refreshToken)
-
-        requestHeader = {'Authorization': "Bearer " + accessToken}
-        response = requests.post(url, params=parameters, headers=requestHeader)
-
-    # If still not ok, print error and return
-    if response.status_code != requests.codes.ok:
-        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
-        searchResults = response.json()
-        for key in searchResults:
-            print "  " + str(key) + ": " + str(searchResults[key])
-
-        return None
-
-    # Return json response
-    return response.json()
-
-
-##
-## [DELETE]
-##
-def query_delete(url, parameters, requestHeader, reqType):
+def query_http(url, parameters, requestHeader, reqType, httpType):
     global accessToken
     global refreshToken
 
@@ -218,18 +157,18 @@ def query_delete(url, parameters, requestHeader, reqType):
     requestHeader['Authorization'] = "Bearer " + str(accessToken)
 
     # Send DELETE query
-    response = requests.delete(url, data=parameters, headers=requestHeader)
+    response = sendQuery(url, parameters, requestHeader, reqType, httpType)
 
     # Check status code; if not ok, try refreshing access token
     if response.status_code != requests.codes.ok:
         print "Invalid access token found. Refreshing!"
         queryForAccessToken(refreshToken)
-        requestHeader = {'Authorization': "Bearer " + accessToken}
-        response = requests.delete(url, params=parameters, headers=requestHeader)
+        requestHeader['Authorization'] = "Bearer " + accessToken
+        response = sendQuery(url, parameters, requestHeader, reqType, httpType)
 
     # If still not ok, print error and return
     if response.status_code != requests.codes.ok:
-        print "Error: <" + reqType + "> code not ok! Status code: " + str(response.status_code)
+        print "Error: <" + reqType + "> of http type <" + str(httpType) + "> code not ok! Status code: " + str(response.status_code)
         searchResults = response.json()
         for key in searchResults:
             print "  " + str(key) + ": " + str(searchResults[key])
@@ -238,3 +177,19 @@ def query_delete(url, parameters, requestHeader, reqType):
 
     # Return json response
     return response.json()
+
+
+## Send actual request
+def sendQuery(url, parameters, requestHeader, reqType, httpType):
+    if httpType == 'GET':
+        return requests.get(url, params=parameters, headers=requestHeader)
+    elif httpType == 'POST':
+        return requests.post(url, params=parameters, headers=requestHeader)
+    elif httpType == 'PUT':
+        return requests.put(url, params=parameters, headers=requestHeader)
+    elif httpType == 'DELETE':
+        return requests.delete(url, params=parameters, headers=requestHeader)
+    else:
+        print "Unknown HTTP request type found: <" + str(httpType) + ">"
+
+    return None
