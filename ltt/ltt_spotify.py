@@ -14,7 +14,9 @@ def searchSpotify(postList):
         spotifyData.append(searchForPost(post))
 
     replaceTrackObjects(spotifyData)
-    fillWithArtistTopSongs(spotifyData)
+    albumList = fillWithArtistTopSongs(spotifyData)
+    replaceAlbumObjects(spotifyData, albumList)
+
 
     return spotifyData
 
@@ -50,21 +52,53 @@ def getMatchingTracks(searchResults):
 def replaceTrackObjects(initialResults):
     trackResults = helpers.queryForFullTrackObjects(initialResults)
     if trackResults is None:
-        return
+        return None
 
     # TODO: Horrible runtime, improve if motivated
     for trackResult in trackResults['tracks']:
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
                 initialResult['track'] = trackResult
+                continue
 
-def fillWithArtistTopSongs(initialResults):
-    for result in initialResults:
-        if 'track' in result:
-            if 'artists' in result['track'] and len(result['track']['artists']):
-                topSong = helpers.queryForArtistTopSong(result['track']['artists'][0]['id'])
-                if topSong is not None and topSong['id'] != result['track']['id']:
-                    result['top'] = topSong
+def replaceAlbumObjects(spotifyData, albumList):
+    index = 0
+    while (index + 20) < len(albumList):
+        queryIds = albumList[index:index+20]
+        albumResults = helpers.queryForAllAlbums(queryIds)
+        if albumResults is None:
+            continue
+
+        for albumResult in albumResults:
+            for spotifyObj in spotifyData:
+                if 'track' in spotifyObj:
+                    if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
+                        spotifyObj['track']['album'] = albumResult
+                        continue
+
+                if 'top' in spotifyObj:
+                    if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
+                        spotifyObj['top']['album'] = albumResult
+
+        index += 20
+
+def fillWithArtistTopSongs(spotifyData):
+    albumList = []
+
+    for entry in spotifyData:
+        if 'track' in entry:
+            if 'album' in entry['track']:
+                albumList.append(entry['track']['album']['id'])
+
+            if 'artists' in entry['track'] and len(entry['track']['artists']):
+                topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
+                if topSong is not None and topSong['id'] != entry['track']['id']:
+                    entry['top'] = topSong
+
+                    if 'album' in topSong and topSong['album']['id'] not in albumList:
+                        albumList.append(topSong['album']['id'])
+
+    return albumList
 
 #############################################################
 #                                                           #
