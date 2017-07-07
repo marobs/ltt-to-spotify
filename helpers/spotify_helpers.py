@@ -62,13 +62,33 @@ def queryForArtistTopSong(artistId):
     params = {'country': 'US'}
     requestHeader = None
 
-    result = global_helpers.query_http(url, params, requestHeader, "Top tracks query", "GET")
+    result = global_helpers.query_http(url, params, requestHeader, "Top tracks query", 'GET')
 
     if 'tracks' in result and len(result['tracks']) >= 1:
         return result['tracks'][0]
 
     return None
 
+
+##
+## [GET] Get all albums in albumList
+##
+def queryForAllAlbums(albumList):
+    url = "https://api.spotify.com/v1/albums"
+    params = {'ids': albumList}
+    requestHeader = None
+
+    return global_helpers.query_http(url, params, requestHeader, "All albums query", 'GET')
+
+##
+## [GET] Get all artists in artistList
+##
+def queryForAllArtists(artistList):
+    url = "https://api.spotify.com/v1/artists"
+    params = {'ids': artistList}
+    requestHeader = None
+
+    return global_helpers.query_http(url, params, requestHeader, "All artists query", 'GET')
 
 ##
 ## [GET] Get user playlists
