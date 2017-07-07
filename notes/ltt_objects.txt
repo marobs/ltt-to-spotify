@@ -61,6 +61,19 @@ spotifyData: [
       track_number:      int
       type:              string
       uri:               string
+      redditGenres:      string
+    },
+    artist {
+      external_urls:     external URL object
+      followers:         followers object
+      genres:            list of strings
+      href:              string
+      id:                string
+      images:            images object
+      name:              string
+      popularity:        int
+      type:              string
+      uri:               string
     }
   }
 ]

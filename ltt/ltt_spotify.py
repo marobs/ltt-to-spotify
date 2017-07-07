@@ -11,12 +11,17 @@ import helpers
 def searchSpotify(postList):
     spotifyData = []
     for post in postList:
-        spotifyData.append(searchForPost(post))
+        spotifyEntry = searchForPost(post)
+        if 'track' in spotifyEntry:
+            spotifyEntry['track']['redditGenres'] = post['genre']
+
+        spotifyData.append(spotifyEntry)
 
     replaceTrackObjects(spotifyData)
-    albumList = fillWithArtistTopSongs(spotifyData)
+    albumList, artistList = fillWithArtistTopSongs(spotifyData)
     replaceAlbumObjects(spotifyData, albumList)
-
+    addArtistObjects(spotifyData, artistList)
+    collectPostGenres(spotifyData)
 
     return spotifyData
 
@@ -63,8 +68,9 @@ def replaceTrackObjects(initialResults):
 
 def fillWithArtistTopSongs(spotifyData):
     albumList = []
+    artistList = []
 
-    # For each track, save album to albumList and query for the corresponding artist's top song
+    # For each track, save album and artist and query for that artist's top song
     for entry in spotifyData:
         if 'track' in entry:
             if 'album' in entry['track']:
@@ -72,6 +78,7 @@ def fillWithArtistTopSongs(spotifyData):
 
             # If artist exists, query for top song
             if 'artists' in entry['track'] and len(entry['track']['artists']):
+                artistList.append(entry['track']['artists'][0]['id'])
                 topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
 
                 # If top song is different than reddit track, save to entry['top'] and save album id
@@ -81,7 +88,7 @@ def fillWithArtistTopSongs(spotifyData):
                     if 'album' in topSong and topSong['album']['id'] not in albumList:
                         albumList.append(topSong['album']['id'])
 
-    return albumList
+    return albumList, artistList
 
 # Given a list of albums in spotifyData, replace spotifyData album objects with corresponding full album objects
 def replaceAlbumObjects(spotifyData, albumList):
@@ -111,6 +118,28 @@ def emplaceAlbumResult(albumResult, spotifyData):
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
                 spotifyObj['top']['album'] = albumResult
+
+# Add artist data to each spotify post
+def addArtistObjects(spotifyData, artistList):
+    artistResults = helpers.queryforAllArtists(artistList)
+
+    if artistResults is not None:
+        for result in artistResults:
+            for entry in spotifyData:
+                if 'track' in entry and 'artists' in entry['track'] and len(entry['track']['artists']):
+                    if result['id'] == entry['track']['artists'][0]['id']:
+                        entry['artist'] = result
+
+def collectPostGenres(spotifyData):
+    for post in spotifyData:
+        if 'track' in post and 'album' in post['track']:
+            post['track']['genres'] = post['track']['album']['genres']
+            post['genres'] += splitRedditGenres(post['track']['redditGenres'])
+
+def splitRedditGenres(genreString):
+    if genreString is None:
+        return ["hi"]
+
 
 #############################################################
 #                                                           #
