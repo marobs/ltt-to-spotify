@@ -23,8 +23,7 @@ def ltt_route():
         if userPlaylists is not None and len(userPlaylists) > 0:
             selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
 
-        ltt.trimLTTObjects(spotifyTracks, userPlaylists, selectedPlaylist)
-
+        ltt.trimLTTObjects(spotifyTracks, userPlaylists)
         return render_template("ltt.html", songList=redditPosts, playlists=userPlaylists, selected=selectedPlaylist)
 
 ###
@@ -45,7 +44,7 @@ def ltt_playlist_route():
 ### [POST] Add track to playlist
 ###
 @listentothis.route("/ltt/addTrack", methods=['POST'])
-def ltt_addtrack_route():
+def ltt_add_track_route():
     if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
         return jsonify({'Error': "Malformed add track request"})
 
@@ -54,13 +53,13 @@ def ltt_addtrack_route():
     trackURI = request.args['trackURI']
 
     response = helpers.postAddTrackRequest(playlistId, userId, trackURI)
-    return response # Success = {'snapshot_id': xxx} 201
+    return response  # Success = {'snapshot_id': xxx} 201
 
 ###
 ### [DELETE] Remove track from playlist
 ###
 @listentothis.route("/ltt/removeTrack", methods=['DELETE'])
-def ltt_removetrack_route():
+def ltt_remove_track_route():
     if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
         return jsonify({'Error': "Malformed remove track request"})
 
@@ -75,7 +74,7 @@ def ltt_removetrack_route():
 ### [PUT] Save track for user
 ###
 @listentothis.route("/ltt/saveTrack", methods=['PUT'])
-def ltt_savetrack_route():
+def ltt_save_track_route():
     if not helpers.checkArgs(['ids'], request):
         return jsonify({'Error': "Malformed save track request"})
 
@@ -92,7 +91,7 @@ def ltt_savetrack_route():
 ### [DELETE] Remove saved track for user
 ###
 @listentothis.route("/ltt/saveTrack", methods=['DELETE'])
-def ltt_unsavetrack_route():
+def ltt_unsave_track_route():
     if not helpers.checkArgs(['ids'], request):
         return jsonify({'Error': "Malformed unsave track request"})
 
@@ -102,4 +101,4 @@ def ltt_unsavetrack_route():
     if response.status_code != requests.codes.ok:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
-    return response # Success 200
+    return response  # Success 200

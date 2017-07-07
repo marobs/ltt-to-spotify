@@ -4,7 +4,7 @@ import helpers
 
 #############################################################
 #                                                           #
-#                   Track Data                              #
+#                   Fill spotifyData                        #
 #                                                           #
 #############################################################
 
@@ -176,7 +176,8 @@ def getSelectedPlaylist(playlist):
 #                      Trim Data                            #
 #                                                           #
 #############################################################
-def trimLTTObjects(spotifyTracks, userPlaylists, selectedPlaylist):
+
+def trimLTTObjects(spotifyTracks, userPlaylists):
     for spotifyObj in spotifyTracks:
         if 'track' in spotifyObj:
             trimTrackObject(spotifyObj['track'])
