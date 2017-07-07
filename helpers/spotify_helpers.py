@@ -1,42 +1,22 @@
 import global_helpers
 import json
 
-# Print track information given (full) track object
-def printTrack(track, extraData=None):
-    print "\tTrack (" + str(extraData) + ")"
-    print "\t  Name: " + track['name'].encode("utf8")
 
-    artistString = track['artists'][0]['name'].encode("utf8")
-    for i in xrange(1, len(track['artists']) - 1):
-        artistString = artistString + "," + track['artists'][i]['name'].encode("utf8")
-    print "\t  Artist(s): " + artistString
+##########################################################################
+##                                                                      ##
+##                          Queries                                     ##
+##                                                                      ##
+##########################################################################
 
-    print "\t  Album: " + str(track['album']['name'].encode("utf8"))
-    print "\t  Duration: " + str(track['duration_ms'])
-
-
-# Print artist information given artist object
-def printArtist(artist, extraData=None):
-    print "Artist (" + str(extraData) + ")"
-    print "\tArtist: " + artist['name'].encode("utf8")
-    print "\t  Genres: " + artist['genres'].encode("utf8")
-
-
-# Given artist and song, search Spotify for top artist and song results
+##
+## [GET] Given artist and song, search Spotify for top artist and song results
+##
 def queryForSearch(title, artist):
-    searchParams = generateSearchParams(title, artist)
-
     url = "https://api.spotify.com/v1/search"
+    searchParams = generateSearchParams(title, artist)
     requestHeader = None
+
     return global_helpers.query_http(url, searchParams, requestHeader, "Search query", "GET")
-
-def generateSearchParams(title, artist):
-    keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
-    spotifyType = "track"
-
-    return {'q': keyword,
-            'type': spotifyType,
-            'limit': '10'}
 
 ##
 ## [GET] Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
@@ -52,7 +32,6 @@ def queryForFullTrackObjects(initialSpotifyData):
     requestHeader = None
 
     return global_helpers.query_http(url, params, requestHeader, "Full Track Query", 'GET')
-
 
 ##
 ## [GET] Given an artist id, get full track data for that artist's top song
@@ -113,7 +92,6 @@ def queryForUserPlaylists():
 
     return playlists
 
-
 ##
 ## [GET] Get specific playlist data
 ##
@@ -163,3 +141,36 @@ def deleteUnsaveTrackRequest(ids):
     requestHeader = {'Content-Type': 'application/json'}
 
     return global_helpers.query_http(url, params, requestHeader, "Unsave track delete", 'DELETE')
+
+##########################################################################
+##                                                                      ##
+##                          Miscellaneous                               ##
+##                                                                      ##
+##########################################################################
+
+# Print track information given (full) track object
+def printTrack(track, extraData=None):
+    print "\tTrack (" + str(extraData) + ")"
+    print "\t  Name: " + track['name'].encode("utf8")
+
+    artistString = track['artists'][0]['name'].encode("utf8")
+    for i in xrange(1, len(track['artists']) - 1):
+        artistString = artistString + "," + track['artists'][i]['name'].encode("utf8")
+    print "\t  Artist(s): " + artistString
+
+    print "\t  Album: " + str(track['album']['name'].encode("utf8"))
+    print "\t  Duration: " + str(track['duration_ms'])
+
+# Print artist information given artist object
+def printArtist(artist, extraData=None):
+    print "Artist (" + str(extraData) + ")"
+    print "\tArtist: " + artist['name'].encode("utf8")
+    print "\t  Genres: " + artist['genres'].encode("utf8")
+
+def generateSearchParams(title, artist):
+    keyword = 'track:"' + title.encode('utf-8') + '" artist:"' + artist.encode('utf-8') + '"'
+    spotifyType = "track"
+
+    return {'q': keyword,
+            'type': spotifyType,
+            'limit': '10'}
