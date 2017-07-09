@@ -4,6 +4,10 @@
     <title>ltt-to-spotify: ltt</title>
     <meta name="description" content="Adding functionality between r/listentothis and Spotify">
 {% endblock %}
+{% block scripts %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js' defer></script>
+    <script src='/static/javascript/ltt.js' defer></script>
+{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="/static/css/ltt_style.css" />
 {% endblock %}
@@ -12,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="left">
+    <div id="left-col">
         <ul>
         {% for playlist in playlists %}
             <li {% if playlist["id"] == selected["id"] %} class="selected"{% endif %}>
@@ -21,17 +25,17 @@
         {% endfor %}
         </ul>
     </div>
-    <div class="middle">
+    <div id="middle-col">
         <ul>
         {% for track in selected["tracks"]["items"] %}
-            <li>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</li>
+            <li class='track'>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</li>
         {% endfor %}
         </ul>
     </div>
-    <div class="right">
+    <div id="right-col">
         <ul>
         {% for entry in songList %}
-            <li><a href="{{ entry["url"] }}">{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
+            <li class='track'><a href='{{ entry["url"] }}'>{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
         {% endfor %}
         </ul>
     </div>
