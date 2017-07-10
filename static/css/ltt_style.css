@@ -3,28 +3,60 @@
     flex-direction: row;
 }
 
-.left {
+#left-col {
     background-color: aliceblue;
     white-space: nowrap;
     overflow-x: hidden;
     overflow-y: scroll;
-    float: left;
     height: 100%;
-    width: 200px;
+    flex: 0 0 20%;
+    min-width: 200px;
 }
 
-.middle {
+#middle-col {
     background-color: beige;
     overflow: scroll;
-    float: left;
     height: 100%;
-    flex: 1
-
+    flex: 1 1 40%;
 }
 
-.right {
+#right-col {
     background-color: #3A7734;
-    float: left;
+    overflow: scroll;
     height: 100%;
-    flex: 1
+    flex: 1 1 40%;
+}
+
+.track {
+    display: block;
+    height: 40px;
+    background-color: gray;
+    border: 1px solid black;
+}
+
+/* Dragula Styling */
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    padding: 1em;
+}
+.gu-hide {
+    display: none !important;
+}
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+.gu-transit {
+    opacity: 0.5;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+}
+.gu-mirror {
+    opacity: 0.5;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
 }

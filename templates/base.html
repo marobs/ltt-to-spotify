@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="static/css/style.css" />
     <link rel="stylesheet" href="static/css/base_style.css" />
+    {% block scripts %}{% endblock %}
     {% block stylesheet %}{% endblock %}
     {% block title %}{% endblock %}
 </head>
@@ -16,6 +17,7 @@
           {% block content %}{% endblock %}
       </div>
   </div>
+
 </body>
 </html>
 
