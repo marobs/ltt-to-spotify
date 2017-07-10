@@ -5,7 +5,7 @@ def initializeGenreDict():
 
     with open(basePath + "/../static/genres.txt", "r") as genreFile:
         lines = genreFile.readlines()
-        lines = [x.rstrip().lower() for x in lines]
+        lines = [x.strip().lower().replace('-', '') for x in lines]
 
         i = 0
         while i < len(lines):
