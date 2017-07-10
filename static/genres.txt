@@ -29,6 +29,7 @@ Classical
   Orchestral
   Soundtrack
   OST
+  Post Classical
   Post-Classical
   Modern Classical
 
@@ -41,7 +42,6 @@ Electronic
   Chillstep
   Electropop
   Glitch
-  Glitch-hop
   Glitchhop
   Dance
   Trip-hop
@@ -91,7 +91,6 @@ Rock
   Math
   Prog
   Post
-
 
 Singer-songwriter
   Acoustic
