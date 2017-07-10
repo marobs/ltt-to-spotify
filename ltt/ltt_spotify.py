@@ -1,6 +1,5 @@
-import requests
-import urllib
 import helpers
+import json
 
 #############################################################
 #                                                           #
@@ -12,15 +11,32 @@ def searchSpotify(postList):
     spotifyData = []
     for post in postList:
         spotifyEntry = searchForPost(post)
+
         if spotifyEntry:
             spotifyEntry['track']['redditGenres'] = post['genre']
             spotifyData.append(spotifyEntry)
 
+    print "Got base spotify objects"
+
     replaceTrackObjects(spotifyData)
+
+    print "Replaced track objects"
+
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
+
+    print "Got top song data"
+
     replaceAlbumObjects(spotifyData, albumList)
+
+    print "Got album objects"
+
     replaceArtistObjects(spotifyData, artistList)
+
+    print "Got artist objects"
+
     collectPostGenres(spotifyData)
+
+    print "Collected genre information"
 
     return spotifyData
 
@@ -55,6 +71,7 @@ def getMatchingTrack(searchResults):
 
 def replaceTrackObjects(initialResults):
     trackResults = helpers.queryForFullTrackObjects(initialResults)
+
     if trackResults is None:
         return None
 
@@ -62,7 +79,10 @@ def replaceTrackObjects(initialResults):
     for trackResult in trackResults['tracks']:
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
+                redditGenres = initialResult['track']['redditGenres']
                 initialResult['track'] = trackResult
+                initialResult['track']['redditGenres'] = redditGenres
+
                 continue
 
 def fillWithArtistTopSongs(spotifyData):
@@ -95,10 +115,11 @@ def replaceAlbumObjects(spotifyData, albumList):
     while (index + 20) < len(albumList):
         queryIds = albumList[index:index+20]
         albumResults = helpers.queryForAllAlbums(queryIds)
+
         if albumResults is None:
             continue
 
-        for albumResult in albumResults:
+        for albumResult in albumResults['albums']:
             emplaceAlbumResult(albumResult, spotifyData)
 
         index += 20
@@ -120,10 +141,10 @@ def emplaceAlbumResult(albumResult, spotifyData):
 
 # Add artist data to each spotify post
 def replaceArtistObjects(spotifyData, artistList):
-    artistResults = helpers.queryforAllArtists(artistList)
+    artistResults = helpers.queryForAllArtists(artistList)
 
     if artistResults is not None:
-        for result in artistResults:
+        for result in artistResults['artists']:
             for entry in spotifyData:
                 if 'track' in entry and 'artists' in entry['track'] and len(entry['track']['artists']):
                     if result['id'] == entry['track']['artists'][0]['id']:
@@ -146,7 +167,7 @@ def collectPostGenres(spotifyData):
             spotifyEntry['track']['genres'].update(redditGenres)
 
             # Add track album genres
-            if 'album' in spotifyEntry['track']:
+            if 'album' in spotifyEntry['track'] and 'genres' in spotifyEntry['track']['album']:
                 spotifyEntry['track']['genres'].update(spotifyEntry['track']['album']['genres'])
 
         # If different top artist song
@@ -154,20 +175,21 @@ def collectPostGenres(spotifyData):
             spotifyEntry['top']['genres'] = set(spotifyGenres)
 
             # Add album genres
-            if 'album' in spotifyEntry['top']:
+            if 'album' in spotifyEntry['top'] and 'genres' in spotifyEntry['top']['album']:
                 spotifyEntry['top']['genres'].update(spotifyEntry['top']['album']['genres'])
 
 
 def splitRedditGenres(genreString):
     if genreString is None:
-        return []
+        return set()
 
     splitChar = ' '
     if '/' in genreString:
         splitChar = '/'
 
     genres = genreString.split(splitChar)
-    return [x.split() for x in genres]
+    genres = [x.strip() for x in genres]
+    return set(genres)
 
 def categorizeGenres(spotifyData):
     for spotifyEntry in spotifyData:
@@ -243,5 +265,4 @@ def trimTrackObject(trackObj):
     del (trackObj['available_markets'])
     del (trackObj['external_ids'])
     del (trackObj['external_urls'])
-    del (trackObj['linked_from'])
 

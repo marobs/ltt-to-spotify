@@ -171,4 +171,4 @@ def generateSearchParams(title, artist):
 
     return {'q': keyword,
             'type': spotifyType,
-            'limit': '10'}
+            'limit': '4'}
