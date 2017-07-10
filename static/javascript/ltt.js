@@ -47,16 +47,16 @@ dragula([midCol, rightCol], {
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
 
         if (dragIndex === -1 && source === rightCol) { // Add Song
-            let options = new AddOptions(uris, $midCol.children($el).index($el));
+            let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el));
             sendEndpointRequest(ADD_ENDPOINT, options)
-            .fail((e) => {
+            .catch((e) => {
                 // Handle error
             });
         }
         else if (dragIndex >= 0 && source === midCol) { // Re-order Song
             let options = new ReorderOptions(dragIndex, 1, $midCol.children($el).index($el));
             sendEndpointRequest(REORDER_ENDPOINT, options)
-            .fail((e) => {
+            .catch((e) => {
                 // Handle error
             });
         }
