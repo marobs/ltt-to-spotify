@@ -115,10 +115,10 @@ spotifyData: [
       type:              string
       uri:               string
       redditGenres:      string
-      genres: {
+      genres: [{
           genre:  string
           class:  string
-      }
+      }]
     }
   }
 ]
