@@ -1,0 +1,99 @@
+Alternative
+  Emo
+  Pop-punk
+  Punk
+
+Experimental
+  Ambient
+  Atmospheric
+  Experimental
+  Avant-garde
+  Psychedelic
+
+Chill
+  Mellow
+  Chillout
+  Chill-out
+  Chill
+  Chillhop
+  Chill-hop
+
+Americana
+  Bluegrass
+  Country
+  Western
+  Blues
+
+Classical
+  Piano
+  Orchestral
+  Soundtrack
+  OST
+  Post-Classical
+  Modern Classical
+
+Electronic
+  Chiptune
+  House
+  Techno
+  Synth
+  Electro
+  Chillstep
+  Electropop
+  Glitch
+  Glitch-hop
+  Glitchhop
+  Dance
+  Trip-hop
+  Triphop
+  EDM
+  Dubstep
+  Jungle
+
+Folk
+  Anti-folk
+
+Funk
+  Disco
+  Future Funk
+  Soul
+
+Heavy
+  Metal
+  Hard
+  Noise
+  Drone
+  Stoner
+
+Hiphop
+  Hip-hop
+  Rap
+  Trap
+
+Garage
+  Surf
+
+Jazz
+  Improvisation
+
+Pop
+  K-pop
+  J-pop
+
+Reggae
+  Dub
+
+RnB
+
+Rock
+  Ska
+  Indie
+  Math
+  Prog
+  Post
+
+
+Singer-songwriter
+  Acoustic
+
+World

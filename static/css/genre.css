@@ -1,0 +1,102 @@
+.genre-tag {
+    border: 1px solid;
+    border-radius: 25px;
+    color: #ffffff;
+    display: inline-block;
+    height: 20px;
+    padding: 2px 10px 2px 10px;
+
+}
+
+.singer-songwriter {
+    background-color: #4b0082;
+	border-color: #4b0082;
+}
+
+.jazz {
+    background-color: #48308b;
+	border-color: #48308b;
+}
+
+.classical {
+    background-color: #7b68ee;
+	border-color: #7b68ee;
+}
+
+.electronic {
+    background-color: #008b8b;
+	border-color: #008b8b;
+}
+
+.chill {
+    background-color: #afeeee;
+	border-color: #afeeee;
+    color: #000000;
+}
+
+.folk {
+    background-color: #7fffd4;
+	border-color: #7fffd4;
+    color: #000000;
+}
+
+.funk {
+    background-color: #006400;
+	border-color: #006400;
+}
+
+.world {
+    background-color: #bdb76b;
+	border-color: #bdb76b;
+}
+
+.hiphop {
+    background-color: #daa520;
+	border-color: #daa520;
+}
+
+.americana {
+    background-color: #ff8c00;
+	border-color: #ff8c00;
+}
+
+.garage {
+    background-color: #ff4500;
+	border-color: #ff4500;
+}
+
+.reggae {
+    background-color: #e9967a;
+	border-color: #e9967a;
+}
+
+.rock {
+    background-color: #dc143c;
+	border-color: #dc143c;
+}
+
+.rnb {
+    background-color: #b22222;
+	border-color: #b22222;
+}
+
+.pop {
+    background-color: #f08080;
+	border-color: #f08080;
+}
+
+.heavy {
+    background-color: #8b4513;
+	border-color: #8b4513;
+}
+
+.experimental {
+    background-color: #000000;
+	border-color: #000000;
+}
+
+.unclassified {
+    background-color: #ffffff;
+	border-color: #000000;
+	color: #000000;
+}
