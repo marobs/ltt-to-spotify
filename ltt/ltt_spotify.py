@@ -12,15 +12,14 @@ def searchSpotify(postList):
     spotifyData = []
     for post in postList:
         spotifyEntry = searchForPost(post)
-        if 'track' in spotifyEntry:
+        if spotifyEntry:
             spotifyEntry['track']['redditGenres'] = post['genre']
-
-        spotifyData.append(spotifyEntry)
+            spotifyData.append(spotifyEntry)
 
     replaceTrackObjects(spotifyData)
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
     replaceAlbumObjects(spotifyData, albumList)
-    addArtistObjects(spotifyData, artistList)
+    replaceArtistObjects(spotifyData, artistList)
     collectPostGenres(spotifyData)
 
     return spotifyData
@@ -40,9 +39,9 @@ def printSpotifyData(spotifyData):
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
-    return getMatchingTracks(searchResults)
+    return getMatchingTrack(searchResults)
 
-def getMatchingTracks(searchResults):
+def getMatchingTrack(searchResults):
     tracks = None
     if 'tracks' in searchResults:
         if 'items' in searchResults['tracks']:
@@ -120,7 +119,7 @@ def emplaceAlbumResult(albumResult, spotifyData):
                 spotifyObj['top']['album'] = albumResult
 
 # Add artist data to each spotify post
-def addArtistObjects(spotifyData, artistList):
+def replaceArtistObjects(spotifyData, artistList):
     artistResults = helpers.queryforAllArtists(artistList)
 
     if artistResults is not None:
@@ -131,14 +130,60 @@ def addArtistObjects(spotifyData, artistList):
                         entry['artist'] = result
 
 def collectPostGenres(spotifyData):
-    for post in spotifyData:
-        if 'track' in post and 'album' in post['track']:
-            post['track']['genres'] = post['track']['album']['genres']
-            post['genres'] += splitRedditGenres(post['track']['redditGenres'])
+    for spotifyEntry in spotifyData:
+
+        # Grab artist's genres for basis of 'track' and 'top'
+        spotifyGenres = set()
+        if 'artist' in spotifyEntry:
+            spotifyGenres.update(spotifyEntry['artist']['genres'])
+
+        # For 'track' in entry
+        if 'track' in spotifyEntry:
+            spotifyEntry['track']['genres'] = set(spotifyGenres)
+
+            # Add reddit genres
+            redditGenres = splitRedditGenres(spotifyEntry['track']['redditGenres'])
+            spotifyEntry['track']['genres'].update(redditGenres)
+
+            # Add track album genres
+            if 'album' in spotifyEntry['track']:
+                spotifyEntry['track']['genres'].update(spotifyEntry['track']['album']['genres'])
+
+        # If different top artist song
+        if 'top' in spotifyEntry:
+            spotifyEntry['top']['genres'] = set(spotifyGenres)
+
+            # Add album genres
+            if 'album' in spotifyEntry['top']:
+                spotifyEntry['top']['genres'].update(spotifyEntry['top']['album']['genres'])
+
 
 def splitRedditGenres(genreString):
     if genreString is None:
-        return ["hi"]
+        return []
+
+    splitChar = ' '
+    if '/' in genreString:
+        splitChar = '/'
+
+    genres = genreString.split(splitChar)
+    return [x.split() for x in genres]
+
+def categorizeGenres(spotifyData):
+    for spotifyEntry in spotifyData:
+        if 'track' in spotifyEntry and 'genres' in spotifyEntry['track']:
+            genres = []
+            for genre in spotifyEntry['track']['genres']:
+                genres.append({'genre': genre, 'class': helpers.getGenreClass(genre)})
+
+            spotifyEntry['genres'] = genres
+
+        if 'top' in spotifyEntry and 'genres' in spotifyEntry['top']:
+            genres = []
+            for genre in spotifyEntry['track']['genres']:
+                genres.append({'genre': genre, 'class': helpers.getGenreClass(genre)})
+
+            spotifyEntry['genres'] = genres
 
 
 #############################################################

@@ -114,6 +114,11 @@ spotifyData: [
       track_number:      int
       type:              string
       uri:               string
+      redditGenres:      string
+      genres: {
+          genre:  string
+          class:  string
+      }
     }
   }
 ]
