@@ -63,6 +63,26 @@
     margin: 0 16px;
 }
 
+.track-container {
+    display: flex;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #999999;
+    margin: 0 16px;
+}
+
+.track-name {
+    flex: 1 1 40%;
+}
+
+.track-artist {
+    flex: 1 1 30%
+}
+
+.track-album {
+    flex: 1 1 30%
+}
+
 /* Middle Column Styling */
 .middle-col-header {
     display: flex;
