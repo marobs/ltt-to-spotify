@@ -9,7 +9,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     height: 100%;
-    flex: 0 0 20%;
+    flex: 0 0 10%;
     min-width: 200px;
 }
 
@@ -17,21 +17,58 @@
     background-color: beige;
     overflow: scroll;
     height: 100%;
-    flex: 1 1 40%;
+    flex: 1 1 45%;
 }
 
 #right-col {
     background-color: #3A7734;
     overflow: scroll;
     height: 100%;
-    flex: 1 1 40%;
+    flex: 1 1 45%;
 }
 
+/* Left Column Styling */
+.playlist {
+    border-left: 6px solid white;
+    border-right: 6px solid white;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: white;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist.selected {
+    border-color: purple;
+    background-color: #EEEEEE;
+}
+
+
+.playlist:hover:not(.selected) {
+    background-color: #EEEEEE;
+    border-color: #EEEEEE;
+}
+
+/* Right Column Styling */
 .track {
+    position: relative;
     display: block;
     height: 40px;
+    line-height: 40px;
     background-color: gray;
     border: 1px solid black;
+}
+
+.icon-container {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.track-icon {
+    height: 20px;
+    width: 20px;
+    border-radius: 140px;
 }
 
 /* Dragula Styling */
