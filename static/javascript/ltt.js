@@ -4,6 +4,7 @@ let $midCol = $(midCol);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
 
+let selectedPlaylist = null;
 let switchPlaylistRequest = null;
 
 let dragIndex = -1;
@@ -13,15 +14,17 @@ let playlists = {};
 const ADD_ENDPOINT = '/add';
 const REORDER_ENDPOINT = '/reorder';
 
-function AddOptions(uris, position) {
+function AddOptions(uris, position, playlist) {
     this.uris = uris;
     this.position = position;
+    this.playlist = playlist;
 }
 
-function ReorderOptions(range_start, range_length, insert_before) {
+function ReorderOptions(range_start, insert_before, playlist) {
     this.range_start = range_start;
-    this.range_length = range_length;
+    this.range_length = 1;
     this.insert_before = insert_before;
+    this.playlist = playlist
 }
 
 function sendEndpointRequest(url, options) {
@@ -64,14 +67,14 @@ dragula([midCol, rightCol], {
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
 
         if (dragIndex === -1 && source === rightCol) { // Add Song
-            let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el));
+            let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el), selectedPlaylist);
             sendEndpointRequest(ADD_ENDPOINT, options)
             .catch((e) => {
                 // Handle error
             });
         }
         else if (dragIndex >= 0 && source === midCol) { // Re-order Song
-            let options = new ReorderOptions(dragIndex, 1, $midCol.children($el).index($el));
+            let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), selectedPlaylist);
             sendEndpointRequest(REORDER_ENDPOINT, options)
             .catch((e) => {
                 // Handle error
@@ -95,7 +98,9 @@ dragula([midCol, rightCol], {
 
 window.onload = () => {
     // Store playlist information
-    playlists[$leftCol.find('.selected')[0].innerHTML] = $midCol[0].innerHTML;
+    let playlistName = $leftCol.find('.selected')[0].innerHTML;
+    selectedPlaylist = playlistName;
+    playlists[playlistName] = $midCol[0].innerHTML;
 };
 
 
