@@ -18,26 +18,30 @@
 
 {% block content %}
     <div id="left-col">
-        <ul>
         {% for playlist in playlists %}
-            <li {% if playlist["id"] == selected["id"] %} class="selected"{% endif %}>
-                {{ playlist["name"] }}
-            </li>
+            <div class="playlist {% if playlist["id"] == selected["id"] %}selected{% endif %}">{{ playlist["name"] }}</div>
         {% endfor %}
-        </ul>
     </div>
     <div id="middle-col">
-        <ul>
+        <div class="middle-col-header">
+            <div class="mch-title">Title</div>
+            <div class="mch-artist">Artist</div>
+            <div class="mch-album">Album</div>
+        </div>
         {% for track in selected["tracks"]["items"] %}
-            <li class='track'>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</li>
+            <div class='track'>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</div>
         {% endfor %}
-        </ul>
     </div>
     <div id="right-col">
-        <ul>
         {% for entry in songList %}
-            <li class='track'><a href='{{ entry["url"] }}'>{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a></li>
+            <div class='track'>
+                <a href='{{ entry["url"] }}'>{{ entry["artist"] }} -- {{ entry["title"] }} [{{ entry["genre"] }}] {% if "year" in entry %}({{ entry["year"]}}){% endif %} </a>
+                <div class="icon-container">
+                    <img class="reddit-icon track-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA2FBMVEX8SB7/////8/D9l3/9gGP/3NT/6OL+xbj9jHG8NRb8Uiv8aUf+rpzEOBf2Rh38Xjn39/fmQRt+JA+YKxLu7u7R0dFwRDpcMihiHAvfPxr/wwDi4uLZ2dl9fX25NxhPHRJaWlqFhYWbm5uGJhD+pI/MOhjUPBmtMRT/9NT/+Ob/++9OMixPFwrLy8tFNTH/zCsUBQJpTUb/557/1E7/2mn/3XRaQz1gPzddGgtuOCx0b20nIyK7urqZmZlBEgc5EAYyHxuUMBlvHw2BMyEzMC8sIB3/8cc+GA83z+aQAAAB5UlEQVQ4jZ2VaXuiMBCAJxwqKpGjtKJICyho67Ha3a21trb22P//jzbBQiKhPrTzAZLJ+8zFZAB0JOpQaQGRljJUj0+AW9fkDnDSkWuloNQAQRqSCNabIgfQrBfBEnOfRo9ASfmKA1AkDjzBEZKBX/o9iJyB9dMcQP0ASqX58tKUUrDEsYnJw7WTbN+gYE3kcPfX1NbW+6mVaWoElEsMrmMteupivMN5PoA6IphQS6NuYq8zsINALQn+Saf+E8uKc5UKQ5GLd5+hYqZrA/so2MTY9V8v5m9v84tX38XYZKQCrWw5iqzo5XwTOmcInTnh5vyFKEbZaY6Bu7eT58BhneoEz4m9d4XAdCvebQ2Erg8YeRnbf26kCeDIWgcEWPUWY4Qmt70/ZBN0LV0AcfRO7KFFr7dC6IO8yMZ4t1g6eZT6krpcLW6pxd8LahH95ZLJyxPfpcGNJ/Q5Gaex3uS5KFzBpx4qyGzKFZx9Qn1OyTD0+n0vfCRLb85SUfmmSJakPl4wCAYDUlBju8z7kTYF32b+/WZmGH3H6RvGbHPvsxO50LjYv3y4CsIwuHq49LmWSBu3cBVMzY4iWzOPlPL3Llfl61p9AFQfKdWH1Anv8k8HaflolktGM6o87FNR29nvo134ffwHFJIkd3sWo5sAAAAASUVORK5CYII=">
+                    <img class='youtube-icon track-icon' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDpt2eUCdmHqJUaYUilOO2EmCKK-7CN6h0XhzalE5T8Eanvn4e">
+                    <img class='spotify-icon track-icon' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAUVBMVEUe12D///8ZFBM023AdzlwZLB32/fkp2WgaQybt/PMbcjgdt1McqU4cmkcdwlcZIBgaXjAbiUHU9+BW4Yjj+uue7rpP34KB6KbB9NMbfjyN669AwDFYAAABbklEQVQ4jZWU25aDIAxFaUVEBIQWr///oRPuSrVl8oS4V8g5hKBHZaCPHdIb05MfIFmXuekQ6pp5Wckt2O8NOkSz95cgmTpURDeRT9C8S8zG25Tgq7ni4PzXGbzjMulBc8sBaTJILutLdZIETt84hKYI9sEXzMXGIDYtBnwAuz6Au/0Sqn0eo1VaRnL3ILFKxPMiqPaJG+LA1a43/2tsIcYxoSNz6OrAxS4lhbO49Bmw5DpW0tqtxYHzjVi5OZbDcrYgyWZjOXAh+CCjZkF9RigSJXMGRpPuljLuYe8TGIQeJnCl5FENuQyTQW7/UaUYU4oG2ZQfwXi00Pk68KA9rNPdnMR8iqYoOn62R3KhNcgOeVk8e86GA6To4fLYQUk0fPUfzEm1d+ilUJHBNTcF+KMYdBd2UgSzltLYPqEpfJuVwaGQLaz3onFLlOFkzj+fQv3jqn6u9QOgfqTUD6n6sfeoHqQua91oDnDNsP8Sf4buEZsTtySPAAAAAElFTkSuQmCC">
+                </div>
+            </div>
         {% endfor %}
-        </ul>
     </div>
 {% endblock %}

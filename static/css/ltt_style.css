@@ -9,29 +9,104 @@
     overflow-x: hidden;
     overflow-y: scroll;
     height: 100%;
-    flex: 0 0 20%;
+    flex: 0 0 10%;
     min-width: 200px;
+    border-top: 1px solid black;
 }
 
 #middle-col {
-    background-color: beige;
+    background-color: #F8F8F8;
     overflow: scroll;
     height: 100%;
-    flex: 1 1 40%;
+    flex: 1 1 45%;
+    border-top: 1px solid black;
 }
 
 #right-col {
-    background-color: #3A7734;
+    background-color: white;
     overflow: scroll;
     height: 100%;
+    flex: 1 1 45%;
+    border-top: 1px solid black;
+}
+
+/* Left Column Styling */
+.playlist {
+    border-left: 6px solid white;
+    border-right: 6px solid white;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: white;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist.selected {
+    border-color: #5f3596;
+    background-color: #EEEEEE;
+    color: #000000;
+}
+
+
+.playlist:hover:not(.selected) {
+    background-color: #EEEEEE;
+    border-color: #EEEEEE;
+    color: #000000;
+}
+
+/* Middle + Right Column Styling */
+.track {
+    position: relative;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #999999;
+    margin: 0 16px;
+}
+
+/* Middle Column Styling */
+.middle-col-header {
+    display: flex;
+    height: 40px;
+    margin: 0 16px;
+    border-bottom: 1px solid #999999;
+    line-height: 40px;
+    font-size: 20px;
+    color: #000000;
+}
+
+.mch-title {
     flex: 1 1 40%;
 }
 
-.track {
-    display: block;
-    height: 40px;
-    background-color: gray;
-    border: 1px solid black;
+.mch-artist {
+    flex: 1 1 30%;
+}
+
+.mch-album {
+    flex: 1 1 30%;
+}
+
+#middle-col .track {
+    background-color: #F8F8F8;
+}
+
+/* Right Column Styling */
+
+#right-col .track {
+    background-color: white;
+}
+
+.icon-container {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.track-icon {
+    height: 20px;
+    width: 20px;
+    border-radius: 140px;
 }
 
 /* Dragula Styling */
@@ -51,7 +126,7 @@
     user-select: none !important;
 }
 .gu-transit {
-    opacity: 0.5;
+    opacity: 0.8;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     filter: alpha(opacity=50);
 }
