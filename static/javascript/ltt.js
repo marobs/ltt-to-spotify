@@ -118,6 +118,11 @@ $leftCol.on('click', '.playlist', function(e) {
     selected.removeClass('selected');
     newSelected.addClass('selected');
 
+    // Updated cahced dom for this playlist
+    let oldPlaylistName = selected.innerHTML;
+    playlists[oldPlaylistName] = $midCol[0].innerHTML;
+
+
     let playlistName = newSelected.innerHTML;
 
     if (playlistName in playlists && playlists[playlistName] !== 'undefined') {

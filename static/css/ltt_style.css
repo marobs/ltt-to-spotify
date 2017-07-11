@@ -34,8 +34,7 @@
 .playlist {
     border-left: 6px solid white;
     border-right: 6px solid white;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding: 6px 6px;
     background-color: white;
     overflow-y: hidden;
     text-overflow: ellipsis;

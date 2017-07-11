@@ -11,6 +11,13 @@
     border-bottom: 1px solid black;
 }
 
+#header-icon {
+    position: absolute;
+    left: 20px;
+    height: 50px;
+    top: 5px;
+}
+
 .header-link-container {
     position: absolute;
     right: 10px;
