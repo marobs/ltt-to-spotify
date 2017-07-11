@@ -140,6 +140,19 @@ def deleteUnsaveTrackRequest(ids):
 
     return global_helpers.query_http(url, params, requestHeader, "Unsave track delete", 'DELETE')
 
+
+##
+## [PUT] Reorder playlist
+##
+def reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBefore):
+    url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId) + "/tracks"
+    params = {'range_start': rangeStart,
+              'range_length': rangeLength,
+              'insert_before': insertBefore}
+    requestHeader = {'Content-Type': 'application/json'}
+
+    return global_helpers.query_http(url, params, requestHeader, "Reorder playlist", 'PUT')
+
 ##########################################################################
 ##                                                                      ##
 ##                          Miscellaneous                               ##

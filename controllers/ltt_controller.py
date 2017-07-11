@@ -102,3 +102,24 @@ def ltt_unsave_track_route():
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
     return response  # Success 200
+
+
+###
+### [PUT] Reorder playlist tracks
+###
+@listentothis.route("/ltt/reorder", methods=['PUT'])
+def ltt_reorder_route():
+    if not helpers.checkArgs(['userId', 'playlistId', 'rangeStart', 'rangeLength', 'insertBefore'], request):
+        return jsonify({'Error': 'Malformed reorder request'})
+
+    userId = request.args['userId']
+    playlistId = request.args['playlistId']
+    rangeStart = request.args['rangeStart']
+    rangeLength = request.args['rangeLength']
+    insertBefore = request.args['insertBefore']
+
+    response = helpers.reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBefore)
+    if response.status_code != requests.codes.ok:
+        return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
+
+    return response
