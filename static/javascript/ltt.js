@@ -70,6 +70,7 @@ dragula([midCol, rightCol], {
             let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el), selectedPlaylist);
             sendEndpointRequest(ADD_ENDPOINT, options)
             .catch((e) => {
+                // TODO: something with error?
                 // Handle error
             });
         }
@@ -77,6 +78,7 @@ dragula([midCol, rightCol], {
             let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), selectedPlaylist);
             sendEndpointRequest(REORDER_ENDPOINT, options)
             .catch((e) => {
+                // TODO: something with error?
                 // Handle error
             });
         }
@@ -130,6 +132,9 @@ $leftCol.on('click', '.playlist', function(e) {
             if (requestPromise === switchPlaylistRequest) {
                 $midCol[0].innerHTML = response;
             }
-        })
+        }).catch((error) => {
+            // TODO: something with error?
+            return;
+        });
     }
 });
