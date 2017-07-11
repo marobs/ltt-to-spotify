@@ -23,6 +23,11 @@
         {% endfor %}
     </div>
     <div id="middle-col">
+        <div class="middle-col-header">
+            <div class="mch-title">Title</div>
+            <div class="mch-artist">Artist</div>
+            <div class="mch-album">Album</div>
+        </div>
         {% for track in selected["tracks"]["items"] %}
             <div class='track'>{{ track["track"]["artists"][0]["name"] }} -- {{ track["track"]["name"] }} -- {{ track["track"]["album"]["name"] }}</div>
         {% endfor %}

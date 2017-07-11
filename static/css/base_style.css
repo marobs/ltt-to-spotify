@@ -30,10 +30,16 @@
 
 .header-link:hover {
     font-size: 16px;
+    cursor: pointer;
 }
 
 
 .main-content {
     flex: 1;
     width: 100vw;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #4B4B4B;
 }
