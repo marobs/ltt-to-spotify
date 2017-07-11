@@ -1,9 +1,14 @@
+let $leftCol = $('#left-col');
 let midCol = document.getElementById('middle-col');
 let $midCol = $(midCol);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
 
+let switchPlaylistRequest = null;
+
 let dragIndex = -1;
+
+let playlists = {};
 
 const ADD_ENDPOINT = '/add';
 const REORDER_ENDPOINT = '/reorder';
@@ -25,7 +30,19 @@ function sendEndpointRequest(url, options) {
         .done((response) => {
             resolve(response);
         }).fail((e) => {
-            // Error
+            console.error(e);
+            reject(e);
+        });
+    });
+}
+
+function getPlaylistInfo(playlistName) {
+    return new Promise((resolve, reject) => {
+        $.get('/playlist', { "playlist": playlistName })
+        .done((response) => {
+            playlists[playlistName] = response;
+            resolve(response);
+        }).fail((e) => {
             console.error(e);
             reject(e);
         });
@@ -73,5 +90,41 @@ dragula([midCol, rightCol], {
     }
     else {
         dragIndex = -1;
+    }
+});
+
+window.onload = () => {
+    // Store playlist information
+    playlists[$leftCol.find('.selected')[0].innerHTML] = $midCol[0].innerHTML;
+};
+
+
+// Event handlers
+$leftCol.on('click', '.playlist', function(e) {
+    let selected = $leftCol.find('.selected');
+    let newSelected = $(e.target);
+
+    if (selected === newSelected) {
+        return;
+    }
+
+    selected.removeClass('selected');
+    newSelected.addClass('selected');
+
+    let playlistName = newSelected.innerHTML;
+
+    if (playlistName in playlists && playlists[playlistName] !== 'undefined') {
+        // Playlist information cached, set html
+        $midCol[0].innerHTML = playlists[playlistName];
+    }
+    else {
+        // No playlist information cached, make request on server
+        let requestPromise = getPlaylistInfo(playlistName);
+        switchPlaylistRequest = requestPromise;
+        requestPromise.then((response) => {
+            if (requestPromise === switchPlaylistRequest) {
+                $midCol[0].innerHTML = response;
+            }
+        })
     }
 });
