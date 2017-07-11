@@ -11,6 +11,7 @@
     height: 100%;
     flex: 0 0 10%;
     min-width: 200px;
+    border-top: 1px solid black;
 }
 
 #middle-col {
@@ -39,7 +40,7 @@
 }
 
 .playlist.selected {
-    border-color: purple;
+    border-color: #5f3596;
     background-color: #EEEEEE;
 }
 

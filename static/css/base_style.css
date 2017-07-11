@@ -5,9 +5,33 @@
 }
 
 .header {
-    height: 30px;
-    background-color: #3B666B;
+    height: 60px;
+    line-height: 60px;
+    background-color: #5f3596;
+    border-bottom: 1px solid black;
 }
+
+.header-link-container {
+    position: absolute;
+    right: 10px;
+}
+
+.header-link {
+    display: inline-block;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    width: 60px;
+    padding: 6px;
+}
+
+.header-link:hover {
+    font-size: 16px;
+}
+
 
 .main-content {
     flex: 1;
