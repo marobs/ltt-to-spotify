@@ -17,7 +17,13 @@ sCachePath = basePath + '/../cache/spotifyCache.pkl'
 #                                                   #
 #####################################################
 
-def saveToSCache(spotifyTrack, topTrack):
+# Need to cache by reddit title/artist to get benefit out of caching (don't have to search)
+# Also need to cache by id? Not sure
+# Should cache top songs as well but those won't be cached by reddit post
+# Add reddit data and top song data to reddit songs to be able to grab the top song with just the other one?
+# Think about when stuff is needed/not needed/inputs/outputs/etc
+
+def saveToSCacheById(spotifyTrack, topTrack):
     print "Saving spotify track data to SCache"
     global sCacheDict
 

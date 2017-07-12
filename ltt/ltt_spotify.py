@@ -14,6 +14,7 @@ def searchSpotify(postList):
 
         if spotifyEntry:
             spotifyEntry['track']['redditGenres'] = post['genre']
+            spotifyEntry['track']['redditTitle'] = post['title'] # TODO: NECESSARY?
             spotifyData.append(spotifyEntry)
 
     print "Got base spotify objects"
@@ -75,7 +76,6 @@ def replaceTrackObjects(initialResults):
     if trackResults is None:
         return None
 
-    # TODO: Horrible runtime, improve if motivated
     for trackResult in trackResults['tracks']:
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
