@@ -25,15 +25,15 @@ def searchSpotify(postList):
     print "Replaced track objects"
 
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
-    albumSet, artistSet = checkIfCached(spotifyData, albumList, artistList)
+    albumSetList, artistSetList = checkIfCached(spotifyData, albumList, artistList)
 
     print "Got top song data"
 
-    replaceAlbumObjects(spotifyData, albumSet)
+    replaceAlbumObjects(spotifyData, albumSetList)
 
     print "Got album objects"
 
-    replaceArtistObjects(spotifyData, artistSet)
+    replaceArtistObjects(spotifyData, artistSetList)
 
     print "Got artist objects"
 
@@ -90,18 +90,18 @@ def replaceTrackObjects(initialResults):
                 continue
 
 def fillWithArtistTopSongs(spotifyData):
-    albumSet = set()
-    artistSet = set()
+    albumList = []
+    artistList = []
 
     # For each track, save album and artist and query for that artist's top song
     for entry in spotifyData:
         if 'track' in entry:
             if 'album' in entry['track']:
-                albumSet.add(entry['track']['album']['id'])
+                albumList.append(entry['track']['album']['id'])
 
             # If artist exists, query for top song
             if 'artists' in entry['track'] and len(entry['track']['artists']):
-                albumSet.add(entry['track']['artists'][0]['id'])
+                artistList.append(entry['track']['artists'][0]['id'])
                 topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
 
                 # If top song is different than reddit track, save to entry['top'] and save album id
@@ -114,9 +114,9 @@ def fillWithArtistTopSongs(spotifyData):
                         entry['top'] = topSong
                         entry['track']['top'] = topSong['id']
                         entry['track']['isTop'] = False
-                        albumSet.add(topSong['album']['id'])
+                        albumList.add(topSong['album']['id'])
 
-    return albumSet, artistSet
+    return albumList, artistList
 
 # Given a list of albums in spotifyData, replace spotifyData album objects with corresponding full album objects
 def replaceAlbumObjects(spotifyData, albumSet):
@@ -319,7 +319,7 @@ def checkIfCached(spotifyData, albumList, artistList):
                     if entry['artist']['id'] == artist:
                         artistList.remove(artist)
 
-    return set(albumList), set(artistList)
+    return list(set(albumList)), list(set(artistList))
 
 def prepareAndCacheSpotifyData(spotifyData):
     for entry in spotifyData:
