@@ -88,35 +88,26 @@ spotifyData: [
   {
     track, top: {
       album {
-          album_type:        "album", "single", or "compilation"
-          artists:           {external_urls, href, id, name, type, uri}
           genres:            array of strings
-          href:              string
           id:                string
           images:            array of {height, url, width}
-          label:             string
           name:              string
           popularity:        integer
           release_date:      string
           release_date_prec: string
-          uri:               string
       },
-      artists:           {external_urls, href, id, name, type, uri}
-      artist:            full artist object
-      disc_number:       int
+      artist: {
+          genres             string
+          id                 string
+          name               string
+          popularity         int
+      }
       duration_ms:       int
       explicit:          bool
-      href:              string
       id:                string
-      is_playable:       bool
       name:              string
       popularity:        int
-      preview_url:       string
-      track_number:      int
-      type:              string
-      uri:               string
-      redditGenres:      string
-      redditId:    string
+      redditData:        postList data
       genres: [{
           genre:  string
           class:  string

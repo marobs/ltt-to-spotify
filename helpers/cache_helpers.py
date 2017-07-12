@@ -30,8 +30,6 @@ def saveToSCacheByKeyList(spotifyTrack, keyList):
     for key in keyList:
         sCacheDict[str(key)] = dict(spotifyTrack)
 
-
-
 def getFromSCache(trackId):
     print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
     global sCacheDict
@@ -65,6 +63,8 @@ def flushSCache():
     print "Saving SCache to file"
     global sCacheDict
     with open(sCachePath, 'wb') as f:
+        f.seek(0)
+        f.truncate()
         cPickle.dump(sCacheDict, f, cPickle.HIGHEST_PROTOCOL)
 
 #####################################################
