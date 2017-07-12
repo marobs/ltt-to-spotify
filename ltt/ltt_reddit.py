@@ -9,7 +9,7 @@ def getRedditPosts(redditQuery):
     # Check if the data is cached
     cachedData = helpers.getFromRCache(redditQuery)
     if cachedData is not None:
-        print "Found and returning cached reddit data"
+        print "Found and returning cached reddit data. " + str(len(cachedData)) + " posts found"
         return cachedData
 
     # Grab actual reddit data
@@ -32,8 +32,7 @@ def getRedditPosts(redditQuery):
                 postList.append(post)
 
     # Save to cache
-    print "Saving to cache: "
-    printPostList(postList)
+    print "Saving to cache. " + str(len(postList)) + " posts found"
     helpers.saveToRCache(postList, redditQuery)
     return postList
 

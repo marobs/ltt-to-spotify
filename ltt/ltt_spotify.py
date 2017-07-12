@@ -24,15 +24,14 @@ def searchSpotify(postList):
     print "Replaced track objects"
 
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
-    albumSetList, artistSetList = checkIfTopTrackCached(spotifyData, albumList, artistList)
 
     print "Got top song data"
 
-    replaceAlbumObjects(spotifyData, albumSetList)
+    replaceAlbumObjects(spotifyData, albumList)
 
     print "Got album objects"
 
-    replaceArtistObjects(spotifyData, artistSetList)
+    replaceArtistObjects(spotifyData, artistList)
 
     print "Got artist objects"
 
@@ -158,7 +157,7 @@ def replaceArtistObjects(spotifyData, artistSet):
                     entry['track']['artist'] = result
 
                 if 'top' in entry and len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
-                    entry['top']['artists'] = result
+                    entry['top']['artist'] = result
 
 def collectPostGenres(spotifyData):
     for spotifyEntry in spotifyData:
@@ -173,7 +172,7 @@ def collectPostGenres(spotifyData):
             spotifyEntry['track']['genres'] = set(spotifyGenres)
 
             # Add reddit genres
-            redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['genres'])
+            redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['genre'])
             spotifyEntry['track']['genres'].update(redditGenres)
 
             # Add track album genres
@@ -300,31 +299,13 @@ def getCachedEntries(postList):
 
     return postList, cachedEntries
 
-def checkIfTopTrackCached(spotifyData, albumList, artistList):
-    # Original not cached--would have already had this data and skipped this step.
-    # However, a different song by the same artist could be posted leading to a cached version of the top song.
-    for entry in spotifyData:
-        if 'top' in entry:
-            cachedTop = helpers.getFromSCache(entry['top']['id'])
-            if cachedTop is not None:
-                entry['top'] = cachedTop
-                entry['artist'] = cachedTop['artist']
-
-                for album in albumList:
-                    if cachedTop['album']['id'] == album:
-                        albumList.remove(album)
-
-                for artist in artistList:
-                    if entry['artist']['id'] == artist:
-                        artistList.remove(artist)
-
-    return list(set(albumList)), list(set(artistList))
-
 def prepareAndCacheSpotifyData(spotifyData):
     for entry in spotifyData:
-        trackKeyList = [entry['track']['id'], entry['track']['redditData']['id']]
+        trackKeyList = [entry['track']['id'], entry['track']['redditData']['redditId']]
         helpers.saveToSCacheByKeyList(entry['track'], trackKeyList)
-        helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
+
+        if 'top' in entry:
+            helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
 
     # Make permanent by flushing to disk
     helpers.flushSCache()
