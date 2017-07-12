@@ -173,7 +173,7 @@ def collectPostGenres(spotifyData):
             spotifyEntry['track']['genres'] = set(spotifyGenres)
 
             # Add reddit genres
-            redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['redditGenres'])
+            redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['genres'])
             spotifyEntry['track']['genres'].update(redditGenres)
 
             # Add track album genres
@@ -322,7 +322,7 @@ def checkIfTopTrackCached(spotifyData, albumList, artistList):
 
 def prepareAndCacheSpotifyData(spotifyData):
     for entry in spotifyData:
-        trackKeyList = [entry['track']['id'], entry['track']['redditId']]
+        trackKeyList = [entry['track']['id'], entry['track']['redditData']['id']]
         helpers.saveToSCacheByKeyList(entry['track'], trackKeyList)
         helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
 
