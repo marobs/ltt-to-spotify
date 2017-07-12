@@ -1,17 +1,24 @@
 import requests
 import re
+import helpers.cache_helpers
 
-def getRedditPosts():
-    response = requests.get("http://reddit.com/r/listentothis/hot.json", headers={'User-agent': 'ltts bot 0.1'})
-    jData = response.json()
+def getRedditPosts(redditQuery):
+    # Check if the data is cached
+    if redditQuery is not None:
+        cachedData = helpers.getFromRCache(redditQuery)
+        if cachedData is not None:
+            return cachedData
+
+    # Grab actual reddit data
+    response = queryForRedditData(redditQuery)
 
     # Not sure what kind of error checking needs to occur here
-    if "data" not in jData or "children" not in jData["data"]:
+    if "data" not in response or "children" not in response["data"]:
         print "No children post in reddit response"
-        return False
+        return None
 
     postList = []
-    for child in jData["data"]["children"]:
+    for child in response["data"]["children"]:
         if "data" not in child:
             print "No child data found"
             continue
@@ -34,8 +41,21 @@ def getRedditPosts():
 
         generateAndAppendSongData(post, postList)
 
+    # Save to cache
+    helpers.saveToRCache(postList, redditQuery)
     return postList
 
+# Query for reddit data based on redditQuery type
+def queryForRedditData(redditQuery):
+    if redditQuery is None or not helpers.checkQueryType(redditQuery):
+        redditQuery = "top"
+
+    url = "http://reddit.com/r/listentothis/" + str(redditQuery) + ".json"
+    requestHeader = {'User-agent': 'ltts bot 0.1'}
+    response = requests.get(url, headers=requestHeader)
+    return response.json()
+
+# Use regex to pull out title, artist, genre, and year
 def generateAndAppendSongData(post, postList):
     regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\].*(\d\d\d\d)", post["rawTitle"])
     if regexGroups is None:
@@ -58,6 +78,7 @@ def generateAndAppendSongData(post, postList):
 
     postList.append(post)
 
+# Pretty printer
 def printPostList(postList):
     for post in postList:
         print str(post["rawTitle"].encode("utf-8"))

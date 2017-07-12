@@ -10,12 +10,14 @@ listentothis = Blueprint('ltt', __name__, template_folder='templates')
 ###
 @listentothis.route("/ltt")
 def ltt_route():
+    redditQuery = request.args.get('redditQuery')
+
     if not helpers.checkAuthenticated():
         print "Must authenticate!"
         return redirect(helpers.getAuthorizationUrl())
 
     else:
-        redditPosts = ltt.getRedditPosts()
+        redditPosts = ltt.getRedditPosts(redditQuery)
         spotifyTracks = ltt.searchSpotify(redditPosts)
         userPlaylists = ltt.getUserPlaylists()
 
