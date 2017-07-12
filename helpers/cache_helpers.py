@@ -1,5 +1,7 @@
 from global_helpers import basePath
 import cPickle
+import os.path
+
 
 ###
 ### Objects
@@ -7,6 +9,7 @@ import cPickle
 
 rCacheDict = {}
 sCacheDict = {}
+sCachePath = basePath + '/../cache/spotifyCache.pkl', 'rb'
 
 #####################################################
 #                                                   #
@@ -35,8 +38,15 @@ def getFromSCache(trackId):
 
 def initializeSCache():
     global sCacheDict
-    with open(basePath + '/../cache/spotifyCache.pkl', 'rb') as f:
+
+    if not os.path.isfile(sCachePath, 'rb'):
+        return {}
+
+    with open(sCachePath, 'rb') as f:
         obj = cPickle.load(f)
+
+        print "LOADED OBJ: "
+        print str(obj)
 
         if obj is not None:
             sCacheDict = obj
@@ -46,7 +56,7 @@ def initializeSCache():
 
 def flushSCache():
     global sCacheDict
-    with open(basePath + '/../cache/spotifyCache.pkl', 'wb') as f:
+    with open(sCachePath, 'wb') as f:
         cPickle.dump(sCacheDict, f, cPickle.HIGHEST_PROTOCOL)
 
 #####################################################
