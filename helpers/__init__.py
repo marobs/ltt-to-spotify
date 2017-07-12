@@ -4,5 +4,7 @@ from session_helpers import *
 from flask_helpers import *
 from spotify_helpers import *
 from genre_helpers import *
+from cache_helpers import *
 
 initializeHelpers()
+initializeSCache()
