@@ -112,7 +112,7 @@
 
 /* Right Column Styling */
 
-#right-col .track {
+#right-col {
     background-color: white;
 }
 
@@ -126,6 +126,41 @@
     height: 20px;
     width: 20px;
     border-radius: 140px;
+}
+
+.rt-container {
+    display: flex;
+    height: 150px;
+    line-height: 150px;
+    border-bottom: 1px solid #999999;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.rt-album-img {
+    flex: 0 0 140px;
+    height: 140px;
+    background-position: center;
+    background-size: cover;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.rt-artist-container {
+    flex: 1 1;
+}
+
+.rt-artist {
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+}
+
+.rt-track {
+    height: 40px;
+    line-height: 40px;
+    position: relative;
 }
 
 /* Dragula Styling */
