@@ -3,11 +3,13 @@ import re
 import helpers.cache_helpers
 
 def getRedditPosts(redditQuery):
+    if redditQuery is None or not helpers.checkQueryType(redditQuery):
+        redditQuery = "top"
+
     # Check if the data is cached
-    if redditQuery is not None:
-        cachedData = helpers.getFromRCache(redditQuery)
-        if cachedData is not None:
-            return cachedData
+    cachedData = helpers.getFromRCache(redditQuery)
+    if cachedData is not None:
+        return cachedData
 
     # Grab actual reddit data
     response = queryForRedditData(redditQuery)
@@ -19,44 +21,32 @@ def getRedditPosts(redditQuery):
 
     postList = []
     for child in response["data"]["children"]:
-        if "data" not in child:
-            print "No child data found"
+        if 'data' not in child or 'stickied' in child['data'] and child['data']['stickied']:
             continue
 
-        childData = child["data"]
-
-        # If stickied post, not a song so continue
-        if "stickied" in childData and childData["stickied"]:
-            continue
-
-        # Otherwise, grab song data and append it to the post list
         post = {}
-        if "title" in childData:
-            post["rawTitle"] = childData["title"]
-        else:
-            print "No title in child"
+        if 'title' in child['data'] and 'url' in child['data']:
+            post['rawTitle'] = child['data']['title']
+            post['url'] = child['data']['url']
 
-        if "url" in childData:
-            post["url"] = childData["url"]
-
-        generateAndAppendSongData(post, postList)
+        post = fillPostData(post)
+        postList.append(post)
 
     # Save to cache
     helpers.saveToRCache(postList, redditQuery)
     return postList
 
+
 # Query for reddit data based on redditQuery type
 def queryForRedditData(redditQuery):
-    if redditQuery is None or not helpers.checkQueryType(redditQuery):
-        redditQuery = "top"
-
     url = "http://reddit.com/r/listentothis/" + str(redditQuery) + ".json"
     requestHeader = {'User-agent': 'ltts bot 0.1'}
     response = requests.get(url, headers=requestHeader)
     return response.json()
 
+
 # Use regex to pull out title, artist, genre, and year
-def generateAndAppendSongData(post, postList):
+def fillPostData(post):
     regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\].*(\d\d\d\d)", post["rawTitle"])
     if regexGroups is None:
         regexGroups = re.search("^(.*) -{1,2} (.*) \[(.*)\]", post["rawTitle"])
@@ -76,7 +66,8 @@ def generateAndAppendSongData(post, postList):
     if len(regexGroups) == 4:
         post["year"] = regexGroups[3]
 
-    postList.append(post)
+    return post
+
 
 # Pretty printer
 def printPostList(postList):
