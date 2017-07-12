@@ -15,6 +15,7 @@ def searchSpotify(postList):
         spotifyEntry = searchForPost(post)
         if spotifyEntry:
             spotifyEntry['track']['redditData'] = post
+            print "Found Spotify entry for -- " + str(post['rawTitle'])
             spotifyData.append(spotifyEntry)
 
     print "Got base spotify objects"
@@ -82,9 +83,7 @@ def replaceTrackObjects(initialResults):
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
                 redditData = initialResult['track']['redditData']
-                initialResult['track'] = trackResult
-                initialResult['track']['redditData'] = redditData
-
+                assignTrack(initialResult['track'], trackResult, redditData)
                 continue
 
 def fillWithArtistTopSongs(spotifyData):
@@ -93,28 +92,40 @@ def fillWithArtistTopSongs(spotifyData):
 
     # For each track, save album and artist and query for that artist's top song
     for entry in spotifyData:
-        if 'track' in entry:
-            if 'album' in entry['track']:
-                albumList.append(entry['track']['album']['id'])
+        if 'album' in entry['track']:
+            albumList.append(entry['track']['album']['id'])
 
-            # If artist exists, query for top song
-            if 'artists' in entry['track'] and len(entry['track']['artists']):
-                artistList.append(entry['track']['artists'][0]['id'])
-                topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
+        # If artist exists, query for top song
+        if 'artists' in entry['track'] and len(entry['track']['artists']):
+            artistList.append(entry['track']['artists'][0]['id'])
+            topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
 
-                # If top song is different than reddit track, save to entry['top'] and save album id
-                if topSong is not None:
-                    if topSong['id'] == entry['track']['id']:
-                        entry['track']['top'] = None
-                        entry['track']['isTop'] = True
+            # If top song is different than reddit track, save to entry['top'] and save album id
+            if topSong is not None:
+                if topSong['id'] == entry['track']['id']:
+                    entry['track']['top'] = None
+                    entry['track']['isTop'] = True
 
-                    else:
-                        entry['top'] = topSong
-                        entry['track']['top'] = topSong['id']
-                        entry['track']['isTop'] = False
-                        albumList.append(topSong['album']['id'])
+                else:
+                    entry['top'] = {}
+                    assignTrack(entry['top'], topSong, None)
+                    entry['track']['top'] = topSong['id']
+                    entry['track']['isTop'] = False
+                    albumList.append(topSong['album']['id'])
 
     return albumList, artistList
+
+def assignTrack(spotifyEntry, trackObject, redditData):
+    spotifyEntry['album'] = trackObject['album']
+    spotifyEntry['artists'] = trackObject['artists']
+    spotifyEntry['duration_ms'] = trackObject['duration_ms']
+    spotifyEntry['explicit'] = trackObject['explicit']
+    spotifyEntry['id'] = trackObject['id']
+    spotifyEntry['name'] = trackObject['name']
+    spotifyEntry['popularity'] = trackObject['popularity']
+
+    if redditData is not None:
+        spotifyEntry['redditData'] = redditData
 
 # Given a list of albums in spotifyData, replace spotifyData album objects with corresponding full album objects
 def replaceAlbumObjects(spotifyData, albumSet):
@@ -138,13 +149,22 @@ def emplaceAlbumResult(albumResult, spotifyData):
         # Check if album corresponds to reddit suggestion
         if 'track' in spotifyObj:
             if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
-                spotifyObj['track']['album'] = albumResult
+                assignAlbum(spotifyObj['track']['album'], albumResult)
                 continue
 
         # Check if labum corresponds to artist top song
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
-                spotifyObj['top']['album'] = albumResult
+                assignAlbum(spotifyObj['top']['album'], albumResult)
+
+def assignAlbum(spotifyEntry, albumObject):
+    spotifyEntry['genres'] = albumObject['genres']
+    spotifyEntry['id'] = albumObject['id']
+    spotifyEntry['images'] = albumObject['images']
+    spotifyEntry['name'] = albumObject['name']
+    spotifyEntry['popularity'] = albumObject['popularity']
+    spotifyEntry['release_date'] = albumObject['release_date']
+    spotifyEntry['release_date_precision'] = albumObject['release_date_precision']
 
 # Add artist data to each spotify post
 def replaceArtistObjects(spotifyData, artistSet):
@@ -154,10 +174,19 @@ def replaceArtistObjects(spotifyData, artistSet):
         for result in artistResults['artists']:
             for entry in spotifyData:
                 if len(entry['track']['artists']) and result['id'] == entry['track']['artists'][0]['id']:
-                    entry['track']['artist'] = result
+                    assignArtist(entry['track']['artist'], result)
+                    del entry['track']['artists']
 
                 if 'top' in entry and len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
-                    entry['top']['artist'] = result
+                    assignArtist(entry['top']['artist'], result)
+                    del entry['top']['artists']
+
+def assignArtist(spotifyEntry, artistObject):
+    spotifyEntry['genres'] = artistObject['genres']
+    spotifyEntry['id'] = artistObject['id']
+    spotifyEntry['images'] = artistObject['images']
+    spotifyEntry['name'] = artistObject['name']
+    spotifyEntry['popularity'] = artistObject['popularity']
 
 def collectPostGenres(spotifyData):
     for spotifyEntry in spotifyData:
