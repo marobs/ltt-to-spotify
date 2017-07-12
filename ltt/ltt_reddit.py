@@ -28,6 +28,7 @@ def getRedditPosts(redditQuery):
         if 'title' in child['data'] and 'url' in child['data']:
             post['rawTitle'] = child['data']['title']
             post['url'] = child['data']['url']
+            post['redditId'] = child['data']['id']
 
         post = fillPostData(post)
         postList.append(post)

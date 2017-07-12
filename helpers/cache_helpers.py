@@ -23,16 +23,12 @@ sCachePath = basePath + '/../cache/spotifyCache.pkl'
 # Add reddit data and top song data to reddit songs to be able to grab the top song with just the other one?
 # Think about when stuff is needed/not needed/inputs/outputs/etc
 
-def saveToSCacheById(spotifyTrack, topTrack):
+def saveToSCacheByKeyList(spotifyTrack, keyList):
     print "Saving spotify track data to SCache"
     global sCacheDict
 
-    trackId = spotifyTrack['id']
-    sCacheDict[trackId] = spotifyTrack
-
-    if topTrack is not None:
-        topId = topTrack['id']
-        sCacheDict[topId] = topTrack
+    for key in keyList:
+        sCacheDict[key] = spotifyTrack
 
 def getFromSCache(trackId):
     print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
