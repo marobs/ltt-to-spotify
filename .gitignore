@@ -6,3 +6,4 @@ vagrant.sh
 *.pyc
 .idea/
 .DS_Store
+/cache
