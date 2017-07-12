@@ -21,41 +21,28 @@ def searchSpotify(postList):
     print "Got base spotify objects"
 
     replaceTrackObjects(spotifyData)
-
     print "Replaced track objects"
 
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
-
     print "Got top song data"
 
     replaceAlbumObjects(spotifyData, albumList)
-
     print "Got album objects"
 
     replaceArtistObjects(spotifyData, artistList)
-
     print "Got artist objects"
 
     collectPostGenres(spotifyData)
-
     print "Collected genre information"
+    #printSpotifyData(spotifyData)
 
-    prepareAndCacheSpotifyData(spotifyData)
+    #prepareAndCacheSpotifyData(spotifyData)
 
     return spotifyData + cachedEntries
 
 def printSpotifyData(spotifyData):
-
     print "Printing Spotify Data"
-
-    for data in spotifyData:
-        if 'track' in data:
-            helpers.printTrack(data['track'], 'track')
-
-        if 'top' in data:
-            helpers.printTrack(data['top'], 'top')
-
-        print "\n"
+    print json.dumps(spotifyData, indent=2)
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
@@ -73,18 +60,20 @@ def getMatchingTrack(searchResults):
 
     return match
 
-def replaceTrackObjects(initialResults):
-    trackResults = helpers.queryForFullTrackObjects(initialResults)
+##
+## TRACKS
+##
+def replaceTrackObjects(spotifyData):
+    trackResults = helpers.queryForFullTrackObjects(spotifyData)
 
     if trackResults is None:
         return None
 
     for trackResult in trackResults['tracks']:
-        for initialResult in initialResults:
+        for initialResult in spotifyData:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
                 redditData = initialResult['track']['redditData']
-                assignTrack(initialResult['track'], trackResult, redditData)
-                continue
+                initialResult['track'] = buildTrackObject(trackResult, redditData)
 
 def fillWithArtistTopSongs(spotifyData):
     albumList = []
@@ -107,15 +96,15 @@ def fillWithArtistTopSongs(spotifyData):
                     entry['track']['isTop'] = True
 
                 else:
-                    entry['top'] = {}
-                    assignTrack(entry['top'], topSong, None)
+                    entry['top'] = buildTrackObject(topSong, None)
                     entry['track']['top'] = topSong['id']
                     entry['track']['isTop'] = False
                     albumList.append(topSong['album']['id'])
 
     return albumList, artistList
 
-def assignTrack(spotifyEntry, trackObject, redditData):
+def buildTrackObject(trackObject, redditData):
+    spotifyEntry = {}
     spotifyEntry['album'] = trackObject['album']
     spotifyEntry['artists'] = trackObject['artists']
     spotifyEntry['duration_ms'] = trackObject['duration_ms']
@@ -127,9 +116,19 @@ def assignTrack(spotifyEntry, trackObject, redditData):
     if redditData is not None:
         spotifyEntry['redditData'] = redditData
 
-# Given a list of albums in spotifyData, replace spotifyData album objects with corresponding full album objects
+    return spotifyEntry
+
+##
+## ALBUMS
+##
 def replaceAlbumObjects(spotifyData, albumSet):
     index = 0
+
+    print "ALBUMSET: " + str(albumSet)
+
+
+    # TODO: PARSING THIS LIST WRONG
+
     while (index + 20) < len(albumSet):
         queryIds = albumSet[index:index+20]
         albumResults = helpers.queryForAllAlbums(queryIds)
@@ -137,27 +136,37 @@ def replaceAlbumObjects(spotifyData, albumSet):
         if albumResults is None:
             continue
 
+        print json.dumps(albumResults, indent=4)
+
         for albumResult in albumResults['albums']:
+            print "Emplacing album " + str(albumResult['id'])
             emplaceAlbumResult(albumResult, spotifyData)
 
         index += 20
 
-# Given a full album object, replace the corresponding simple album object in the spotifyData
 def emplaceAlbumResult(albumResult, spotifyData):
+    found = False
     for spotifyObj in spotifyData:
 
         # Check if album corresponds to reddit suggestion
         if 'track' in spotifyObj:
             if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
-                assignAlbum(spotifyObj['track']['album'], albumResult)
-                continue
+                spotifyObj['track']['album'] = buildAlbumObject(albumResult)
+                found = True
+                print "MATCH FOUND - Album - track"
 
         # Check if labum corresponds to artist top song
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
-                assignAlbum(spotifyObj['top']['album'], albumResult)
+                spotifyObj['top']['album'] = buildAlbumObject(albumResult)
+                found = True
+                print "MATCH FOUND - ALBUM - top"
 
-def assignAlbum(spotifyEntry, albumObject):
+    if not found:
+        print "NO MATCH FOUND - Album"
+
+def buildAlbumObject(albumObject):
+    spotifyEntry = {}
     spotifyEntry['genres'] = albumObject['genres']
     spotifyEntry['id'] = albumObject['id']
     spotifyEntry['images'] = albumObject['images']
@@ -166,7 +175,11 @@ def assignAlbum(spotifyEntry, albumObject):
     spotifyEntry['release_date'] = albumObject['release_date']
     spotifyEntry['release_date_precision'] = albumObject['release_date_precision']
 
-# Add artist data to each spotify post
+    return spotifyEntry
+
+##
+## ARTISTS
+##
 def replaceArtistObjects(spotifyData, artistSet):
     artistResults = helpers.queryForAllArtists(artistSet)
 
@@ -174,20 +187,26 @@ def replaceArtistObjects(spotifyData, artistSet):
         for result in artistResults['artists']:
             for entry in spotifyData:
                 if len(entry['track']['artists']) and result['id'] == entry['track']['artists'][0]['id']:
-                    assignArtist(entry['track']['artist'], result)
+                    entry['track']['artist'] = buildArtistObject(result)
                     del entry['track']['artists']
 
                 if 'top' in entry and len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
-                    assignArtist(entry['top']['artist'], result)
+                    entry['top']['artist'] = buildArtistObject(result)
                     del entry['top']['artists']
 
-def assignArtist(spotifyEntry, artistObject):
+def buildArtistObject(artistObject):
+    spotifyEntry = {}
     spotifyEntry['genres'] = artistObject['genres']
     spotifyEntry['id'] = artistObject['id']
     spotifyEntry['images'] = artistObject['images']
     spotifyEntry['name'] = artistObject['name']
     spotifyEntry['popularity'] = artistObject['popularity']
 
+    return spotifyEntry
+
+##
+## GENRES
+##
 def collectPostGenres(spotifyData):
     for spotifyEntry in spotifyData:
 
@@ -208,6 +227,8 @@ def collectPostGenres(spotifyData):
             if 'album' in spotifyEntry['track'] and 'genres' in spotifyEntry['track']['album']:
                 spotifyEntry['track']['genres'].update(spotifyEntry['track']['album']['genres'])
 
+            spotifyEntry['track']['genres'] = list(spotifyEntry['track']['genres'])
+
         # If different top artist song
         if 'top' in spotifyEntry:
             spotifyEntry['top']['genres'] = set(spotifyGenres)
@@ -216,6 +237,7 @@ def collectPostGenres(spotifyData):
             if 'album' in spotifyEntry['top'] and 'genres' in spotifyEntry['top']['album']:
                 spotifyEntry['top']['genres'].update(spotifyEntry['top']['album']['genres'])
 
+            spotifyEntry['top']['genres'] = list(spotifyEntry['top']['genres'])
 
 def splitRedditGenres(genreString):
     if genreString is None:
@@ -245,7 +267,6 @@ def categorizeGenres(spotifyData):
 
             spotifyEntry['genres'] = genres
 
-
 #############################################################
 #                                                           #
 #                   Playlist Data                           #
@@ -254,7 +275,6 @@ def categorizeGenres(spotifyData):
 
 def getUserPlaylists():
     return helpers.queryForUserPlaylists()
-
 
 def printUserPlaylists(playlists):
     for playlist in playlists:
@@ -278,31 +298,9 @@ def getSelectedPlaylist(playlist):
 
 #############################################################
 #                                                           #
-#                      Trim Data                            #
+#                      Cached Data                          #
 #                                                           #
 #############################################################
-
-def trimLTTObjects(spotifyTracks, userPlaylists):
-    for spotifyObj in spotifyTracks:
-        if 'track' in spotifyObj:
-            trimTrackObject(spotifyObj['track'])
-
-        if 'top' in spotifyObj:
-            trimTrackObject(spotifyObj['top'])
-
-    for playlist in userPlaylists:
-        del (playlist['external_urls'])
-
-def trimTrackObject(trackObj):
-    del (trackObj['album']['available_markets'])
-    del (trackObj['album']['copyrights'])
-    del (trackObj['album']['external_ids'])
-    del (trackObj['album']['external_urls'])
-    del (trackObj['album']['tracks'])
-    del (trackObj['album']['type'])
-    del (trackObj['available_markets'])
-    del (trackObj['external_ids'])
-    del (trackObj['external_urls'])
 
 def getCachedEntries(postList):
     cachedEntries = []
