@@ -9,7 +9,7 @@ import os.path
 
 rCacheDict = {}
 sCacheDict = {}
-sCachePath = basePath + '/../cache/spotifyCache.pkl', 'rb'
+sCachePath = basePath + '/../cache/spotifyCache.pkl'
 
 #####################################################
 #                                                   #
@@ -39,7 +39,7 @@ def getFromSCache(trackId):
 def initializeSCache():
     global sCacheDict
 
-    if not os.path.isfile(sCachePath, 'rb'):
+    if not os.path.isfile(sCachePath):
         return {}
 
     with open(sCachePath, 'rb') as f:
