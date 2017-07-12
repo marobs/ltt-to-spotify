@@ -14,8 +14,7 @@ def searchSpotify(postList):
     for post in postList:
         spotifyEntry = searchForPost(post)
         if spotifyEntry:
-            spotifyEntry['track']['redditGenres'] = post['genre']
-            spotifyEntry['track']['redditId'] = post['redditId']
+            spotifyEntry['track']['redditData'] = post
             spotifyData.append(spotifyEntry)
 
     print "Got base spotify objects"
@@ -25,7 +24,7 @@ def searchSpotify(postList):
     print "Replaced track objects"
 
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
-    albumSetList, artistSetList = checkIfCached(spotifyData, albumList, artistList)
+    albumSetList, artistSetList = checkIfTopTrackCached(spotifyData, albumList, artistList)
 
     print "Got top song data"
 
@@ -83,9 +82,9 @@ def replaceTrackObjects(initialResults):
     for trackResult in trackResults['tracks']:
         for initialResult in initialResults:
             if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
-                redditGenres = initialResult['track']['redditGenres']
+                redditData = initialResult['track']['redditData']
                 initialResult['track'] = trackResult
-                initialResult['track']['redditGenres'] = redditGenres
+                initialResult['track']['redditData'] = redditData
 
                 continue
 
@@ -114,7 +113,7 @@ def fillWithArtistTopSongs(spotifyData):
                         entry['top'] = topSong
                         entry['track']['top'] = topSong['id']
                         entry['track']['isTop'] = False
-                        albumList.add(topSong['album']['id'])
+                        albumList.append(topSong['album']['id'])
 
     return albumList, artistList
 
@@ -158,7 +157,7 @@ def replaceArtistObjects(spotifyData, artistSet):
                 if len(entry['track']['artists']) and result['id'] == entry['track']['artists'][0]['id']:
                     entry['track']['artist'] = result
 
-                if len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
+                if 'top' in entry and len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
                     entry['top']['artists'] = result
 
 def collectPostGenres(spotifyData):
@@ -174,7 +173,7 @@ def collectPostGenres(spotifyData):
             spotifyEntry['track']['genres'] = set(spotifyGenres)
 
             # Add reddit genres
-            redditGenres = splitRedditGenres(spotifyEntry['track']['redditGenres'])
+            redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['redditGenres'])
             spotifyEntry['track']['genres'].update(redditGenres)
 
             # Add track album genres
@@ -301,7 +300,7 @@ def getCachedEntries(postList):
 
     return postList, cachedEntries
 
-def checkIfCached(spotifyData, albumList, artistList):
+def checkIfTopTrackCached(spotifyData, albumList, artistList):
     # Original not cached--would have already had this data and skipped this step.
     # However, a different song by the same artist could be posted leading to a cached version of the top song.
     for entry in spotifyData:
