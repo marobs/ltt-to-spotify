@@ -151,9 +151,14 @@
     flex: 1 1;
 }
 
+.rt-artist-text {
+    font-weight: bold;
+}
+
 .rt-artist {
     height: 60px;
     line-height: 60px;
+    font-size: 20px;
     position: relative;
 }
 
@@ -161,6 +166,10 @@
     height: 40px;
     line-height: 40px;
     position: relative;
+}
+
+.rt-track-1 {
+    border-bottom: 1px solid #999999;
 }
 
 /* Dragula Styling */
