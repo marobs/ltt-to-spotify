@@ -18,6 +18,7 @@ sCachePath = basePath + '/../cache/spotifyCache.pkl'
 #####################################################
 
 def saveToSCache(spotifyTrack, topTrack):
+    print "Saving spotify track data to SCache"
     global sCacheDict
 
     trackId = spotifyTrack['id']
@@ -28,6 +29,7 @@ def saveToSCache(spotifyTrack, topTrack):
         sCacheDict[topId] = topTrack
 
 def getFromSCache(trackId):
+    print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
     global sCacheDict
 
     if trackId in sCacheDict:
@@ -37,6 +39,7 @@ def getFromSCache(trackId):
         return None
 
 def initializeSCache():
+    print "Initializing SCache"
     global sCacheDict
 
     if not os.path.isfile(sCachePath):
@@ -55,6 +58,7 @@ def initializeSCache():
             sCacheDict = {}
 
 def flushSCache():
+    print "Saving SCache to file"
     global sCacheDict
     with open(sCachePath, 'wb') as f:
         cPickle.dump(sCacheDict, f, cPickle.HIGHEST_PROTOCOL)
@@ -66,11 +70,13 @@ def flushSCache():
 #####################################################
 
 def saveToRCache(redditData, queryType):
+    print "Saving data to RCache"
     global rCacheDict
     if redditData is not None and queryType is not None and checkQueryType(queryType):
         rCacheDict[queryType] = redditData
 
 def getFromRCache(queryType):
+    print "Grabbing data from RCache"
     global rCacheDict
     if queryType in rCacheDict:
         return rCacheDict[queryType]
