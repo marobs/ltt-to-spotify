@@ -17,7 +17,7 @@ redditPosts: [
 
 ##############################################
 ##                                          ##
-##        Track Data (before trim)          ##
+##      Track Data (what is available)      ##
 ##                                          ##
 ##############################################
 
@@ -86,7 +86,7 @@ spotifyData: [
 
 spotifyData: [
   {
-    track, top: {
+    track, (top): {
       album {
           genres:            array of strings
           id:                string
@@ -101,13 +101,23 @@ spotifyData: [
           id                 string
           name               string
           popularity         int
+          images             array of image objects
       }
       duration_ms:       int
       explicit:          bool
       id:                string
       name:              string
       popularity:        int
-      redditData:        postList data
+      redditData {
+          redditId      string
+          title         string
+          url           string
+          artist        string
+          genre         string
+          (year)        string
+          rawTitle      string
+
+      }
       genres: [{
           genre:  string
           class:  string
@@ -120,7 +130,7 @@ spotifyData: [
 
 ##############################################
 ##                                          ##
-##             Playlists Data                ##
+##             Playlists Data               ##
 ##                                          ##
 ##############################################
 
