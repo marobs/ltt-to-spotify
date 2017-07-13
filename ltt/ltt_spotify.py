@@ -7,11 +7,11 @@ import json
 #                                                           #
 #############################################################
 
-def searchSpotify(postList):
+def generateSpotifyData(postList):
     spotifyData = []
-    postList, cachedEntries = getCachedEntries(postList)
+    remainingPosts, cachedEntries = getCachedEntries(postList)
 
-    for post in postList:
+    for post in remainingPosts:
         spotifyEntry = searchForPost(post)
         if spotifyEntry:
             spotifyEntry['track']['redditData'] = post
@@ -34,9 +34,9 @@ def searchSpotify(postList):
 
     collectPostGenres(spotifyData)
     print "Collected genre information"
-    printSpotifyData(spotifyData)
+    #printSpotifyData(spotifyData)
 
-    #prepareAndCacheSpotifyData(spotifyData)
+    prepareAndCacheSpotifyData(spotifyData)
 
     return spotifyData + cachedEntries
 
@@ -146,14 +146,12 @@ def emplaceAlbumResult(albumResult, spotifyData):
             if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
                 spotifyObj['track']['album'] = buildAlbumObject(albumResult)
                 found = True
-                print "MATCH FOUND - Album - track"
 
         # Check if album corresponds to artist top song
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
                 spotifyObj['top']['album'] = buildAlbumObject(albumResult)
                 found = True
-                print "MATCH FOUND - ALBUM - top"
 
     if not found:
         print "NO MATCH FOUND - Album"
@@ -183,13 +181,11 @@ def replaceArtistObjects(spotifyData, artistSet):
                 if 'artists' in entry['track'] and result['id'] == entry['track']['artists'][0]['id']:
                     entry['track']['artist'] = buildArtistObject(result)
                     del entry['track']['artists']
-                    print "MATCH FOUND - ARTIST - track"
                     found = True
 
                 if 'top' in entry and 'artists' in entry['top'] and result['id'] == entry['top']['artists'][0]['id']:
                     entry['top']['artist'] = buildArtistObject(result)
                     del entry['top']['artists']
-                    print "MATCH FOUND - ARTIST - top"
                     found = True
 
             if not found:
@@ -299,27 +295,36 @@ def getSelectedPlaylist(playlist):
 
 def getCachedEntries(postList):
     cachedEntries = []
+    cachedIds = set()
+    postIds = set()
     for post in postList:
+        postIds.add(post['redditId'])
+
         cachedTrack = helpers.getFromSCache(post['redditId'])
         if cachedTrack is not None:
-
-            # Must have 'top' in it to be "correctly formed" -- aka processed by me
-            if 'top' in cachedTrack:
-                if cachedTrack['top'] is not None:  # This is not top
+            if 'top' in cachedTrack:  # Processed by me
+                if cachedTrack['top'] is not None:  # This is only track (not top)
                     cachedTop = helpers.getFromSCache(cachedTrack['top'])
                     if cachedTop is not None:
                         cachedSpotifyEntry = {'track': cachedTrack, 'top': cachedTop}
                         cachedEntries.append(cachedSpotifyEntry)
-                        postList.remove(post)
+                        cachedIds.add(post['redditId'])
 
-                else:  # This is top
+                else:  # This is track and top
                     cachedSpotifyEntry = {'track': cachedTrack}
                     cachedEntries.append(cachedSpotifyEntry)
-                    postList.remove(post)
+                    cachedIds.add(post['redditId'])
 
-    print "Found " + str(len(cachedEntries)) + " cached entries"
+    remainingIds = list(postIds - postIds)
+    remainingPosts = []
+    for id in remainingIds:
+        for post in postList:
+            if post['redditId'] == id:
+                remainingPosts.append(post)
 
-    return postList, cachedEntries
+    print "Found " + str(len(cachedEntries)) + " cached entries. Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
+
+    return remainingPosts, cachedEntries
 
 def prepareAndCacheSpotifyData(spotifyData):
     for entry in spotifyData:

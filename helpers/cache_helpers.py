@@ -1,6 +1,7 @@
 from global_helpers import basePath
 import cPickle
 import os.path
+import json
 
 
 ###
@@ -28,6 +29,7 @@ def saveToSCacheByKeyList(spotifyTrack, keyList):
     global sCacheDict
 
     for key in keyList:
+        print "    Saving track by id " + str(key)
         sCacheDict[str(key)] = dict(spotifyTrack)
 
 def getFromSCache(trackId):
@@ -35,6 +37,7 @@ def getFromSCache(trackId):
     global sCacheDict
 
     if trackId in sCacheDict:
+        print "    Found track"
         return sCacheDict[trackId]
 
     else:
@@ -51,7 +54,7 @@ def initializeSCache():
         obj = cPickle.load(f)
 
         print "Loaded Spotify Cache: "
-        print str(obj)
+        print json.dumps(obj, indent=4)
 
         if obj is not None:
             sCacheDict = obj

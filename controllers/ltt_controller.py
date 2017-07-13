@@ -2,6 +2,7 @@ from flask import *
 import helpers
 import ltt
 import requests
+import json
 
 listentothis = Blueprint('ltt', __name__, template_folder='templates')
 
@@ -18,7 +19,11 @@ def ltt_route():
 
     else:
         redditPosts = ltt.getRedditPosts(redditQuery)
-        spotifyTracks = ltt.searchSpotify(redditPosts)
+
+        print "Number of reddit posts - " + str(len(redditPosts))
+        print json.dumps(redditPosts, indent=4)
+
+        spotifyTracks = ltt.generateSpotifyData(redditPosts)
         userPlaylists = ltt.getUserPlaylists()
 
         selectedPlaylist = None
