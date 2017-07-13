@@ -26,11 +26,13 @@ def generateSpotifyData(postList):
     albumList, artistList = fillWithArtistTopSongs(spotifyData)
     print "Got top song data"
 
-    replaceAlbumObjects(spotifyData, albumList)
-    print "Got album objects"
+    if len(albumList):
+        replaceAlbumObjects(spotifyData, albumList)
+        print "Got album objects"
 
-    replaceArtistObjects(spotifyData, artistList)
-    print "Got artist objects"
+    if len(artistList):
+        replaceArtistObjects(spotifyData, artistList)
+        print "Got artist objects"
 
     collectPostGenres(spotifyData)
     print "Collected genre information"
@@ -315,7 +317,7 @@ def getCachedEntries(postList):
                     cachedEntries.append(cachedSpotifyEntry)
                     cachedIds.add(post['redditId'])
 
-    remainingIds = list(postIds - postIds)
+    remainingIds = list(postIds - cachedIds)
     remainingPosts = []
     for id in remainingIds:
         for post in postList:
