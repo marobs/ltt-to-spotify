@@ -51,21 +51,25 @@ def queryForArtistTopSong(artistId):
 ## [GET] Get all albums in albumList
 ##
 def queryForAllAlbums(albumList):
-    url = "https://api.spotify.com/v1/albums"
-    params = {'ids': albumList}
+    url = "https://api.spotify.com/v1/albums/?ids="
+    for album in albumList:
+        url += str(album) + ','
+    url = url[:-1]
     requestHeader = None
 
-    return global_helpers.query_http(url, params, requestHeader, "All albums query", 'GET')
+    return global_helpers.query_http(url, None, requestHeader, "All albums query", 'GET')
 
 ##
 ## [GET] Get all artists in artistList
 ##
 def queryForAllArtists(artistList):
-    url = "https://api.spotify.com/v1/artists"
-    params = {'ids': artistList}
+    url = "https://api.spotify.com/v1/artists/?ids="
+    for artist in artistList:
+        url += str(artist) + ','
+    url = url[:-1]
     requestHeader = None
 
-    return global_helpers.query_http(url, params, requestHeader, "All artists query", 'GET')
+    return global_helpers.query_http(url, None, requestHeader, "All artists query", 'GET')
 
 ##
 ## [GET] Get user playlists
