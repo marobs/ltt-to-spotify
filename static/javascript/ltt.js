@@ -17,8 +17,8 @@ let dragIndex = -1;
 
 let playlists = {};
 
-const ADD_ENDPOINT = '/add';
-const REORDER_ENDPOINT = '/reorder';
+const ADD_ENDPOINT = '/ltt/addTrack';
+const REORDER_ENDPOINT = '/ltt/reorder';
 
 function AddOptions(uris, position, playlist) {
     this.uris = uris;
