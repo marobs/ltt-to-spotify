@@ -1,8 +1,14 @@
 let $leftCol = $('#left-col');
 let midCol = document.getElementById('middle-col');
 let $midCol = $(midCol);
+let rightColTracks = document.getElementsByClassName('rt-track-container');
+let $rightColTracks = $(rightColTracks);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
+
+let dragulaElements = Object.keys(rightColTracks).map(function (key) { return rightColTracks[key]; });
+dragulaElements.push(midCol);
+
 
 let selectedPlaylist = null;
 let switchPlaylistRequest = null;
@@ -52,9 +58,12 @@ function getPlaylistInfo(playlistName) {
     });
 }
 
-dragula([midCol, rightCol], {
+dragula(dragulaElements, {
     copy: (el, source) => {
-        return source === rightCol
+        console.log(source);
+        console.log($(source));
+        console.log($(source).hasClass('rt-track-container'));
+        return $(source).hasClass('rt-track-container');
     },
     copySortSource: false,
     accepts: (el, target) => {
@@ -66,7 +75,7 @@ dragula([midCol, rightCol], {
         // Make call to serve to reorder tracks on playlist
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
 
-        if (dragIndex === -1 && source === rightCol) { // Add Song
+        if (dragIndex === -1 && $(source).hasClass('rt-track-container')) { // Add Song
             let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el), selectedPlaylist);
             sendEndpointRequest(ADD_ENDPOINT, options)
             .catch((e) => {
@@ -141,5 +150,17 @@ $leftCol.on('click', '.playlist', function(e) {
             // TODO: something with error?
             return;
         });
+    }
+});
+
+$rightCol.on('click', '.rch-text', function(e) {
+    console.log("Sad");
+    let newSelected = $(e.target);
+    let oldSelected = $('#right-col-header').find('.selected');
+    console.log(newSelected);
+
+    if (newSelected !== oldSelected) {
+        oldSelected.removeClass('selected');
+        newSelected.addClass('selected');
     }
 });
