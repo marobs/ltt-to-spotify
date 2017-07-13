@@ -34,7 +34,7 @@ def searchSpotify(postList):
 
     collectPostGenres(spotifyData)
     print "Collected genre information"
-    #printSpotifyData(spotifyData)
+    printSpotifyData(spotifyData)
 
     #prepareAndCacheSpotifyData(spotifyData)
 
@@ -124,22 +124,15 @@ def buildTrackObject(trackObject, redditData):
 def replaceAlbumObjects(spotifyData, albumSet):
     index = 0
 
-    print "ALBUMSET: " + str(albumSet)
-
-
-    # TODO: PARSING THIS LIST WRONG
-
-    while (index + 20) < len(albumSet):
+    albumSet = list(set(albumSet))
+    while index < len(albumSet):
         queryIds = albumSet[index:index+20]
         albumResults = helpers.queryForAllAlbums(queryIds)
 
         if albumResults is None:
             continue
 
-        print json.dumps(albumResults, indent=4)
-
         for albumResult in albumResults['albums']:
-            print "Emplacing album " + str(albumResult['id'])
             emplaceAlbumResult(albumResult, spotifyData)
 
         index += 20
@@ -155,7 +148,7 @@ def emplaceAlbumResult(albumResult, spotifyData):
                 found = True
                 print "MATCH FOUND - Album - track"
 
-        # Check if labum corresponds to artist top song
+        # Check if album corresponds to artist top song
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
                 spotifyObj['top']['album'] = buildAlbumObject(albumResult)
@@ -185,14 +178,22 @@ def replaceArtistObjects(spotifyData, artistSet):
 
     if artistResults is not None:
         for result in artistResults['artists']:
+            found = False
             for entry in spotifyData:
-                if len(entry['track']['artists']) and result['id'] == entry['track']['artists'][0]['id']:
+                if 'artists' in entry['track'] and result['id'] == entry['track']['artists'][0]['id']:
                     entry['track']['artist'] = buildArtistObject(result)
                     del entry['track']['artists']
+                    print "MATCH FOUND - ARTIST - track"
+                    found = True
 
-                if 'top' in entry and len(entry['top']['artists']) and result['id'] == entry['top']['artists'][0]['id']:
+                if 'top' in entry and 'artists' in entry['top'] and result['id'] == entry['top']['artists'][0]['id']:
                     entry['top']['artist'] = buildArtistObject(result)
                     del entry['top']['artists']
+                    print "MATCH FOUND - ARTIST - top"
+                    found = True
+
+            if not found:
+                print "NO MATCH FOUND - Artist"
 
 def buildArtistObject(artistObject):
     spotifyEntry = {}
