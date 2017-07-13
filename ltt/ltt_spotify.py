@@ -219,25 +219,19 @@ def collectPostGenres(spotifyData):
         # For 'track' in entry
         if 'track' in spotifyEntry:
             spotifyEntry['track']['genres'] = set(spotifyGenres)
+            spotifyEntry['track']['genres'].update(spotifyEntry['track']['artist']['genres'])
+            spotifyEntry['track']['genres'].update(spotifyEntry['track']['album']['genres'])
 
-            # Add reddit genres
             redditGenres = splitRedditGenres(spotifyEntry['track']['redditData']['genre'])
             spotifyEntry['track']['genres'].update(redditGenres)
-
-            # Add track album genres
-            if 'album' in spotifyEntry['track'] and 'genres' in spotifyEntry['track']['album']:
-                spotifyEntry['track']['genres'].update(spotifyEntry['track']['album']['genres'])
 
             spotifyEntry['track']['genres'] = list(spotifyEntry['track']['genres'])
 
         # If different top artist song
         if 'top' in spotifyEntry:
             spotifyEntry['top']['genres'] = set(spotifyGenres)
-
-            # Add album genres
-            if 'album' in spotifyEntry['top'] and 'genres' in spotifyEntry['top']['album']:
-                spotifyEntry['top']['genres'].update(spotifyEntry['top']['album']['genres'])
-
+            spotifyEntry['top']['genres'].update(spotifyEntry['top']['artist']['genres'])
+            spotifyEntry['top']['genres'].update(spotifyEntry['top']['album']['genres'])
             spotifyEntry['top']['genres'] = list(spotifyEntry['top']['genres'])
 
 def splitRedditGenres(genreString):
