@@ -17,8 +17,9 @@ let dragIndex = -1;
 
 let playlists = {};
 
-const ADD_ENDPOINT = '/ltt/addTrack';
-const REORDER_ENDPOINT = '/ltt/reorder';
+const ADD_URL = '/ltt/addTrack';
+const REORDER_URL = '/ltt/reorder';
+const PLAYLIST_URL = '/ltt/playlist';
 
 function AddOptions(uris, position, playlist) {
     this.uris = uris;
@@ -47,7 +48,7 @@ function sendEndpointRequest(url, options) {
 
 function getPlaylistInfo(playlistName) {
     return new Promise((resolve, reject) => {
-        $.get('/playlist', { "playlist": playlistName })
+        $.get(PLAYLIST_URL, { "playlist": playlistName })
         .done((response) => {
             playlists[playlistName] = response;
             resolve(response);
@@ -76,8 +77,8 @@ dragula(dragulaElements, {
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
 
         if (dragIndex === -1 && $(source).hasClass('rt-track-container')) { // Add Song
-            let options = new AddOptions(ADD_ENDPOINT, $midCol.children($el).index($el), selectedPlaylist);
-            sendEndpointRequest(ADD_ENDPOINT, options)
+            let options = new AddOptions(ADD_URL, $midCol.children($el).index($el), selectedPlaylist);
+            sendEndpointRequest(ADD_URL, options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
@@ -85,7 +86,7 @@ dragula(dragulaElements, {
         }
         else if (dragIndex >= 0 && source === midCol) { // Re-order Song
             let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), selectedPlaylist);
-            sendEndpointRequest(REORDER_ENDPOINT, options)
+            sendEndpointRequest(REORDER_URL, options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
