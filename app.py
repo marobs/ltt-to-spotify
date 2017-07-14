@@ -1,6 +1,7 @@
 from flask import Flask
 import controllers
 import helpers
+import argparse
 
 # Initialize Flask app with the template folder address
 app = Flask(__name__, template_folder='templates')
@@ -9,6 +10,10 @@ app = Flask(__name__, template_folder='templates')
 app.register_blueprint(controllers.main)
 app.register_blueprint(controllers.listentothis)
 app.secret_key = helpers.getFlaskSecret()
+
+# Get and set flags
+parser = argparse.ArgumentParser(description="Start up a ltt-to-spotify server.")
+parser.add_argument('-nc', '--nocache', action='store_true', help="Enable to not cache or used cache data")
 
 # Listen on external IPs
 # For us, listen to port 3000 so you can just run 'python app.py' to start the server
