@@ -41,7 +41,7 @@ def generateSpotifyData(postList):
         print "Collected genre information"
 
     spotifyData += cachedEntries
-    printSpotifyData(spotifyData)
+    logSpotifyData(spotifyData)
     prepareAndCacheSpotifyData(spotifyData, list(notFoundIds))
 
     return spotifyData
@@ -49,6 +49,9 @@ def generateSpotifyData(postList):
 def printSpotifyData(spotifyData):
     print "Printing Spotify Data"
     print json.dumps(spotifyData, indent=2)
+
+def logSpotifyData(spotifyData):
+    helpers.logGeneral(json.dumps(spotifyData, indent=4))
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
