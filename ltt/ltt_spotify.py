@@ -164,14 +164,12 @@ def emplaceAlbumResult(albumResult, spotifyData):
             if 'album' in spotifyObj['track'] and spotifyObj['track']['album']['id'] == albumResult['id']:
                 spotifyObj['track']['album'] = buildAlbumObject(albumResult)
                 found = True
-                print "Match found -- ALBUM -- track"
 
         # Check if album corresponds to artist top song
         if 'top' in spotifyObj:
             if 'album' in spotifyObj['top'] and spotifyObj['top']['album']['id'] == albumResult['id']:
                 spotifyObj['top']['album'] = buildAlbumObject(albumResult)
                 found = True
-                print "Match found -- ALBUM -- top"
 
     if not found:
         print "NO MATCH FOUND - Album"
@@ -202,13 +200,11 @@ def replaceArtistObjects(spotifyData, artistSet):
                     entry['track']['artist'] = buildArtistObject(result)
                     del entry['track']['artists']
                     found = True
-                    print "Match found -- ARTIST -- track"
 
                 if 'top' in entry and 'artists' in entry['top'] and result['id'] == entry['top']['artists'][0]['id']:
                     entry['top']['artist'] = buildArtistObject(result)
                     del entry['top']['artists']
                     found = True
-                    print "Match found -- ARTIST -- top"
 
             if not found:
                 print "NO MATCH FOUND - Artist"

@@ -29,11 +29,9 @@ def saveToSCacheByKeyList(spotifyTrack, keyList):
     if not checkCacheEnabled("save to SCache"):
         return
 
-    print "Saving spotify track data to SCache"
     global sCacheDict
 
     for key in keyList:
-        print "    Saving track by id " + str(key)
         if spotifyTrack is not None:
             sCacheDict[str(key)] = dict(spotifyTrack)
         else:
@@ -43,12 +41,10 @@ def getFromSCache(trackId):
     if not checkCacheEnabled("get from SCache"):
         return None
 
-    print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
     global notFoundValue
     global sCacheDict
 
     if trackId in sCacheDict:
-        print "    Found track"
         if sCacheDict[trackId] is not None:
             return sCacheDict[trackId]
 
@@ -71,9 +67,6 @@ def initializeSCache():
     with open(sCachePath, 'rb') as f:
         obj = cPickle.load(f)
 
-        print "Loaded Spotify Cache: "
-        print json.dumps(obj, indent=4)
-
         if obj is not None:
             sCacheDict = obj
 
@@ -84,7 +77,6 @@ def flushSCache():
     if not checkCacheEnabled("flushing SCache"):
         return
 
-    print "Saving SCache to file"
     global sCacheDict
     with open(sCachePath, 'wb') as f:
         f.seek(0)
@@ -101,7 +93,6 @@ def saveToRCache(redditData, queryType):
     if not checkCacheEnabled("saving to RCache"):
         return
 
-    print "Saving data to RCache"
     global rCacheDict
 
     if redditData is not None and queryType is not None and checkQueryType(queryType):
@@ -111,7 +102,6 @@ def getFromRCache(queryType):
     if not checkCacheEnabled("getting from RCache"):
         return None
 
-    print "Grabbing data from RCache for query " + str(queryType)
     global rCacheDict
     if queryType in rCacheDict:
         return list(rCacheDict[queryType])
