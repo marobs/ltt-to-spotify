@@ -4,7 +4,7 @@ import helpers.cache_helpers
 
 def getRedditPosts(redditQuery):
     if redditQuery is None or not helpers.checkQueryType(redditQuery):
-        redditQuery = "top"
+        redditQuery = 'top'
 
     # Check if the data is cached
     cachedData = helpers.getFromRCache(redditQuery)
@@ -16,7 +16,7 @@ def getRedditPosts(redditQuery):
     response = queryForRedditData(redditQuery)
 
     # Not sure what kind of error checking needs to occur here
-    if "data" not in response or "children" not in response["data"]:
+    if 'data' not in response or 'children' not in response['data']:
         print "No children post in reddit response"
         return None
 
@@ -32,7 +32,6 @@ def getRedditPosts(redditQuery):
                 postList.append(post)
 
     # Save to cache
-    print "Saving to cache. " + str(len(postList)) + " posts found"
     helpers.saveToRCache(postList, redditQuery)
     return postList
 

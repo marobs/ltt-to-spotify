@@ -344,7 +344,8 @@ def getCachedEntries(postList):
             if post['redditId'] == remainingId:
                 remainingPosts.append(post)
 
-    print "Found " + str(len(cachedEntries)) + " cached entries. Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
+    print "Found " + str(len(cachedEntries) + len(cachedNotFoundIds)) + " cached entries."
+    print "Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
 
     return remainingPosts, cachedEntries, cachedNotFoundIds
 
@@ -356,7 +357,6 @@ def prepareAndCacheSpotifyData(spotifyData, notFoundPosts):
         if 'top' in entry:
             helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
 
-    print "notFoundPosts: " + str(notFoundPosts)
     for postId in notFoundPosts:
         helpers.saveToSCacheByKeyList(None, [postId])
 

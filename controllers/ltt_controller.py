@@ -13,25 +13,32 @@ listentothis = Blueprint('ltt', __name__, template_folder='templates')
 def ltt_route():
     redditQuery = request.args.get('redditQuery')
 
-    if not helpers.checkAuthenticated():
-        print "Must authenticate!"
-        return redirect(helpers.getAuthorizationUrl())
+    redditPosts = ltt.getRedditPosts(redditQuery)
+    spotifyData = ltt.generateSpotifyData(redditPosts)
+    userPlaylists = ltt.getUserPlaylists()
 
-    else:
-        redditPosts = ltt.getRedditPosts(redditQuery)
+    selectedPlaylist = None
+    if userPlaylists is not None and len(userPlaylists) > 0:
+        selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
 
-        print "Number of reddit posts - " + str(len(redditPosts))
-        print json.dumps(redditPosts, indent=4)
+    return render_template("ltt.html", songList=redditPosts, playlists=userPlaylists, selected=selectedPlaylist)
 
-        spotifyTracks = ltt.generateSpotifyData(redditPosts)
-        userPlaylists = ltt.getUserPlaylists()
+###
+### [GET] Spotify entries for different reddit query
+###
+@listentothis.route("/ltt/redditSearch")
+def ltt_reddit_route():
+    if not helpers.checkArgs(['redditQuery'], request):
+        return jsonify({'Error': "Malformed playlist request"})
 
-        selectedPlaylist = None
-        if userPlaylists is not None and len(userPlaylists) > 0:
-            selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
+    redditQuery = request.args['redditQuery']
+    if not helpers.checkQueryType(redditQuery):
+        return jsonify({'Error': "Invalid reddit query type requested: " + str(redditQuery)})
 
-        #ltt.trimLTTObjects(spotifyTracks, userPlaylists)
-        return render_template("ltt.html", songList=redditPosts, playlists=userPlaylists, selected=selectedPlaylist)
+    redditPosts = ltt.getRedditPosts(redditQuery)
+    spotifyData = ltt.generateSpotifyData(redditPosts)
+
+    return jsonify(spotifyData)
 
 ###
 ### [GET] Get playlist data
