@@ -2,7 +2,7 @@ from global_helpers import basePath
 import cPickle
 import os.path
 import json
-
+from helpers import flag_helpers
 
 ###
 ### Objects
@@ -26,6 +26,9 @@ sCachePath = basePath + '/../cache/spotifyCache.pkl'
 # Think about when stuff is needed/not needed/inputs/outputs/etc
 
 def saveToSCacheByKeyList(spotifyTrack, keyList):
+    if not checkCacheEnabled("save to SCache"):
+        return
+
     print "Saving spotify track data to SCache"
     global sCacheDict
 
@@ -37,6 +40,9 @@ def saveToSCacheByKeyList(spotifyTrack, keyList):
             sCacheDict[str(key)] = None
 
 def getFromSCache(trackId):
+    if not checkCacheEnabled("get from SCache"):
+        return None
+
     print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
     global notFoundValue
     global sCacheDict
@@ -53,6 +59,9 @@ def getFromSCache(trackId):
         return None
 
 def initializeSCache():
+    if not checkCacheEnabled("initializing SCache"):
+        return
+
     print "Initializing SCache"
     global sCacheDict
 
@@ -72,6 +81,9 @@ def initializeSCache():
             sCacheDict = {}
 
 def flushSCache():
+    if not checkCacheEnabled("flushing SCache"):
+        return
+
     print "Saving SCache to file"
     global sCacheDict
     with open(sCachePath, 'wb') as f:
@@ -86,6 +98,9 @@ def flushSCache():
 #####################################################
 
 def saveToRCache(redditData, queryType):
+    if not checkCacheEnabled("saving to RCache"):
+        return
+
     print "Saving data to RCache"
     global rCacheDict
 
@@ -93,6 +108,9 @@ def saveToRCache(redditData, queryType):
         rCacheDict[str(queryType)] = list(redditData)
 
 def getFromRCache(queryType):
+    if not checkCacheEnabled("getting from RCache"):
+        return None
+
     print "Grabbing data from RCache for query " + str(queryType)
     global rCacheDict
     if queryType in rCacheDict:
@@ -104,3 +122,10 @@ def checkQueryType(queryType):
            queryType == 'new' or \
            queryType == 'rising' or \
            queryType == 'controversial'
+
+def checkCacheEnabled(action):
+    if not flag_helpers.CACHE_ENABLED():
+        print "No-cache mode enabled, not " + str(action)
+        return False
+
+    return True
