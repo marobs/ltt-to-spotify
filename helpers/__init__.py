@@ -5,6 +5,7 @@ from flask_helpers import *
 from spotify_helpers import *
 from genre_helpers import *
 from cache_helpers import *
+from log_helpers import *
 
 initializeHelpers()
 initializeSCache()

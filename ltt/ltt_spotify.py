@@ -9,7 +9,7 @@ import json
 
 def generateSpotifyData(postList):
     spotifyData = []
-    remainingPosts, cachedEntries = getCachedEntries(postList)
+    remainingPosts, cachedEntries, notFoundIds = getCachedEntries(postList)
 
     for post in remainingPosts:
         spotifyEntry = searchForPost(post)
@@ -17,6 +17,8 @@ def generateSpotifyData(postList):
             spotifyEntry['track']['redditData'] = post
             print "Found Spotify entry for -- " + str(post['rawTitle'])
             spotifyData.append(spotifyEntry)
+        else:
+            notFoundIds.add(post['redditId'])
 
     print "Got base spotify objects"
 
@@ -39,14 +41,17 @@ def generateSpotifyData(postList):
         print "Collected genre information"
 
     spotifyData += cachedEntries
-    printSpotifyData(spotifyData)
-    prepareAndCacheSpotifyData(spotifyData)
+    logSpotifyData(spotifyData)
+    prepareAndCacheSpotifyData(spotifyData, list(notFoundIds))
 
     return spotifyData
 
 def printSpotifyData(spotifyData):
     print "Printing Spotify Data"
     print json.dumps(spotifyData, indent=2)
+
+def logSpotifyData(spotifyData):
+    helpers.logGeneral(json.dumps(spotifyData, indent=4))
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
@@ -91,6 +96,9 @@ def fillWithArtistTopSongs(spotifyData):
         # If artist exists, query for top song
         if 'artists' in entry['track'] and len(entry['track']['artists']):
             artistList.append(entry['track']['artists'][0]['id'])
+
+            print "Querying for artist: " + str(entry['track']['artists'][0]['name']) + " -- " + str(entry['track']['artists'][0]['id'])
+
             topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
 
             # If top song is different than reddit track, save to entry['top'] and save album id
@@ -105,6 +113,11 @@ def fillWithArtistTopSongs(spotifyData):
                     entry['track']['isTop'] = False
                     albumList.append(topSong['album']['id'])
                     artistList.append(topSong['artists'][0]['id'])
+
+            else:
+                print "No top song."
+                entry['track']['top'] = None
+                entry['track']['isTop'] = False
 
     return albumList, artistList
 
@@ -304,6 +317,7 @@ def getSelectedPlaylist(playlist):
 
 def getCachedEntries(postList):
     cachedEntries = []
+    cachedNotFoundIds = set()
     cachedIds = set()
     postIds = set()
     for post in postList:
@@ -324,24 +338,31 @@ def getCachedEntries(postList):
                     cachedEntries.append(cachedSpotifyEntry)
                     cachedIds.add(post['redditId'])
 
-    remainingIds = list(postIds - cachedIds)
+            elif cachedTrack == helpers.notFoundValue:
+                cachedNotFoundIds.add(post['redditId'])
+
+    remainingIds = list((postIds - cachedIds) - cachedNotFoundIds)
     remainingPosts = []
-    for id in remainingIds:
+    for remainingId in remainingIds:
         for post in postList:
-            if post['redditId'] == id:
+            if post['redditId'] == remainingId:
                 remainingPosts.append(post)
 
     print "Found " + str(len(cachedEntries)) + " cached entries. Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
 
-    return remainingPosts, cachedEntries
+    return remainingPosts, cachedEntries, cachedNotFoundIds
 
-def prepareAndCacheSpotifyData(spotifyData):
+def prepareAndCacheSpotifyData(spotifyData, notFoundPosts):
     for entry in spotifyData:
         trackKeyList = [entry['track']['id'], entry['track']['redditData']['redditId']]
         helpers.saveToSCacheByKeyList(entry['track'], trackKeyList)
 
         if 'top' in entry:
             helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
+
+    print "notFoundPosts: " + str(notFoundPosts)
+    for postId in notFoundPosts:
+        helpers.saveToSCacheByKeyList(None, [postId])
 
     # Make permanent by flushing to disk
     helpers.flushSCache()
