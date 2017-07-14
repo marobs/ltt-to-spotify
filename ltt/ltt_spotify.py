@@ -9,7 +9,7 @@ import json
 
 def generateSpotifyData(postList):
     spotifyData = []
-    remainingPosts, cachedEntries = getCachedEntries(postList)
+    remainingPosts, cachedEntries, notFoundIds = getCachedEntries(postList)
 
     for post in remainingPosts:
         spotifyEntry = searchForPost(post)
@@ -17,6 +17,8 @@ def generateSpotifyData(postList):
             spotifyEntry['track']['redditData'] = post
             print "Found Spotify entry for -- " + str(post['rawTitle'])
             spotifyData.append(spotifyEntry)
+        else:
+            notFoundIds.add(post['redditId'])
 
     print "Got base spotify objects"
 
@@ -40,7 +42,7 @@ def generateSpotifyData(postList):
 
     spotifyData += cachedEntries
     printSpotifyData(spotifyData)
-    prepareAndCacheSpotifyData(spotifyData)
+    prepareAndCacheSpotifyData(spotifyData, list(notFoundIds))
 
     return spotifyData
 
@@ -304,6 +306,7 @@ def getSelectedPlaylist(playlist):
 
 def getCachedEntries(postList):
     cachedEntries = []
+    cachedNotFoundIds = set()
     cachedIds = set()
     postIds = set()
     for post in postList:
@@ -324,24 +327,31 @@ def getCachedEntries(postList):
                     cachedEntries.append(cachedSpotifyEntry)
                     cachedIds.add(post['redditId'])
 
-    remainingIds = list(postIds - cachedIds)
+            elif cachedTrack == helpers.notFoundValue:
+                cachedNotFoundIds.add(post['redditId'])
+
+    remainingIds = list((postIds - cachedIds) - cachedNotFoundIds)
     remainingPosts = []
-    for id in remainingIds:
+    for remainingId in remainingIds:
         for post in postList:
-            if post['redditId'] == id:
+            if post['redditId'] == remainingId:
                 remainingPosts.append(post)
 
     print "Found " + str(len(cachedEntries)) + " cached entries. Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
 
-    return remainingPosts, cachedEntries
+    return remainingPosts, cachedEntries, cachedNotFoundIds
 
-def prepareAndCacheSpotifyData(spotifyData):
+def prepareAndCacheSpotifyData(spotifyData, notFoundPosts):
     for entry in spotifyData:
         trackKeyList = [entry['track']['id'], entry['track']['redditData']['redditId']]
         helpers.saveToSCacheByKeyList(entry['track'], trackKeyList)
 
         if 'top' in entry:
             helpers.saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
+
+    print "notFoundPosts: " + str(notFoundPosts)
+    for postId in notFoundPosts:
+        helpers.saveToSCacheByKeyList(None, [postId])
 
     # Make permanent by flushing to disk
     helpers.flushSCache()

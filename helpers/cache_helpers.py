@@ -8,6 +8,7 @@ import json
 ### Objects
 ###
 
+notFoundValue = "VALUE_NOT_FOUND"
 rCacheDict = {}
 sCacheDict = {}
 sCachePath = basePath + '/../cache/spotifyCache.pkl'
@@ -30,15 +31,23 @@ def saveToSCacheByKeyList(spotifyTrack, keyList):
 
     for key in keyList:
         print "    Saving track by id " + str(key)
-        sCacheDict[str(key)] = dict(spotifyTrack)
+        if spotifyTrack is not None:
+            sCacheDict[str(key)] = dict(spotifyTrack)
+        else:
+            sCacheDict[str(key)] = None
 
 def getFromSCache(trackId):
     print "Grabbing spotify track id <" + str(trackId) + "> from SCache"
+    global notFoundValue
     global sCacheDict
 
     if trackId in sCacheDict:
         print "    Found track"
-        return sCacheDict[trackId]
+        if sCacheDict[trackId] is not None:
+            return sCacheDict[trackId]
+
+        else:  # Not found entry
+            return notFoundValue
 
     else:
         return None
