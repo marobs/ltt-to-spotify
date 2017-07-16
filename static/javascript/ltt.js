@@ -9,13 +9,14 @@ let $rightCol = $(rightCol);
 let dragulaElements = Object.keys(rightColTracks).map(function (key) { return rightColTracks[key]; });
 dragulaElements.push(midCol);
 
-
+let playlists = [];
 let selectedPlaylist = null;
 let switchPlaylistRequest = null;
 
+let switchRedditCategoryRequest = null;
+
 let dragIndex = -1;
 
-let playlists = {};
 
 const ADD_URL = '/ltt/addTrack';
 const REORDER_URL = '/ltt/reorder';
@@ -56,6 +57,25 @@ function getPlaylistInfo(playlistName) {
             console.error(e);
             reject(e);
         });
+    });
+}
+
+function getCategoryTracks(category) {
+    return new Promise((resolve, reject) => {
+        $.get(REDDIT_CATEGORY_URL, {category: category})
+        .done((response) => {
+            let expirationTime = 10; // Minutes
+            if (newCateogry === 'new') {
+                expirationTime = 2; // Minutes
+            }
+            lscache.set(newCategory, response, expirationTime);
+
+            resolve(response);
+        }).fail((e) => {
+            console.error(e);
+            reject(e);
+        });
+
     });
 }
 
@@ -129,11 +149,10 @@ $leftCol.on('click', '.playlist', function(e) {
     newSelected.addClass('selected');
 
     // Updated cahced dom for this playlist
-    let oldPlaylistName = selected.innerHTML;
+    let oldPlaylistName = selected[0].innerHTML;
     playlists[oldPlaylistName] = $midCol[0].innerHTML;
 
-
-    let playlistName = newSelected.innerHTML;
+    let playlistName = newSelected[0].innerHTML;
 
     if (playlistName in playlists && playlists[playlistName] !== 'undefined') {
         // Playlist information cached, set html
@@ -141,6 +160,7 @@ $leftCol.on('click', '.playlist', function(e) {
     }
     else {
         // No playlist information cached, make request on server
+        console.log("making request");
         let requestPromise = getPlaylistInfo(playlistName);
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
@@ -155,13 +175,33 @@ $leftCol.on('click', '.playlist', function(e) {
 });
 
 $rightCol.on('click', '.rch-text', function(e) {
-    console.log("Sad");
     let newSelected = $(e.target);
     let oldSelected = $('#right-col-header').find('.selected');
-    console.log(newSelected);
 
-    if (newSelected !== oldSelected) {
-        oldSelected.removeClass('selected');
-        newSelected.addClass('selected');
+    if (newSelected === oldSelected) {
+        return;
+    }
+
+    oldSelected.removeClass('selected');
+    newSelected.addClass('selected');
+
+    let newCategory = newSelected[0].innerHTML;
+
+    // Always fetch if new
+    let newCategoryHTML = lscache.get(newCategory);
+    if (newCategoryHTML !== null && newCategoryHTML !== 'undefined') {
+        $rightCol[0].innerHTML = newCategoryHTML;
+    }
+    else {
+        let requestPromise = getCategoryTracks(newCategory);
+        switchRedditCategoryRequest = requestPromise;
+        requestPromise.then((response) => {
+            if (requestPromise === switchRedditCategoryRequest) {
+                $rightCol[0].innerHTML = response;
+            }
+        }).catch((error) => {
+            // TODO: something with error?
+            return;
+        });
     }
 });
