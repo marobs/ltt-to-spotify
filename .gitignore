@@ -8,3 +8,4 @@ vagrant.sh
 .DS_Store
 /cache
 /log
+node_modules/*
