@@ -21,7 +21,7 @@ def ltt_route():
     if userPlaylists is not None and len(userPlaylists) > 0:
         selectedPlaylist = ltt.getSelectedPlaylist(userPlaylists[0])
 
-    return render_template("ltt.html", songList=redditPosts, playlists=userPlaylists, selected=selectedPlaylist)
+    return render_template("ltt.html", songList=spotifyData, playlists=userPlaylists, selected=selectedPlaylist)
 
 ###
 ### [GET] Spotify entries for different reddit query
