@@ -15,7 +15,10 @@ def generateSpotifyData(postList):
         spotifyEntry = searchForPost(post)
         if spotifyEntry:
             spotifyEntry['track']['redditData'] = post
-            print "Found Spotify entry for -- " + str(post['rawTitle'])
+            try:
+                print "Found Spotify entry for -- " + str(post['rawTitle'])
+            except  UnicodeEncodeError:
+                print "Foudn Spotify entry for -- " + post['rawTitle'].encode('utf-8')
             spotifyData.append(spotifyEntry)
         else:
             notFoundIds.add(post['redditId'])
@@ -97,7 +100,10 @@ def fillWithArtistTopSongs(spotifyData):
         if 'artists' in entry['track'] and len(entry['track']['artists']):
             artistList.append(entry['track']['artists'][0]['id'])
 
-            print "Querying for artist: " + str(entry['track']['artists'][0]['name']) + " -- " + str(entry['track']['artists'][0]['id'])
+            try:
+                print "Querying for artist: " + str(entry['track']['artists'][0]['name']) + " -- " + str(entry['track']['artists'][0]['id'])
+            except  UnicodeEncodeError:
+                print "Querying for artist: " + entry['track']['artists'][0]['name'].encode('utf-8') + " -- " + entry['track']['artists'][0]['id'].encode('utf-8')
 
             topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
 
