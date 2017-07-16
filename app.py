@@ -2,6 +2,13 @@ from flask import Flask
 import controllers
 import helpers
 import argparse
+import os
+
+if not os.path.exists('log'):
+    os.makedirs('log')
+
+if not os.path.exists('cache'):
+    os.makedirs('cache')
 
 # Initialize Flask app with the template folder address
 app = Flask(__name__, template_folder='templates')
