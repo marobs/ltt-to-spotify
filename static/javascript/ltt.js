@@ -32,7 +32,7 @@ function ReorderOptions(range_start, insert_before, playlist) {
     this.range_start = range_start;
     this.range_length = 1;
     this.insert_before = insert_before;
-    this.playlist = playlist
+    this.playlist = playlist;
 }
 
 function sendEndpointRequest(url, options) {
@@ -88,7 +88,7 @@ dragula(dragulaElements, {
     },
     copySortSource: false,
     accepts: (el, target) => {
-        return target === midCol
+        return target === midCol;
     }
 }).on('drop', (el, target, source) => {
     if (target === midCol) {
