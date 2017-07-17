@@ -95,15 +95,15 @@ module.exports = function(grunt) {
             build: {
                 files: {
                     'static/css/ltt.css': [
-                        'src/css/base_style.css',
-                        'src/css/genre.css',
-                        'src/css/ltt_style.css',
-                        'src/css/style.css'
+                        'src/postcss/base_style.css',
+                        'src/postcss/genre.css',
+                        'src/postcss/ltt_style.css',
+                        'src/postcss/style.css'
                     ],
                     'static/css/index.css': [
-                        'src/css/base_style.css',
-                        'src/css/index_style.css',
-                        'src/css/style.css'
+                        'src/postcss/base_style.css',
+                        'src/postcss/index_style.css',
+                        'src/postcss/style.css'
                     ]
                 }
             }
@@ -117,6 +117,22 @@ module.exports = function(grunt) {
                 files: '<%= jshint.all.src %>',
                 tasks: ['jshint:all']
             }
+        },
+        postcss: {
+            options: {
+                processors: [
+                    require('postcss-cssnext')(),
+                    require('precss')()
+                ]
+            },
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/css/',
+                    src: ['*.css'],
+                    dest: 'src/postcss/'
+                }]
+            }
         }
     });
 
@@ -129,9 +145,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-postcss');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'browserify:build', 'uglify:build', 'cssmin:build']);
+    grunt.registerTask('default', ['jshint', 'browserify:build', 'uglify:build', 'postcss:build', 'cssmin:build']);
     grunt.registerTask('debug', ['jshint', 'concat:debug', 'copy:debug']);
 
 

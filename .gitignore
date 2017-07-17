@@ -11,3 +11,4 @@ vagrant.sh
 node_modules/*
 static/javascript/*.js
 static/css/*.css
+src/postcss/*.css
