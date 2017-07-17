@@ -8,9 +8,13 @@ listentothis = Blueprint('ltt', __name__, template_folder='templates')
 
 ###
 ### [GET] Base /ltt endpoint
+### HTML
 ###
 @listentothis.route("/ltt")
 def ltt_route():
+    if not helpers.checkAuthenticated():
+        return redirect(helpers.getAuthorizationUrl())
+
     redditQuery = request.args.get('redditQuery')
 
     redditPosts = ltt.getRedditPosts(redditQuery)
@@ -25,6 +29,7 @@ def ltt_route():
 
 ###
 ### [GET] Spotify entries for different reddit query
+### JSON
 ###
 @listentothis.route("/ltt/redditSearch")
 def ltt_reddit_route():
@@ -42,6 +47,7 @@ def ltt_reddit_route():
 
 ###
 ### [GET] Get playlist data
+### JSON
 ###
 @listentothis.route("/ltt/playlist")
 def ltt_playlist_route():
@@ -56,6 +62,7 @@ def ltt_playlist_route():
 
 ###
 ### [POST] Add track to playlist
+### JSON
 ###
 @listentothis.route("/ltt/addTrack", methods=['POST'])
 def ltt_add_track_route():
@@ -71,6 +78,7 @@ def ltt_add_track_route():
 
 ###
 ### [DELETE] Remove track from playlist
+### JSON
 ###
 @listentothis.route("/ltt/removeTrack", methods=['DELETE'])
 def ltt_remove_track_route():
@@ -86,6 +94,7 @@ def ltt_remove_track_route():
 
 ###
 ### [PUT] Save track for user
+### JSON
 ###
 @listentothis.route("/ltt/saveTrack", methods=['PUT'])
 def ltt_save_track_route():
@@ -103,6 +112,7 @@ def ltt_save_track_route():
 
 ###
 ### [DELETE] Remove saved track for user
+### JSON
 ###
 @listentothis.route("/ltt/saveTrack", methods=['DELETE'])
 def ltt_unsave_track_route():
@@ -120,6 +130,7 @@ def ltt_unsave_track_route():
 
 ###
 ### [PUT] Reorder playlist tracks
+### JSON
 ###
 @listentothis.route("/ltt/reorder", methods=['PUT'])
 def ltt_reorder_route():
