@@ -16,6 +16,7 @@ app = Flask(__name__, template_folder='templates')
 # Register the controllers
 app.register_blueprint(controllers.main)
 app.register_blueprint(controllers.listentothis)
+app.register_blueprint(controllers.playlist)
 app.secret_key = helpers.getFlaskSecret()
 
 # Get and set flags
