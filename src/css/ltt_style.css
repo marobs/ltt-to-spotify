@@ -72,6 +72,12 @@
     margin: 0 16px;
 }
 
+#middle-col .rt-track:hover,
+.track-container:hover {
+    cursor: default;
+    background-color: #EBE6F2;
+}
+
 /* Middle Column Styling */
 .middle-col-header {
     display: flex;
@@ -138,6 +144,10 @@
     margin-left: 10px;
 }
 
+#right-col-header:hover {
+    cursor: default;
+}
+
 #right-col-header div {
     display: inline-block;
     margin-left: 20px;
@@ -176,6 +186,10 @@
     margin-right: 10px;
 }
 
+.rt-container:hover {
+    cursor: default;
+}
+
 .rt-album-img {
     flex: 0 0 140px;
     height: 140px;
@@ -205,6 +219,10 @@
     height: 40px;
     line-height: 40px;
     position: relative;
+}
+
+.rt-track:hover {
+    background-color: #EBE6F2;
 }
 
 .rt-track-album {
