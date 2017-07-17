@@ -1,0 +1,9 @@
+.main-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.playlist-container {
+    margin: 20px;
+}

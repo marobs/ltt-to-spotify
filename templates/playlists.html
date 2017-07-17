@@ -18,5 +18,8 @@
 {% endblock %}
 
 {% block content %}
-<div></div>
+    {% for playlist in playlists %}
+        <div class="playlist-container">
+            <img src="{% playlist['images'][0]['url'] %}"/>
+        </div>
 {% endblock %}
