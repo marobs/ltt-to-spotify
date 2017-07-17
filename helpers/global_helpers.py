@@ -138,7 +138,7 @@ def setAccessToken(token):
 ##
 ## UserId
 ##
-def inializeUserId():
+def initializeUserId():
     global userId
     url = "https://api.spotify.com/v1/me"
     userProfile = query_http(url, None, None, "Get user profile", 'GET')
@@ -147,6 +147,7 @@ def inializeUserId():
 
     if 'id' in userProfile:
         userId = userProfile['id']
+        print "Set userid: " + str(userId)
 
     else:
         print "ERROR: User id couldn't be found in userProfile"
