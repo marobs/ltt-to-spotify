@@ -20,7 +20,7 @@
 {% block content %}
     {% for playlist in playlists %}
         <div class="playlist-container">
-            <img src="{% playlist['images'][0]['url'] %}"/>
+            <img src="{{ playlist['images'][1]['url'] }}"/>
         </div>
     {% endfor %}
 {% endblock %}
