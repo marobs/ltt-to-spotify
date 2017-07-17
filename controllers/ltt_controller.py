@@ -51,11 +51,11 @@ def ltt_reddit_route():
 ###
 @listentothis.route("/ltt/playlist")
 def ltt_playlist_route():
-    if not helpers.checkArgs(['playlistId'], request):
+    if not helpers.checkArgs(['playlistId', 'userId'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
     playlistId = request.args['playlistId']
-    userId = helpers.getUserId()
+    userId = request.args['userId']
     playlist = helpers.queryForSelectedPlaylist(playlistId, userId)
 
     return render_template('expandedPlaylist.html', selected=playlist)
