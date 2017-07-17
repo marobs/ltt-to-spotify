@@ -58,7 +58,7 @@ def ltt_playlist_route():
     userId = helpers.getUserId()
     playlist = helpers.queryForSelectedPlaylist(playlistId, userId)
 
-    return jsonify(playlist)
+    return render_template('expandedPlaylist.html', selected=playlist)
 
 ###
 ### [POST] Add track to playlist

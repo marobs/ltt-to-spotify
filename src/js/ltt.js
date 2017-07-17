@@ -49,7 +49,7 @@ function sendEndpointRequest(url, options) {
 
 function getPlaylistInfo(playlistName) {
     return new Promise((resolve, reject) => {
-        $.get(PLAYLIST_URL, { "playlist": playlistName })
+        $.get(PLAYLIST_URL, { "playlistId": playlistName })
         .done((response) => {
             playlists[playlistName] = response;
             resolve(response);
@@ -140,6 +140,7 @@ window.onload = () => {
 $leftCol.on('click', '.playlist', function(e) {
     let selected = $leftCol.find('.selected');
     let newSelected = $(e.target);
+    let newSelectedId = newSelected.attr('data-playlistId');
 
     if (selected === newSelected) {
         return;
@@ -161,7 +162,7 @@ $leftCol.on('click', '.playlist', function(e) {
     else {
         // No playlist information cached, make request on server
         console.log("making request");
-        let requestPromise = getPlaylistInfo(playlistName);
+        let requestPromise = getPlaylistInfo(newSelectedId);
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
             if (requestPromise === switchPlaylistRequest) {
