@@ -74,7 +74,12 @@ module.exports = function(grunt) {
                         'src/css/index_style.css',
                         'src/css/style.css'
                     ],
-
+                    'static/css/playlist.css': [
+                        'src/css/base_style.css',
+                        'src/css/genre.css',
+                        'src/css/playlist_style.css',
+                        'src/css/style.css'
+                    ],
                 }
             }
         },
