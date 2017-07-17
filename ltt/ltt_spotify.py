@@ -109,7 +109,7 @@ def fillWithArtistTopSongs(spotifyData):
 
             # If top song is different than reddit track, save to entry['top'] and save album id
             if topSong is not None:
-                if topSong['id'] == entry['track']['id']:
+                if topSong['id'] == entry['track']['id'] or topSong['name'] == entry['track']['name']:
                     entry['track']['top'] = None
                     entry['track']['isTop'] = True
 
@@ -125,7 +125,7 @@ def fillWithArtistTopSongs(spotifyData):
                 entry['track']['top'] = None
                 entry['track']['isTop'] = False
 
-    return albumList, artistList
+    return list(set(albumList)), list(set(artistList))
 
 def buildTrackObject(trackObject, redditData):
     spotifyEntry = {}
@@ -136,6 +136,7 @@ def buildTrackObject(trackObject, redditData):
     spotifyEntry['id'] = trackObject['id']
     spotifyEntry['name'] = trackObject['name']
     spotifyEntry['popularity'] = trackObject['popularity']
+    spotifyEntry['preview_url'] = trackObject['preview_url']
 
     if redditData is not None:
         spotifyEntry['redditData'] = redditData
@@ -200,6 +201,7 @@ def replaceArtistObjects(spotifyData, artistSet):
 
     if artistResults is not None:
         for result in artistResults['artists']:
+
             found = False
             for entry in spotifyData:
                 if 'artists' in entry['track'] and result['id'] == entry['track']['artists'][0]['id']:
