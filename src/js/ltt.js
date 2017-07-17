@@ -160,7 +160,6 @@ $leftCol.on('click', '.playlist', function(e) {
     }
     else {
         // No playlist information cached, make request on server
-        console.log("making request");
         let requestPromise = getPlaylistInfo(playlistId, ownerId);
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
