@@ -17,6 +17,7 @@ flaskSecret = None
 refreshToken = None
 accessToken = None
 userId = None
+userProfile = None
 basePath = os.path.dirname(os.path.realpath(__file__))
 
 ##
@@ -138,16 +139,18 @@ def setAccessToken(token):
 ##
 ## UserId
 ##
-def initializeUserId():
+def initializeUser():
     global userId
+    global userProfile
     url = "https://api.spotify.com/v1/me"
-    userProfile = query_http(url, None, None, "Get user profile", 'GET')
+    profile = query_http(url, None, None, "Get user profile", 'GET')
 
-    print json.dumps(userProfile, indent=4)
+    if profile is not None:
+        userProfile = profile
 
-    if 'id' in userProfile:
+    if profile is not None and 'id' in profile:
         userId = userProfile['id']
-        print "Set userid: " + str(userId)
+        print "Set userId: " + str(userId)
 
     else:
         print "ERROR: User id couldn't be found in userProfile"
@@ -169,7 +172,7 @@ def initializeHelpers():
     initializeFlaskSecret(basePath)
     initializeRefreshToken(basePath)
     initializeAccessToken()
-    initializeUserId()
+    initializeUser()
 
 def checkAuthenticated():
     print "Checking authenticated"
