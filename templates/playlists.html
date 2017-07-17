@@ -11,7 +11,7 @@
     <script src='/static/javascript/ltt.js' defer></script>
 {% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="/static/css/playlists.css" />
+    <link rel="stylesheet" href="/static/css/playlist.css" />
 {% endblock %}
 {% block headerContent %}
     {{ hc.addHeaderContent("playlists") }}
@@ -20,7 +20,7 @@
 {% block content %}
     {% for playlist in playlists %}
         <div class="playlist-container">
-            <img src="{{ playlist['images'][1]['url'] }}"/>
+            <img class="playlist-img" src="{{ playlist['images'][0]['url'] }}"/>
         </div>
     {% endfor %}
 {% endblock %}
