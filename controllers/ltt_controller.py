@@ -45,11 +45,11 @@ def ltt_reddit_route():
 ###
 @listentothis.route("/ltt/playlist")
 def ltt_playlist_route():
-    if not helpers.checkArgs(['playlistId', 'userId'], request):
+    if not helpers.checkArgs(['playlistId'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
     playlistId = request.args['playlistId']
-    userId = request.args['userId']
+    userId = helpers.getUserId()
     playlist = helpers.queryForSelectedPlaylist(playlistId, userId)
 
     return jsonify(playlist)
@@ -59,11 +59,11 @@ def ltt_playlist_route():
 ###
 @listentothis.route("/ltt/addTrack", methods=['POST'])
 def ltt_add_track_route():
-    if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
+    if not helpers.checkArgs(['playlistId', 'trackURI'], request):
         return jsonify({'Error': "Malformed add track request"})
 
     playlistId = request.args['playlistId']
-    userId = request.args['userId']
+    userId = helpers.getUserId()
     trackURI = request.args['trackURI']
 
     response = helpers.postAddTrackRequest(playlistId, userId, trackURI)
@@ -74,11 +74,11 @@ def ltt_add_track_route():
 ###
 @listentothis.route("/ltt/removeTrack", methods=['DELETE'])
 def ltt_remove_track_route():
-    if not helpers.checkArgs(['playlistId', 'userId', 'trackURI'], request):
+    if not helpers.checkArgs(['playlistId', 'trackURI'], request):
         return jsonify({'Error': "Malformed remove track request"})
 
     playlistId = request.args['playlistId']
-    userId = request.args['userId']
+    userId = helpers.getUserId()
     trackURI = request.args['trackURI']
 
     response = helpers.deleteRemoveTrackRequest(playlistId, userId, trackURI)
@@ -123,10 +123,10 @@ def ltt_unsave_track_route():
 ###
 @listentothis.route("/ltt/reorder", methods=['PUT'])
 def ltt_reorder_route():
-    if not helpers.checkArgs(['userId', 'playlistId', 'rangeStart', 'rangeLength', 'insertBefore'], request):
+    if not helpers.checkArgs(['playlistId', 'rangeStart', 'rangeLength', 'insertBefore'], request):
         return jsonify({'Error': 'Malformed reorder request'})
 
-    userId = request.args['userId']
+    userId = helpers.getUserId()
     playlistId = request.args['playlistId']
     rangeStart = request.args['rangeStart']
     rangeLength = request.args['rangeLength']
