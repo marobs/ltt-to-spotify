@@ -20,7 +20,7 @@
 {% block content %}
     <div id="left-col">
         {% for playlist in playlists %}
-            <div class="playlist {% if playlist["id"] == selected["id"] %}selected{% endif %}">{{ playlist["name"] }}</div>
+            <div class="playlist {% if playlist["id"] == selected["id"] %}selected{% endif %}" data-ownerId="{{ playlist['owner']['id'] }}" data-playlistId="{{ playlist['id'] }}">{{ playlist["name"] }}</div>
         {% endfor %}
     </div>
     <div id="middle-col">

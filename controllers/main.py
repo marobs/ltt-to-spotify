@@ -4,6 +4,10 @@ import requests
 
 main = Blueprint('main', __name__, template_folder='templates')
 
+###
+### [GET] Base index endpoint
+### HTML
+###
 @main.route('/')
 def main_route():
     if not helpers.checkAuthenticated():
@@ -15,6 +19,10 @@ def main_route():
         return render_template("index.html")
 
 
+###
+### [GET] Landing page from Spotify authorization callback -- returns index page
+### HTML
+###
 @main.route('/login')
 def login_route():
     if not helpers.checkLoginArgs(request):

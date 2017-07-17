@@ -87,13 +87,14 @@ def initializeRefreshToken(bPath):
     
     if not os.path.isfile(basePath + "/../secrets/refresh_token.txt"):
         print "  No refresh token file found, need to query"
-        # Query for tokens
+        return None
 
     else:
         with open(bPath + "/../secrets/refresh_token.txt") as f:
             refreshToken = f.read().rstrip("\n")
 
         print "Found refresh token file. refreshToken"
+        return refreshToken
 
 def saveRefreshToken(token):
     if token is None:
@@ -170,7 +171,10 @@ def initializeHelpers():
     
     initializeClientSecret(basePath)
     initializeFlaskSecret(basePath)
-    initializeRefreshToken(basePath)
+    rt = initializeRefreshToken(basePath)
+    if rt is None:
+        return
+
     initializeAccessToken()
     initializeUser()
 

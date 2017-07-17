@@ -2,7 +2,7 @@ import urllib
 from session_helpers import *
 
 def composeAuthorizationUrl(clientId):
-    url  = "?client_id="     + urllib.quote_plus(clientId)
+    url =  "?client_id="     + urllib.quote_plus(clientId)
     url += "&response_type=" + "code"
     url += "&redirect_uri="  + urllib.quote_plus("http://localhost:3000/login")
     url += "&scope="         + urllib.quote_plus(getScopes())

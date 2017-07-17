@@ -9,3 +9,8 @@ vagrant.sh
 /cache
 /log
 node_modules/*
+static/javascript/*.js
+static/css/*.css
+src/postcss/*.css
+src/babel/*
+package-lock.json
