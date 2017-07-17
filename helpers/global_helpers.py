@@ -1,6 +1,7 @@
 import os
 import requests
 from url_helpers import *
+import json
 
 #############################################################################
 #                                                                           #
@@ -15,6 +16,7 @@ clientSecret = None
 flaskSecret = None
 refreshToken = None
 accessToken = None
+userId = None
 basePath = os.path.dirname(os.path.realpath(__file__))
 
 ##
@@ -42,6 +44,10 @@ def getAccessToken():
         return queryForAccessToken()
 
     return accessToken
+
+def getUserId():
+    global userId
+    return userId
 
 ##
 ## Client Secret
@@ -130,6 +136,23 @@ def setAccessToken(token):
     accessToken = token
 
 ##
+## UserId
+##
+def inializeUserId():
+    global userId
+    url = "https://api.spotify.com/v1/me"
+    userProfile = query_http(url, None, None, "Get user profile", 'GET')
+
+    print json.dumps(userProfile, indent=4)
+
+    if 'id' in userProfile:
+        userId = userProfile['id']
+
+    else:
+        print "ERROR: User id couldn't be found in userProfile"
+
+
+##
 ## Initialization
 ##
 def initializeHelpers():
@@ -145,6 +168,7 @@ def initializeHelpers():
     initializeFlaskSecret(basePath)
     initializeRefreshToken(basePath)
     initializeAccessToken()
+    initializeUserId()
 
 def checkAuthenticated():
     print "Checking authenticated"
