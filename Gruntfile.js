@@ -36,6 +36,37 @@ module.exports = function(grunt) {
                 }
             }
         },
+        concat: {
+            options: {
+                stripBanners: true,
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            },
+            debug: {
+                files: {
+                    'static/css/ltt.css': [
+                        'src/css/base_style.css',
+                        'src/css/genre.css',
+                        'src/css/ltt_style.css',
+                        'src/css/style.css'
+                    ],
+                    'static/css/index.css': [
+                        'src/css/base_style.css',
+                        'src/css/index_style.css',
+                        'src/css/style.css'
+                    ]
+                },
+            },
+        },
+        copy: {
+            // includes files within path
+            debug: {
+                expand: true,
+                cwd: 'src/js',
+                src: '**',
+                dest: 'static/javascript/'
+            },
+        },
 		browserify: {
             build: {
                 files: {
@@ -73,8 +104,7 @@ module.exports = function(grunt) {
                         'src/css/base_style.css',
                         'src/css/index_style.css',
                         'src/css/style.css'
-                    ],
-
+                    ]
                 }
             }
         },
@@ -94,12 +124,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'browserify', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['jshint', 'browserify:build', 'uglify:build', 'cssmin:build']);
+    grunt.registerTask('debug', ['jshint', 'concat:debug', 'copy:debug']);
 
 
 };
