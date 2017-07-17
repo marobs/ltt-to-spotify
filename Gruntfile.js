@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 src: 'Gruntfile.js'
             },
             build: {
-                src: ['static/javascript/*.js'],
+                src: ['src/js/*.js'],
                 options : {
                     jshintrc : '.jshintrc'
                 }
@@ -92,7 +92,6 @@ module.exports = function(grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('jshint-stylish');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-less');
