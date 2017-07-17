@@ -9,3 +9,5 @@ vagrant.sh
 /cache
 /log
 node_modules/*
+static/javascript/*
+static/css/*
