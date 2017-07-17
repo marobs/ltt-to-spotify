@@ -1,0 +1,16 @@
+<div class="middle-col-header">
+    <div class="mch-title">Title</div>
+    <div class="track-spacer"></div>
+    <div class="mch-artist">Artist</div>
+    <div class="track-spacer"></div>
+    <div class="mch-album">Album</div>
+</div>
+{% for track in selected["tracks"]["items"] %}
+    <div class="track-container">
+        <div class="track-name">{{ track["track"]["name"] }}</div>
+        <div class="track-spacer"></div>
+        <div class="track-artist">{{ track['track']['artists'][0]['name'] }}</div>
+        <div class="track-spacer"></div>
+        <div class="track-album">{{ track["track"]["album"]["name"] }}</div>
+    </div>
+{% endfor %}

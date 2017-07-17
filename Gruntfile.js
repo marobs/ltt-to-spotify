@@ -116,6 +116,10 @@ module.exports = function(grunt) {
             all: {
                 files: '<%= jshint.all.src %>',
                 tasks: ['jshint:all']
+            },
+            debug: {
+                files: ['src/js/*.js', 'src/css/*.css'],
+                tasks: ['copy:debug', 'concat:debug']
             }
         },
         postcss: {

@@ -47,11 +47,11 @@ function sendEndpointRequest(url, options) {
     });
 }
 
-function getPlaylistInfo(playlistName) {
+function getPlaylistInfo(playlistId, ownerId) {
     return new Promise((resolve, reject) => {
-        $.get(PLAYLIST_URL, { "playlist": playlistName })
+        $.get(PLAYLIST_URL, { 'playlistId': playlistId, 'userId': ownerId })
         .done((response) => {
-            playlists[playlistName] = response;
+            playlists[playlistId] = response;
             resolve(response);
         }).fail((e) => {
             console.error(e);
@@ -130,9 +130,9 @@ dragula(dragulaElements, {
 
 window.onload = () => {
     // Store playlist information
-    let playlistName = $leftCol.find('.selected')[0].innerHTML;
-    selectedPlaylist = playlistName;
-    playlists[playlistName] = $midCol[0].innerHTML;
+    let playlistId = $leftCol.find('.selected').attr('data-ownerId');
+    selectedPlaylist = playlistId;
+    playlists[playlistId] = $midCol[0].innerHTML;
 };
 
 
@@ -140,6 +140,8 @@ window.onload = () => {
 $leftCol.on('click', '.playlist', function(e) {
     let selected = $leftCol.find('.selected');
     let newSelected = $(e.target);
+    let playlistId = newSelected.attr('data-playlistId');
+    let ownerId = newSelected.attr('data-ownerId');
 
     if (selected === newSelected) {
         return;
@@ -149,19 +151,17 @@ $leftCol.on('click', '.playlist', function(e) {
     newSelected.addClass('selected');
 
     // Updated cahced dom for this playlist
-    let oldPlaylistName = selected[0].innerHTML;
-    playlists[oldPlaylistName] = $midCol[0].innerHTML;
+    let oldPlaylistId = selected.attr('data-playlistId');
+    playlists[oldPlaylistId] = $midCol[0].innerHTML;
 
-    let playlistName = newSelected[0].innerHTML;
-
-    if (playlistName in playlists && playlists[playlistName] !== 'undefined') {
+    if (playlistId in playlists && playlists[playlistId] !== 'undefined') {
         // Playlist information cached, set html
-        $midCol[0].innerHTML = playlists[playlistName];
+        $midCol[0].innerHTML = playlists[playlistId];
     }
     else {
         // No playlist information cached, make request on server
         console.log("making request");
-        let requestPromise = getPlaylistInfo(playlistName);
+        let requestPromise = getPlaylistInfo(playlistId, ownerId);
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
             if (requestPromise === switchPlaylistRequest) {
