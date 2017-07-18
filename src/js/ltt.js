@@ -81,9 +81,6 @@ function getCategoryTracks(category) {
 
 dragula(dragulaElements, {
     copy: (el, source) => {
-        console.log(source);
-        console.log($(source));
-        console.log($(source).hasClass('rt-track-container'));
         return $(source).hasClass('rt-track-container');
     },
     copySortSource: false,
@@ -98,7 +95,8 @@ dragula(dragulaElements, {
 
         if (dragIndex === -1 && $(source).hasClass('rt-track-container')) { // Add Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
-            let options = new AddOptions(ADD_URL, $midCol.children($el).index($el), playlistId);
+            let trackURI = $el.attr('data-uri');
+            let options = new AddOptions(trackURI, $midCol.children($el).index($el), playlistId);
             sendEndpointRequest(ADD_URL, options)
             .catch((e) => {
                 // TODO: something with error?
