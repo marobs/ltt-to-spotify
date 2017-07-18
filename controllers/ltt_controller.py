@@ -74,8 +74,8 @@ def ltt_add_track_route():
     trackURI = request.values['trackURI']
     position = request.values.get('position')
 
-    response = helpers.postAddTrackRequest(playlistId, userId, trackURI, position)
-    return response  # Success = {'snapshot_id': xxx} 201
+    spotifyResponse = helpers.postAddTrackRequest(playlistId, userId, trackURI, position)
+    return jsonify(spotifyResponse)  # Success = {'snapshot_id': xxx} 201
 
 ###
 ### [DELETE] Remove track from playlist
@@ -91,7 +91,7 @@ def ltt_remove_track_route():
     trackURI = request.values['trackURI']
 
     response = helpers.deleteRemoveTrackRequest(playlistId, userId, trackURI)
-    return response  # Success = {'snapshot_id': xxx} 201
+    return jsonify(response)  # Success = {'snapshot_id': xxx} 201
 
 ###
 ### [PUT] Save track for user
@@ -108,7 +108,7 @@ def ltt_save_track_route():
     if response.status_code not in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
-    return response  # Success 203
+    return jsonify(response)  # Success 203
 
 
 ###
@@ -126,7 +126,7 @@ def ltt_unsave_track_route():
     if response.status_code not in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
-    return response  # Success 200
+    return jsonify(response)  # Success 200
 
 
 ###
@@ -148,4 +148,4 @@ def ltt_reorder_route():
     if response.status_code not in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
-    return response
+    return jsonify(response)
