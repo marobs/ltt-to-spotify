@@ -1,0 +1,56 @@
+.main-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #431c5d;
+
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 20px;
+    background-color: #000000;
+    transition: all 0.5s ease;
+}
+
+.playlist-container:hover {
+    margin: 15px;
+}
+
+/* Playlist container image */
+.playlist-container img {
+    transition: all 0.5s ease;
+}
+
+.playlist-container:hover img {
+    width: 210px;
+    height: auto;
+    opacity: 0.4;
+}
+
+.playlist-img {
+    vertical-align: top;
+    width: 200px;
+    height: auto;
+}
+
+/* Playlist footer */
+.playlist-container:hover div {
+    width: 200px;
+}
+
+.playlist-container div {
+    transition: all 0.5s ease;
+}
+
+.playlist-footer {
+    padding: 5px;
+    width: 190px;
+    background-color: #431c5d;
+    color: #EEEEEE;
+    overflow: hidden;
+}

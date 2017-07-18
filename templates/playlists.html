@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% import 'headerContent.html' as hc %}
+{% block title %}
+    <title>ltt-to-spotify: playlists</title>
+    <meta name="description" content="Adding functionality between r/listentothis and Spotify">
+{% endblock %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js' defer></script>
+    <script src="/static/min/lscache.min.js" defer></script>
+    <script src='/static/javascript/ltt.js' defer></script>
+{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="/static/css/playlist.css" />
+{% endblock %}
+{% block headerContent %}
+    {{ hc.addHeaderContent("playlists") }}
+{% endblock %}
+
+{% block content %}
+    {% for playlist in playlists %}
+        <div class="playlist-container">
+            <img class="playlist-img" src="{{ playlist['images'][0]['url'] }}"/>
+            <div class="playlist-footer">{{ playlist['name'] }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,213 @@
+/*!  - v - 2017-07-18 */.wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column
+}
+
+.header {
+    height: 60px;
+    line-height: 60px;
+    background-color: #5f3596;
+    border-bottom: 1px solid black;
+}
+
+#header-icon {
+    position: absolute;
+    left: 20px;
+    height: 50px;
+    top: 5px;
+}
+
+.header-link-container {
+    position: absolute;
+    right: 10px;
+}
+
+.header-link {
+    display: inline-block;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    width: 60px;
+    padding: 6px;
+}
+
+.header-link:hover {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.main-content {
+    flex: 1;
+    width: 100vw;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #4B4B4B;
+}
+.genre-tag {
+    border: 1px solid;
+    border-radius: 25px;
+    color: #ffffff;
+    display: inline-block;
+    height: 20px;
+    padding: 2px 10px 2px 10px;
+
+}
+
+.singer-songwriter {
+    background-color: #4b0082;
+	border-color: #4b0082;
+}
+
+.jazz {
+    background-color: #48308b;
+	border-color: #48308b;
+}
+
+.classical {
+    background-color: #7b68ee;
+	border-color: #7b68ee;
+}
+
+.electronic {
+    background-color: #008b8b;
+	border-color: #008b8b;
+}
+
+.chill {
+    background-color: #afeeee;
+	border-color: #afeeee;
+    color: #000000;
+}
+
+.folk {
+    background-color: #7fffd4;
+	border-color: #7fffd4;
+    color: #000000;
+}
+
+.funk {
+    background-color: #006400;
+	border-color: #006400;
+}
+
+.world {
+    background-color: #bdb76b;
+	border-color: #bdb76b;
+}
+
+.hiphop {
+    background-color: #daa520;
+	border-color: #daa520;
+}
+
+.americana {
+    background-color: #ff8c00;
+	border-color: #ff8c00;
+}
+
+.garage {
+    background-color: #ff4500;
+	border-color: #ff4500;
+}
+
+.reggae {
+    background-color: #e9967a;
+	border-color: #e9967a;
+}
+
+.rock {
+    background-color: #dc143c;
+	border-color: #dc143c;
+}
+
+.rnb {
+    background-color: #b22222;
+	border-color: #b22222;
+}
+
+.pop {
+    background-color: #f08080;
+	border-color: #f08080;
+}
+
+.heavy {
+    background-color: #8b4513;
+	border-color: #8b4513;
+}
+
+.experimental {
+    background-color: #000000;
+	border-color: #000000;
+}
+
+.unclassified {
+    background-color: #ffffff;
+	border-color: #000000;
+	color: #000000;
+}
+.main-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #431c5d;
+
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 20px;
+    background-color: #000000;
+    transition: all 0.5s ease;
+}
+
+.playlist-container:hover {
+    margin: 15px;
+}
+
+/* Playlist container image */
+.playlist-container img {
+    transition: all 0.5s ease;
+}
+
+.playlist-container:hover img {
+    width: 210px;
+    height: auto;
+    opacity: 0.4;
+}
+
+.playlist-img {
+    vertical-align: top;
+    width: 200px;
+    height: auto;
+}
+
+/* Playlist footer */
+.playlist-container:hover div {
+    width: 200px;
+}
+
+.playlist-container div {
+    transition: all 0.5s ease;
+}
+
+.playlist-footer {
+    padding: 5px;
+    width: 190px;
+    background-color: #431c5d;
+    color: #EEEEEE;
+    overflow: hidden;
+}
+body {
+    margin: 0;
+}
