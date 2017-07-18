@@ -41,7 +41,7 @@
 
 /* Playlist overlay */
 .playlist-overlay {
-    position: absolute;
+    position: relative;
     top: 90px;
     width: 200px;
     height: 20px;
