@@ -158,7 +158,8 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    background-color: #431c5d;
+    background-color: #25172D;
+    overflow-y: scroll;
 
 }
 
@@ -192,6 +193,17 @@ body {
     height: auto;
 }
 
+/* Playlist overlay */
+.playlist-overlay {
+    position: relative;
+    top: 90px;
+    width: 200px;
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
 /* Playlist footer */
 .playlist-container:hover div {
     width: 200px;
@@ -204,9 +216,12 @@ body {
 .playlist-footer {
     padding: 5px;
     width: 190px;
-    background-color: #431c5d;
+    height: 20px;
+    background-color: #25172D;
     color: #EEEEEE;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 body {
     margin: 0;

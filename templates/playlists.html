@@ -21,6 +21,7 @@
     {% for playlist in playlists %}
         <div class="playlist-container">
             <img class="playlist-img" src="{{ playlist['images'][0]['url'] }}"/>
+            <div class="playlist-overlay">{{ playlist['name'] }}</div>
             <div class="playlist-footer">{{ playlist['name'] }}</div>
         </div>
     {% endfor %}

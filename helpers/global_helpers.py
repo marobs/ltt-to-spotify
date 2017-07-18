@@ -19,6 +19,8 @@ accessToken = None
 userId = None
 userProfile = None
 basePath = os.path.dirname(os.path.realpath(__file__))
+okHttpStatusCodes = [200, 201, 202, 203, 204, 205, 206]
+
 
 ##
 ## Getters
@@ -204,14 +206,14 @@ def query_http(url, parameters, requestHeader, reqType, httpType):
     response = sendQuery(url, parameters, requestHeader, reqType, httpType)
 
     # Check status code; if not ok, try refreshing access token
-    if response.status_code != requests.codes.ok:
+    if response.status_code in okHttpStatusCodes:
         print "Invalid access token found. Refreshing!"
         queryForAccessToken(refreshToken)
         requestHeader['Authorization'] = "Bearer " + accessToken
         response = sendQuery(url, parameters, requestHeader, reqType, httpType)
 
     # If still not ok, print error and return
-    if response.status_code != requests.codes.ok:
+    if response.status_code in okHttpStatusCodes:
         print "Error: <" + reqType + "> of http type <" + str(httpType) + "> code not ok! Status code: " + str(response.status_code)
         searchResults = response.json()
         for key in searchResults:
