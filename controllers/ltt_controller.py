@@ -105,7 +105,7 @@ def ltt_save_track_route():
     ids = request.values['ids']
 
     response = helpers.putSaveTrackRequest(ids)
-    if response.status_code != requests.codes.ok:
+    if response.status_code in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
     return response  # Success 203
@@ -123,7 +123,7 @@ def ltt_unsave_track_route():
     ids = request.values['ids']
 
     response = helpers.deleteUnsaveTrackRequest(ids)
-    if response.status_code != requests.codes.ok:
+    if response.status_code in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
     return response  # Success 200
@@ -145,7 +145,7 @@ def ltt_reorder_route():
     insertBefore = request.values['insertBefore']
 
     response = helpers.reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBefore)
-    if response.status_code != requests.codes.ok:
+    if response.status_code in helpers.okHttpStatusCodes:
         return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
     return response
