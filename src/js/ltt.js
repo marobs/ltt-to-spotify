@@ -23,9 +23,9 @@ const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
 
 function AddOptions(uris, position, playlist) {
-    this.uris = uris;
+    this.trackURI = uris;
     this.position = position;
-    this.playlist = playlist;
+    this.playlistId = playlist;
 }
 
 function ReorderOptions(range_start, insert_before, playlist) {
