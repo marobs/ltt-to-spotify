@@ -97,7 +97,8 @@ dragula(dragulaElements, {
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
 
         if (dragIndex === -1 && $(source).hasClass('rt-track-container')) { // Add Song
-            let options = new AddOptions(ADD_URL, $midCol.children($el).index($el), selectedPlaylist);
+            let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
+            let options = new AddOptions(ADD_URL, $midCol.children($el).index($el), playlistId);
             sendEndpointRequest(ADD_URL, options)
             .catch((e) => {
                 // TODO: something with error?
@@ -105,7 +106,8 @@ dragula(dragulaElements, {
             });
         }
         else if (dragIndex >= 0 && source === midCol) { // Re-order Song
-            let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), selectedPlaylist);
+            let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
+            let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), playlistId);
             sendEndpointRequest(REORDER_URL, options)
             .catch((e) => {
                 // TODO: something with error?
@@ -131,7 +133,6 @@ dragula(dragulaElements, {
 window.onload = () => {
     // Store playlist information
     let playlistId = $leftCol.find('.selected').attr('data-ownerId');
-    selectedPlaylist = playlistId;
     playlists[playlistId] = $midCol[0].innerHTML;
 };
 
