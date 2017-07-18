@@ -158,6 +158,8 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
+    background-color: #431c5d;
+
 }
 
 .playlist-container {
@@ -202,7 +204,7 @@ body {
 .playlist-footer {
     padding: 5px;
     width: 190px;
-    background-color: #4b4b4b;
+    background-color: #431c5d;
     color: #EEEEEE;
     overflow: hidden;
 }
