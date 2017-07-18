@@ -72,8 +72,9 @@ def ltt_add_track_route():
     playlistId = request.values['playlistId']
     userId = helpers.getUserId()
     trackURI = request.values['trackURI']
+    position = request.values.get('position')
 
-    response = helpers.postAddTrackRequest(playlistId, userId, trackURI)
+    response = helpers.postAddTrackRequest(playlistId, userId, trackURI, position)
     return response  # Success = {'snapshot_id': xxx} 201
 
 ###

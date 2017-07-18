@@ -107,9 +107,11 @@ def queryForSelectedPlaylist(playlistId, userId):
 ##
 ## [POST] Add track to playlist
 ##
-def postAddTrackRequest(playlistId, userId, trackURI):
+def postAddTrackRequest(playlistId, userId, trackURI, position):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId) + "/tracks"
     params = {'uris': [trackURI]}
+    if position is not None:
+        params['position'] = position
     requestHeader = {'Content-Type': 'application/json'}
 
     return global_helpers.query_http(url, params, requestHeader, "Add track post", 'POST')
