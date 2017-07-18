@@ -165,6 +165,7 @@ body {
     flex-direction: column;
     flex-wrap: nowrap;
     margin: 20px;
+    background-color: #000000;
     transition: all 1.0s ease;
 }
 
@@ -172,6 +173,7 @@ body {
     margin: 15px;
 }
 
+/* Playlist container image */
 .playlist-container img {
     transition: all 1.0s ease;
 }
@@ -179,6 +181,7 @@ body {
 .playlist-container:hover img {
     width: 210px;
     height: auto;
+    opacity: 0.4;
 }
 
 .playlist-img {
@@ -187,6 +190,7 @@ body {
     height: auto;
 }
 
+/* Playlist footer */
 .playlist-container:hover div {
     width: 200px;
 }
