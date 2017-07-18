@@ -12,7 +12,7 @@
     flex-wrap: nowrap;
     margin: 20px;
     background-color: #000000;
-    transition: all 1.0s ease;
+    transition: all 0.5s ease;
 }
 
 .playlist-container:hover {
@@ -21,7 +21,7 @@
 
 /* Playlist container image */
 .playlist-container img {
-    transition: all 1.0s ease;
+    transition: all 0.5s ease;
 }
 
 .playlist-container:hover img {
@@ -42,7 +42,7 @@
 }
 
 .playlist-container div {
-    transition: all 1.0s ease;
+    transition: all 0.5s ease;
 }
 
 .playlist-footer {
