@@ -137,6 +137,7 @@ def buildTrackObject(trackObject, redditData):
     spotifyEntry['name'] = trackObject['name']
     spotifyEntry['popularity'] = trackObject['popularity']
     spotifyEntry['preview_url'] = trackObject['preview_url']
+    spotifyEntry['uri'] = trackObject['uri']
 
     if redditData is not None:
         spotifyEntry['redditData'] = redditData
