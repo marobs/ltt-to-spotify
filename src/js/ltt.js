@@ -24,7 +24,7 @@ const PLAYLIST_URL = '/ltt/playlist';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
-    this.position = position;
+    this.position = position-1;
     this.playlistId = playlist;
 }
 
