@@ -15,7 +15,7 @@ def ltt_route():
     if not helpers.checkAuthenticated():
         return redirect(helpers.getAuthorizationUrl())
 
-    redditQuery = request.args.get('redditQuery')
+    redditQuery = request.values.get('redditQuery')
 
     redditPosts = ltt.getRedditPosts(redditQuery)
     spotifyData = ltt.generateSpotifyData(redditPosts)
@@ -36,7 +36,7 @@ def ltt_reddit_route():
     if not helpers.checkArgs(['redditQuery'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
-    redditQuery = request.args['redditQuery']
+    redditQuery = request.values['redditQuery']
     if not helpers.checkQueryType(redditQuery):
         return jsonify({'Error': "Invalid reddit query type requested: " + str(redditQuery)})
 
@@ -54,8 +54,8 @@ def ltt_playlist_route():
     if not helpers.checkArgs(['playlistId', 'userId'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
-    playlistId = request.args['playlistId']
-    userId = request.args['userId']
+    playlistId = request.values['playlistId']
+    userId = request.values['userId']
     playlist = helpers.queryForSelectedPlaylist(playlistId, userId)
 
     return render_template('expandedPlaylist.html', selected=playlist)
@@ -69,9 +69,9 @@ def ltt_add_track_route():
     if not helpers.checkArgs(['playlistId', 'trackURI'], request):
         return jsonify({'Error': "Malformed add track request"})
 
-    playlistId = request.args['playlistId']
+    playlistId = request.values['playlistId']
     userId = helpers.getUserId()
-    trackURI = request.args['trackURI']
+    trackURI = request.values['trackURI']
 
     response = helpers.postAddTrackRequest(playlistId, userId, trackURI)
     return response  # Success = {'snapshot_id': xxx} 201
@@ -85,9 +85,9 @@ def ltt_remove_track_route():
     if not helpers.checkArgs(['playlistId', 'trackURI'], request):
         return jsonify({'Error': "Malformed remove track request"})
 
-    playlistId = request.args['playlistId']
+    playlistId = request.values['playlistId']
     userId = helpers.getUserId()
-    trackURI = request.args['trackURI']
+    trackURI = request.values['trackURI']
 
     response = helpers.deleteRemoveTrackRequest(playlistId, userId, trackURI)
     return response  # Success = {'snapshot_id': xxx} 201
@@ -101,7 +101,7 @@ def ltt_save_track_route():
     if not helpers.checkArgs(['ids'], request):
         return jsonify({'Error': "Malformed save track request"})
 
-    ids = request.args['ids']
+    ids = request.values['ids']
 
     response = helpers.putSaveTrackRequest(ids)
     if response.status_code != requests.codes.ok:
@@ -119,7 +119,7 @@ def ltt_unsave_track_route():
     if not helpers.checkArgs(['ids'], request):
         return jsonify({'Error': "Malformed unsave track request"})
 
-    ids = request.args['ids']
+    ids = request.values['ids']
 
     response = helpers.deleteUnsaveTrackRequest(ids)
     if response.status_code != requests.codes.ok:
@@ -138,10 +138,10 @@ def ltt_reorder_route():
         return jsonify({'Error': 'Malformed reorder request'})
 
     userId = helpers.getUserId()
-    playlistId = request.args['playlistId']
-    rangeStart = request.args['rangeStart']
-    rangeLength = request.args['rangeLength']
-    insertBefore = request.args['insertBefore']
+    playlistId = request.values['playlistId']
+    rangeStart = request.values['rangeStart']
+    rangeLength = request.values['rangeLength']
+    insertBefore = request.values['insertBefore']
 
     response = helpers.reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBefore)
     if response.status_code != requests.codes.ok:

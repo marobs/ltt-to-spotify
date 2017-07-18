@@ -1,13 +1,13 @@
 def checkLoginArgs(request):
-    code = request.args.get("code")
+    code = request.values.get("code")
     if not code:
         return False
 
-    state = request.args.get("state")
+    state = request.values.get("state")
     if not state:
         return False
 
-    error = request.args.get("error")
+    error = request.values.get("error")
     if error is not None:
         return False
 
@@ -15,7 +15,7 @@ def checkLoginArgs(request):
 
 def checkArgs(argList, request):
     for arg in argList:
-        argument = request.args.get(arg)
+        argument = request.values.get(arg)
         if not argument:
             return False
 
