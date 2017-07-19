@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 from url_helpers import *
 import json
 
@@ -232,7 +233,7 @@ def sendQuery(url, parameters, requestHeader, reqType, httpType):
     elif httpType == 'POST':
         return requests.post(url, params=parameters, headers=requestHeader)
     elif httpType == 'PUT':
-        return requests.put(url, params=parameters, headers=requestHeader)
+        return requests.put(url, data=json.dumps(parameters), headers=requestHeader)
     elif httpType == 'DELETE':
         return requests.delete(url, params=parameters, headers=requestHeader)
     else:

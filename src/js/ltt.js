@@ -1,13 +1,15 @@
 let $leftCol = $('#left-col');
 let midCol = document.getElementById('middle-col');
 let $midCol = $(midCol);
+let spotifyTrackContainer = document.getElementById('spotify-track-container');
+let $spotifyTrackContainer = $(spotifyTrackContainer);
 let rightColTracks = document.getElementsByClassName('rt-track-container');
 let $rightColTracks = $(rightColTracks);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
 
 let dragulaElements = Object.keys(rightColTracks).map(function (key) { return rightColTracks[key]; });
-dragulaElements.push(midCol);
+dragulaElements.push(spotifyTrackContainer);
 
 let playlists = [];
 let selectedPlaylist = null;
@@ -21,6 +23,7 @@ let dragIndex = -1;
 const ADD_URL = '/ltt/addTrack';
 const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
+const REDDIT_CATEGORY_URL = '/ltt/reddit';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
@@ -29,16 +32,38 @@ function AddOptions(uris, position, playlist) {
 }
 
 function ReorderOptions(range_start, insert_before, playlist) {
-    this.range_start = range_start;
-    this.range_length = 1;
-    this.insert_before = insert_before;
-    this.playlist = playlist;
+    this.rangeStart = range_start;
+    this.rangeLength = 1;
+
+    if (range_start <= insert_before) {
+        this.insertBefore = insert_before+1;
+    }
+    else {
+        this.insertBefore = insert_before;
+    }
+
+    this.playlistId = playlist;
 }
 
-function sendEndpointRequest(url, options) {
+function sendAddTrackRequest(options) {
     return new Promise((resolve, reject) => {
-        $.post(url, options)
+        $.post(ADD_URL, options)
         .done((response) => {
+            resolve(response);
+        }).fail((e) => {
+            console.error(e);
+            reject(e);
+        });
+    });
+}
+
+function sendReorderRequest(options) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: REORDER_URL,
+            method: 'PUT',
+            data: options
+        }).done((response) => {
             resolve(response);
         }).fail((e) => {
             console.error(e);
@@ -85,10 +110,10 @@ dragula(dragulaElements, {
     },
     copySortSource: false,
     accepts: (el, target) => {
-        return target === midCol;
+        return target === spotifyTrackContainer;
     }
 }).on('drop', (el, target, source) => {
-    if (target === midCol) {
+    if (target === spotifyTrackContainer) {
         let $el = $(el);
         // Make call to serve to reorder tracks on playlist
         // Requires: range_start, range_length (1), insert_before, snapshot_id (on server? Is optional)
@@ -96,17 +121,19 @@ dragula(dragulaElements, {
         if (dragIndex === -1 && $(source).hasClass('rt-track-container')) { // Add Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
             let trackURI = $el.attr('data-uri');
-            let options = new AddOptions(trackURI, $midCol.children($el).index($el), playlistId);
-            sendEndpointRequest(ADD_URL, options)
+            let options = new AddOptions(trackURI, $spotifyTrackContainer.children($el).index($el), playlistId);
+            sendAddTrackRequest(options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
             });
         }
-        else if (dragIndex >= 0 && source === midCol) { // Re-order Song
+        else if (dragIndex >= 0 && source === spotifyTrackContainer) { // Re-order Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
-            let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), playlistId);
-            sendEndpointRequest(REORDER_URL, options)
+            let options = new ReorderOptions(dragIndex, $spotifyTrackContainer.children($el).index($el), playlistId);
+            console.log(options);
+            console.log($spotifyTrackContainer.children($el).length);
+            sendReorderRequest(options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
@@ -119,9 +146,9 @@ dragula(dragulaElements, {
 
     dragIndex = -1;
 }).on('drag', (el, source) => {
-    if (source === midCol) {
+    if (source === spotifyTrackContainer) {
         let $el = $(el);
-        dragIndex = $midCol.children($el).index($el);
+        dragIndex = $spotifyTrackContainer.children($el).index($el);
     }
     else {
         dragIndex = -1;
@@ -131,7 +158,7 @@ dragula(dragulaElements, {
 window.onload = () => {
     // Store playlist information
     let playlistId = $leftCol.find('.selected').attr('data-ownerId');
-    playlists[playlistId] = $midCol[0].innerHTML;
+    playlists[playlistId] = $spotifyTrackContainer[0].innerHTML;
 };
 
 
@@ -151,11 +178,11 @@ $leftCol.on('click', '.playlist', function(e) {
 
     // Updated cahced dom for this playlist
     let oldPlaylistId = selected.attr('data-playlistId');
-    playlists[oldPlaylistId] = $midCol[0].innerHTML;
+    playlists[oldPlaylistId] = $spotifyTrackContainer[0].innerHTML;
 
     if (playlistId in playlists && playlists[playlistId] !== 'undefined') {
         // Playlist information cached, set html
-        $midCol[0].innerHTML = playlists[playlistId];
+        $spotifyTrackContainer[0].innerHTML = playlists[playlistId];
     }
     else {
         // No playlist information cached, make request on server
@@ -163,7 +190,7 @@ $leftCol.on('click', '.playlist', function(e) {
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
             if (requestPromise === switchPlaylistRequest) {
-                $midCol[0].innerHTML = response;
+                $spotifyTrackContainer[0].innerHTML = response;
             }
         }).catch((error) => {
             // TODO: something with error?
