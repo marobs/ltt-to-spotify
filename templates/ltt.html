@@ -31,15 +31,17 @@
             <div class="track-spacer"></div>
             <div class="mch-album">Album</div>
         </div>
-        {% for track in selected["tracks"]["items"] %}
-            <div class="track-container" data-uri="{{ track['track']['uri'] }}">
-                <div class="track-name">{{ track["track"]["name"] }}</div>
-                <div class="track-spacer"></div>
-                <div class="track-artist">{{ track['track']['artists'][0]['name'] }}</div>
-                <div class="track-spacer"></div>
-                <div class="track-album">{{ track["track"]["album"]["name"] }}</div>
-            </div>
-        {% endfor %}
+        <div id="spotify-track-container">
+            {% for track in selected["tracks"]["items"] %}
+                <div class="track-container" data-uri="{{ track['track']['uri'] }}">
+                    <div class="track-name">{{ track["track"]["name"] }}</div>
+                    <div class="track-spacer"></div>
+                    <div class="track-artist">{{ track['track']['artists'][0]['name'] }}</div>
+                    <div class="track-spacer"></div>
+                    <div class="track-album">{{ track["track"]["album"]["name"] }}</div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
     <div id="right-col">
         <div id="right-col-header">
