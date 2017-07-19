@@ -168,15 +168,16 @@ body {
     flex-wrap: nowrap;
     width: 200px;
     height: 230px;
-    margin: 20px;
-    background-color: #000000;
+    margin: 15px;
+    padding: 5px;
+    background-color: #25172D;
     transition: all 0.5s ease;
 }
 
 .playlist-container:hover {
     width: 210px;
     height: 240px;
-    margin: 15px;
+    padding: 0px;
 }
 
 /* Playlist image and overlay holder */
@@ -195,8 +196,9 @@ body {
 
 /* Playlist image */
 .playlist-img {
+    vertical-align: top;
     width: 100%;
-    height: 100%;
+    height: auto;
     transition: all 0.5s ease;
 }
 
