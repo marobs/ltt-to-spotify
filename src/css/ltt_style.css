@@ -75,7 +75,7 @@
 #middle-col .rt-track:hover,
 .track-container:hover {
     cursor: default;
-    background-color: #EBE6F2;
+    background-color: #EFEAF4;
 }
 
 /* Middle Column Styling */
@@ -129,6 +129,42 @@
     background-color: #F8F8F8;
 }
 
+#right-col .rt-track-preview {
+    flex: 0 0 34px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+    background: linear-gradient(to left, white 50%, #CFC2DF 50%);
+    background-size: 200% 100%;
+    background-position:right;
+    transition:all 0s linear;
+    border-radius: 140px;
+}
+
+#right-col .rt-track-preview:hover {
+    background-position:left;
+    transition: all 30s linear;
+}
+
+.rt-track-preview img {
+    height: 14px;
+    width: 14px;
+    padding-left: 12px;
+    padding-right: 8px;
+    padding-bottom: 2px;
+}
+
+#right-col .rt-track {
+    display: flex;
+}
+
+#right-col .rt-track-preview-spacer {
+    flex: 0 0 10px;
+}
+
+#right-col .rt-track-title {
+    flex: 1 1;
+}
 /* Right Column Styling */
 
 #right-col {
@@ -219,10 +255,6 @@
     height: 40px;
     line-height: 40px;
     position: relative;
-}
-
-.rt-track:hover {
-    background-color: #EBE6F2;
 }
 
 .rt-track-album {

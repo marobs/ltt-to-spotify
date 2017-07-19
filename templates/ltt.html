@@ -58,6 +58,8 @@
                     <div class="rt-artist"><span class="rt-artist-text">{{ entry["track"]['artist']['name'] }}</span> {% if "year" in entry['track']['redditData'] %}({{ entry["track"]['redditData']['year']}}){% endif %} <span class="rt-genre">[{{ entry["track"]['redditData']['genre'] }}]</span></div>
                     <div class="rt-track-container">
                         <div class="rt-track rt-track-1" data-uri="{{ entry['track']['uri'] }}">
+                            <div class="rt-track-preview"><img class="rt-track-preview-img" src="/static/images/play_gray.png"/></div>
+                            <div class="rt-track-preview-spacer"></div>
                             <div class="rt-track-title">{{ entry["track"]['name'] }}</div>
                             <div class="track-spacer"></div>
                             <div class="rt-track-artist">{{ entry["track"]['artist']['name'] }}</div>
@@ -71,6 +73,8 @@
                         </div>
                         {%  if 'top' in entry %}
                         <div class="rt-track rt-track-2" data-uri="{{ entry['top']['uri'] }}">
+                            <div class="rt-track-preview"><img class="rt-track-preview-img" src="/static/images/play_gray.png"/></div>
+                            <div class="rt-track-preview-spacer"></div>
                             <div class="rt-track-title">{{ entry["top"]['name'] }}</div>
                             <div class="track-spacer"></div>
                             <div class="rt-track-artist">{{ entry["top"]['artist']['name'] }}</div>
