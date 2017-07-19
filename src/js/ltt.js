@@ -21,6 +21,7 @@ let dragIndex = -1;
 const ADD_URL = '/ltt/addTrack';
 const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
+const REDDIT_CATEGORY_URL = '/ltt/reddit';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
@@ -29,16 +30,31 @@ function AddOptions(uris, position, playlist) {
 }
 
 function ReorderOptions(range_start, insert_before, playlist) {
-    this.range_start = range_start;
-    this.range_length = 1;
-    this.insert_before = insert_before;
-    this.playlist = playlist;
+    this.rangeStart = range_start;
+    this.rangeLength = 1;
+    this.insertBefore = insert_before;
+    this.playlistId = playlist;
 }
 
-function sendEndpointRequest(url, options) {
+function sendAddTrackRequest(options) {
     return new Promise((resolve, reject) => {
-        $.post(url, options)
+        $.post(ADD_URL, options)
         .done((response) => {
+            resolve(response);
+        }).fail((e) => {
+            console.error(e);
+            reject(e);
+        });
+    });
+}
+
+function sendReorderRequest(options) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: REORDER_URL,
+            method: 'PUT',
+            data: options
+        }).done((response) => {
             resolve(response);
         }).fail((e) => {
             console.error(e);
@@ -97,7 +113,7 @@ dragula(dragulaElements, {
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
             let trackURI = $el.attr('data-uri');
             let options = new AddOptions(trackURI, $midCol.children($el).index($el), playlistId);
-            sendEndpointRequest(ADD_URL, options)
+            sendAddTrackRequest(options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
@@ -106,7 +122,7 @@ dragula(dragulaElements, {
         else if (dragIndex >= 0 && source === midCol) { // Re-order Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
             let options = new ReorderOptions(dragIndex, $midCol.children($el).index($el), playlistId);
-            sendEndpointRequest(REORDER_URL, options)
+            sendReorderRequest(options)
             .catch((e) => {
                 // TODO: something with error?
                 // Handle error
