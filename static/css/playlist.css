@@ -168,16 +168,15 @@ body {
     flex-wrap: nowrap;
     width: 200px;
     height: 230px;
-    margin: 15px;
-    padding: 5px;
-    background-color: #25172D;
+    margin: 20px;
+    background-color: #000000;
     transition: all 0.5s ease;
 }
 
 .playlist-container:hover {
     width: 210px;
     height: 240px;
-    padding: 0px;
+    margin: 15px;
 }
 
 /* Playlist image and overlay holder */
@@ -196,33 +195,36 @@ body {
 
 /* Playlist image */
 .playlist-img {
-    vertical-align: top;
     width: 100%;
-    height: auto;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
     transition: all 0.5s ease;
 }
 
-.playlist-container:hover img {
-    opacity: 0.3;
+.playlist-container:hover .playlist-img {
+    opacity: 0.2;
 }
 
 /* Playlist overlay */
 .playlist-overlay {
     position: absolute;
-    top: 90px;
-    width: 200px;
-    height: 20px;
+    top: 85px;
+    width: 190px;
+    height: 30px;
+    padding: 5px;
     opacity: 0.0;
     color: #ffffff;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    transition: all 0.5s ease;
+    transition: top 0.5s ease, opacity 0.5s ease, margin-left 0.5s ease;
 }
 
 .playlist-container:hover .playlist-overlay {
-    top: 95px;
-    width: 210px;
+    top: 90px;
+    margin-left: 5px;
     opacity: 1.0;
 }
 
