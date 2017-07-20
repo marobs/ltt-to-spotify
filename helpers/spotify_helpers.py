@@ -108,8 +108,8 @@ def queryForSelectedPlaylist(playlistId, userId):
 ##
 ## [GET] Get a playlist's tracks
 ##
-def queryForPlaylistTracks(userId, playlistId, fields, totalTracks):
-    url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId) + "/tracks"
+def queryForPlaylistTracks(ownerId, playlistId, fields):
+    url = "https://api.spotify.com/v1/users/" + str(ownerId) + "/playlists/" + str(playlistId) + "/tracks"
     params = {'limit': 100}
     if fields is not None:
         params['fields'] = fields
@@ -117,20 +117,11 @@ def queryForPlaylistTracks(userId, playlistId, fields, totalTracks):
 
     result = global_helpers.query_http(url, params, None, "Get playlist tracks query", 'GET')
 
-    print "\n\n\n\nFIRST QUERY"
-    print json.dumps(result, indent=4)
-    print "\n\n\n\n"
-
-    index = 0
-    while result['next'] is not None and index < 10:
-        additionalTracks = global_helpers.query_http(url, None, None, "Get additional playlist tracks", 'GET')
-
-        print "ADDITIONAL TRACKS"
-        print json.dumps(additionalTracks, indent=4)
-        print "\n\n\n\n\n"
-
+    while url is not None:
+        additionalTracks = global_helpers.query_http(url, params, None, "Get additional playlist tracks", 'GET')
         result['items'] += additionalTracks['items']
-        index += 1
+        if 'next' in additionalTracks:
+            url = additionalTracks['next']
 
     return result
 

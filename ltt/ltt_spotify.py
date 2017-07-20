@@ -1,5 +1,7 @@
+from __future__ import division
 import helpers
 import json
+
 
 #############################################################
 #                                                           #
@@ -318,27 +320,33 @@ def getSelectedPlaylist(playlist):
 def batchFirstPlaylists(userPlaylists):
     numPlaylists = 0;
     for playlist in userPlaylists:
-        fields = 'tracks.items(track(duration_ms))'
-        playlist = getPlaylistTracks(playlist['id'], fields)
+        fields = 'next,items(track(duration_ms))'
+        playlistTracks = getPlaylistTracks(playlist['owner']['id'], playlist['id'], fields)
 
-        print json.dumps(playlist, indent=4)
-
-        playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
+        playlist['totalLength'] = calcTotalPlaylistLength(playlistTracks['items'])
+        print str(playlist['name'].encode('utf8')) + " length: " + str(playlist['totalLength'])
 
         if numPlaylists == 8:
             return
 
         numPlaylists += 1
 
-def getPlaylistTracks(playlistId, fields):
-    userId = helpers.getUserId()
-    return helpers.queryForPlaylistTracks(userId, playlistId, fields)
+def getPlaylistTracks(ownerId, playlistId, fields):
+    return helpers.queryForPlaylistTracks(ownerId, playlistId, fields)
 
 def calcTotalPlaylistLength(tracks):
     ms = 0
     for track in tracks:
-        print json.dumps(track, indent=4)
-        ms += track['duration_ms']
+        ms += track['track']['duration_ms']
+
+    hours = float(ms)/float(1000*60*60)
+    print str(hours)
+    rem = ms % (1000*60*60)
+    mins = float(rem)/float(1000*60)
+    print str(mins)
+    rem = rem % (1000*60)
+    secs = float(rem)/float(1000)
+    print str(secs)
 
     return ms
 
