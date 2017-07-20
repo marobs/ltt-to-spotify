@@ -22,7 +22,10 @@
         <div class="playlist-container">
             <div class="playlist-img-holder">
                 <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
-                <div class="playlist-overlay">{{ playlist['name'] }}</div>
+                <div class="playlist-overlay playlist-overlay-name">{{ playlist['name'] }}</div>
+                <div class="playlist-overlay playlist-overlay-owner">{{ playlist['owner'] }}</div>
+                <div class="playlist-overlay playlist-overlay-a"></div>
+                <div class="playlist-overlay playlist-overlay-b"></div>
             </div>
             <div class="playlist-footer">{{ playlist['name'] }}</div>
         </div>
