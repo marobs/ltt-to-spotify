@@ -20,12 +20,10 @@
 {% block content %}
     {% for playlist in playlists %}
         <div class="playlist-container">
-        <div class="playlist-img-holder">
-            <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
-            <div class="playlist-overlay">{{ playlist['name'] }}</div>
-        </div>
-
-
+            <div class="playlist-img-holder">
+                <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
+                <div class="playlist-overlay">{{ playlist['name'] }}</div>
+            </div>
             <div class="playlist-footer">{{ playlist['name'] }}</div>
         </div>
     {% endfor %}

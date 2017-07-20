@@ -88,5 +88,6 @@
 }
 
 .playlist-container:hover .playlist-footer {
-    width: 210px;
+    width: 190px;
+    margin-right: 10px;
 }
