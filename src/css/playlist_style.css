@@ -77,7 +77,7 @@
 }
 
 .playlist-container:hover .playlist-overlay-name {
-    top: 40px;
+    top: 20px;
 }
 
 .playlist-overlay-owner {
