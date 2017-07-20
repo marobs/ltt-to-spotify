@@ -190,7 +190,7 @@ $leftCol.on('click', '.playlist', function(e) {
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
             if (requestPromise === switchPlaylistRequest) {
-                $spotifyTrackContainer[0].innerHTML = response;
+                $spotifyTrackContainer[0].html(response);
             }
         }).catch((error) => {
             // TODO: something with error?
@@ -229,4 +229,8 @@ $rightCol.on('click', '.rch-text', function(e) {
             return;
         });
     }
+});
+
+$rightCol.on('click', '.rt-track-preview', function(e) {
+    $(e.target).closest('.rt-track-preview').addClass('previewing');
 });

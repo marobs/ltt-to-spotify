@@ -141,7 +141,7 @@
     border-radius: 140px;
 }
 
-#right-col .rt-track-preview:hover {
+#right-col .previewing {
     background-position:left;
     transition: all 30s linear;
 }
