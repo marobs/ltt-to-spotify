@@ -314,6 +314,34 @@ def getSelectedPlaylist(playlist):
     return None
 
 
+
+def batchFirstPlaylists(userPlaylists):
+    numPlaylists = 0;
+    for playlist in userPlaylists:
+        fields = 'tracks.items(track(duration_ms))'
+        playlist = getPlaylistTracks(playlist['id'], fields)
+
+        print json.dumps(playlist, indent=4)
+
+        playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
+
+        if numPlaylists == 8:
+            return
+
+        numPlaylists += 1
+
+def getPlaylistTracks(playlistId, fields):
+    userId = helpers.getUserId()
+    return helpers.queryForPlaylistTracks(userId, playlistId, fields)
+
+def calcTotalPlaylistLength(tracks):
+    ms = 0
+    for track in tracks:
+        print json.dumps(track, indent=4)
+        ms += track['duration_ms']
+
+    return ms
+
 #############################################################
 #                                                           #
 #                      Cached Data                          #
