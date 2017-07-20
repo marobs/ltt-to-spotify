@@ -10,5 +10,6 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 @playlist.route("/playlists")
 def playlists_route():
     userPlaylists = ltt.getUserPlaylists()
+
     return render_template("playlists.html", playlists=userPlaylists)
 

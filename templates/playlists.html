@@ -19,13 +19,28 @@
 
 {% block content %}
     {% for playlist in playlists %}
-        <div class="playlist-container">
+        <div class="playlist-container" id="{{ playlist['id'] }}">
             <div class="playlist-img-holder">
                 <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
                 <div class="playlist-overlay playlist-overlay-name">{{ playlist['name'] }}</div>
-                <div class="playlist-overlay playlist-overlay-owner">{{ playlist['owner'] }}</div>
-                <div class="playlist-overlay playlist-overlay-a"></div>
-                <div class="playlist-overlay playlist-overlay-b"></div>
+                <div class="playlist-overlay playlist-overlay-owner">{{ playlist['owner']['name'] }}</div>
+                <div class="playlist-overlay playlist-overlay-a">
+                    <div class="overlay-container">X: {{ playlist['tracks']['total'] }}</div>
+                    <div class="overlay-container">
+                        {% if 'followers' in playlist %}
+                            Y: {{ playlist['followers']|length }}
+                        {% else %}
+                            Y: -
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="playlist-overlay playlist-overlay-b">
+                    {% if 'totalLength' in playlist %}
+                        Z: {{ playlist['totalLength'] }}
+                    {% else %}
+                        Z: -
+                    {% endif %}
+                </div>
             </div>
             <div class="playlist-footer">{{ playlist['name'] }}</div>
         </div>

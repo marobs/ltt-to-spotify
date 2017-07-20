@@ -68,16 +68,18 @@
 
 .playlist-container:hover .playlist-overlay {
     margin-left: 5px;
+    margin-right: 5px;
     opacity: 1.0;
 }
 
 .playlist-overlay-name {
     height: 30px;
     top: 1px;
+    font-size: large;
 }
 
 .playlist-container:hover .playlist-overlay-name {
-    top: 20px;
+    top: 30px;
 }
 
 .playlist-overlay-owner {
@@ -86,16 +88,19 @@
 }
 
 .playlist-container:hover .playlist-overlay-owner {
-    top: 70px;
+    top: 75px;
 }
 
 .playlist-overlay-a {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     height: 25px;
     top: 1px;
 }
 
 .playlist-container:hover .playlist-overlay-a {
-    top: 130px;
+    top: 125px;
 }
 
 .playlist-overlay-b {
@@ -104,7 +109,12 @@
 }
 
 .playlist-container:hover .playlist-overlay-b {
-    top: 165px;
+    top: 160px;
+}
+
+.overlay-container {
+    width: 90px;
+    height: 25px;
 }
 
 /* Playlist footer */
