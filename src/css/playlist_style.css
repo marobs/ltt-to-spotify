@@ -125,15 +125,17 @@
 }
 
 .overlay-container-icon {
-    height: 17px;
-    width: 17px;
-    margin: 4px;
+    height: 15px;
+    width: 15px;
+    margin: 5px 10px 5px 5px;
     background-size: cover;
     background-position: center;
 }
 
 .overlay-container-text {
     height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
 }
 
 #overlay-tracks {
