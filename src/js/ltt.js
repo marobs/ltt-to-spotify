@@ -190,7 +190,7 @@ $leftCol.on('click', '.playlist', function(e) {
         switchPlaylistRequest = requestPromise;
         requestPromise.then((response) => {
             if (requestPromise === switchPlaylistRequest) {
-                $spotifyTrackContainer[0].html(response);
+                $spotifyTrackContainer[0].innerHTML = response;
             }
         }).catch((error) => {
             // TODO: something with error?
