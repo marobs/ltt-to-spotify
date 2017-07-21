@@ -246,11 +246,9 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
         });
         currentPreviewHowl.play();
         currentPreviewElement = $newPreview;
-        console.log("set CPE");
     }
     else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
         if (currentPreviewHowl.playing()) {
-            console.log("One");
             currentPreviewHowl.pause();
 
             let computedStyle = window.getComputedStyle($newPreview[0]);
@@ -261,8 +259,15 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             return;
         }
 
+        let computedStyle = window.getComputedStyle($newPreview[0]);
+        let backgroundPos = computedStyle.getPropertyValue('background-position');
+        let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
+        let timeToComplete = parseFloat(30*percentToComplete/100);
+
         $newPreview[0].removeAttribute('style');
         $newPreview.addClass('previewing');
+        $newPreview[0].style.backgroundPosition = 'left';
+        $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
         currentPreviewHowl.play();
         return;
     }
