@@ -78,20 +78,22 @@ def queryForAllArtists(artistList):
 def queryForUserPlaylists():
     url = "https://api.spotify.com/v1/me/playlists"
     params = {'limit': 50}
-    requestHeader = None
 
-    result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
+    result = global_helpers.query_http(url, params, None, "Get my playlists query", 'GET')
     playlists = result['items']
+    if 'next' in result:
+        url = result['next']
+    else:
+        url = None
 
-    iteration = 1
-    while len(playlists) == 50 * iteration:
-        params = {'limit': 50, 'offset': 50 * iteration}
-        result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
+    while url is not None:
+        additionalPlaylists = global_helpers.query_http(url, params, None, "Get additional my playlists", 'GET')
+        playlists += additionalPlaylists['items']
 
-        if 'items' in result:
-            playlists = playlists + result['items']
-
-        iteration += 1
+        if 'next' in additionalPlaylists:
+            url = additionalPlaylists['next']
+        else:
+            url = None
 
     return playlists
 
@@ -113,7 +115,6 @@ def queryForPlaylistTracks(ownerId, playlistId, fields):
     params = {'limit': 100}
     if fields is not None:
         params['fields'] = fields
-    requestHeader = None
 
     result = global_helpers.query_http(url, params, None, "Get playlist tracks query", 'GET')
     if 'next' in result:
@@ -124,8 +125,11 @@ def queryForPlaylistTracks(ownerId, playlistId, fields):
     while url is not None:
         additionalTracks = global_helpers.query_http(url, params, None, "Get additional playlist tracks", 'GET')
         result['items'] += additionalTracks['items']
+
         if 'next' in additionalTracks:
             url = additionalTracks['next']
+        else:
+            url = None
 
     return result
 
