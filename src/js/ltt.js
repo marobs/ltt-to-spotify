@@ -18,6 +18,7 @@ let switchPlaylistRequest = null;
 let switchRedditCategoryRequest = null;
 
 let currentPreviewHowl = null;
+let currentPreviewElement = null;
 
 let dragIndex = -1;
 
@@ -233,33 +234,51 @@ $rightCol.on('click', '.rch-text', function(e) {
 });
 
 $rightCol.on('click', '.rt-track-preview', function(e) {
-    let $oldPreview = $rightCol.find('.previewing');
     let $newPreview = $(e.target).closest('.rt-track-preview');
 
     if (currentPreviewHowl === null) { // First time preview clicked
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
             format: ['mp3'],
-            onloaderror: function(id, err) {
-                console.error(err);
+            onload: function() {
+                $newPreview.addClass('previewing');
             }
         });
         currentPreviewHowl.play();
+        currentPreviewElement = $newPreview;
+        console.log("set CPE");
     }
-    else if ($oldPreview === $newPreview) { // Pause
-        currentPreviewHowl.pause();
+    else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
+        if (currentPreviewHowl.playing()) {
+            console.log("One");
+            currentPreviewHowl.pause();
+
+            let computedStyle = window.getComputedStyle($newPreview[0]);
+            let backgroundPos = computedStyle.getPropertyValue('background-position');
+
+            $newPreview[0].style.backgroundPosition = backgroundPos;
+            $newPreview.removeClass('previewing');
+            return;
+        }
+
+        $newPreview[0].removeAttribute('style');
+        $newPreview.addClass('previewing');
+        currentPreviewHowl.play();
         return;
     }
     else { // Switch Tracks
         currentPreviewHowl.stop();
-        $oldPreview.removeClass('previewing');
+        currentPreviewElement.removeClass('previewing');
 
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
             format: ['mp3'],
+            onload: function() {
+                $newPreview.addClass('previewing');
+            }
         });
         currentPreviewHowl.play();
+        currentPreviewElement = $newPreview;
     }
 
-    $newPreview.addClass('previewing');
 });
