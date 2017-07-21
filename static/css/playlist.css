@@ -216,7 +216,6 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center;
     transition: top 0.5s ease, opacity 0.5s ease, margin-left 0.5s ease;
 }
 
@@ -230,6 +229,7 @@ body {
     height: 30px;
     top: 1px;
     font-size: large;
+    text-align: center;
 }
 
 .playlist-container:hover .playlist-overlay-name {
@@ -239,6 +239,7 @@ body {
 .playlist-overlay-owner {
     height: 30px;
     top: 1px;
+    text-align: center;
 }
 
 .playlist-container:hover .playlist-overlay-owner {
@@ -258,6 +259,8 @@ body {
 }
 
 .playlist-overlay-b {
+    display: flex;
+    flex-direction: row;
     height: 25px;
     top: 1px;
 }
@@ -267,8 +270,34 @@ body {
 }
 
 .overlay-container {
+    display: flex;
+    flex-direction: row;
     width: 90px;
     height: 25px;
+}
+
+.overlay-container-icon {
+    height: 17px;
+    width: 17px;
+    margin: 4px;
+    background-size: cover;
+    background-position: center;
+}
+
+.overlay-container-text {
+    height: 25px;
+}
+
+#overlay-tracks {
+    background-image: url('../images/track_icon.png');
+}
+
+#overlay-followers {
+    background-image: url('../images/figure_icon.png');
+}
+
+#overlay-duration {
+    background-image: url('../images/clock_icon.png');
 }
 
 /* Playlist footer */
