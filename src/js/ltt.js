@@ -17,6 +17,8 @@ let switchPlaylistRequest = null;
 
 let switchRedditCategoryRequest = null;
 
+let currentPreviewHowl = null;
+
 let dragIndex = -1;
 
 
@@ -24,6 +26,7 @@ const ADD_URL = '/ltt/addTrack';
 const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
 const REDDIT_CATEGORY_URL = '/ltt/reddit';
+const PREVIEW_URL = '/ltt/previewTrack';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
@@ -131,8 +134,6 @@ dragula(dragulaElements, {
         else if (dragIndex >= 0 && source === spotifyTrackContainer) { // Re-order Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
             let options = new ReorderOptions(dragIndex, $spotifyTrackContainer.children($el).index($el), playlistId);
-            console.log(options);
-            console.log($spotifyTrackContainer.children($el).length);
             sendReorderRequest(options)
             .catch((e) => {
                 // TODO: something with error?
@@ -232,5 +233,33 @@ $rightCol.on('click', '.rch-text', function(e) {
 });
 
 $rightCol.on('click', '.rt-track-preview', function(e) {
-    $(e.target).closest('.rt-track-preview').addClass('previewing');
+    let $oldPreview = $rightCol.find('.previewing');
+    let $newPreview = $(e.target).closest('.rt-track-preview');
+
+    if (currentPreviewHowl === null) { // First time preview clicked
+        currentPreviewHowl = new Howl({
+            src: [$newPreview.attr('data-preview-url')],
+            format: ['mp3'],
+            onloaderror: function(id, err) {
+                console.error(err);
+            }
+        });
+        currentPreviewHowl.play();
+    }
+    else if ($oldPreview === $newPreview) { // Pause
+        currentPreviewHowl.pause();
+        return;
+    }
+    else { // Switch Tracks
+        currentPreviewHowl.stop();
+        $oldPreview.removeClass('previewing');
+
+        currentPreviewHowl = new Howl({
+            src: [$newPreview.attr('data-preview-url')],
+            format: ['mp3'],
+        });
+        currentPreviewHowl.play();
+    }
+
+    $newPreview.addClass('previewing');
 });
