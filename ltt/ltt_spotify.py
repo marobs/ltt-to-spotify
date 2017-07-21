@@ -315,12 +315,10 @@ def getSelectedPlaylist(playlist):
 
     return None
 
-
-
 def batchFirstPlaylists(userPlaylists):
-    numPlaylists = 0;
+    numPlaylists = 0
     for playlist in userPlaylists:
-        fields = 'next,items(track(name,duration_ms))'
+        fields = 'next,items(track(duration_ms))'
         playlistTracks = getPlaylistTracks(playlist['owner']['id'], playlist['id'], fields)
 
         playlist['totalLength'] = calcTotalPlaylistLength(playlistTracks['items'])
@@ -346,6 +344,7 @@ def calcTotalPlaylistLength(tracks):
     print "M: " + str(minutes)
 
     return str(hours) + " hr " + str(minutes) + " min"
+
 
 #############################################################
 #                                                           #
