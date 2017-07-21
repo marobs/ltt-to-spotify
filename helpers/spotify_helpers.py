@@ -116,6 +116,10 @@ def queryForPlaylistTracks(ownerId, playlistId, fields):
     requestHeader = None
 
     result = global_helpers.query_http(url, params, None, "Get playlist tracks query", 'GET')
+    if 'next' in result:
+        url = result['next']
+    else:
+        url = None
 
     while url is not None:
         additionalTracks = global_helpers.query_http(url, params, None, "Get additional playlist tracks", 'GET')

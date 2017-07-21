@@ -320,13 +320,13 @@ def getSelectedPlaylist(playlist):
 def batchFirstPlaylists(userPlaylists):
     numPlaylists = 0;
     for playlist in userPlaylists:
-        fields = 'next,items(track(duration_ms))'
+        fields = 'next,items(track(name,duration_ms))'
         playlistTracks = getPlaylistTracks(playlist['owner']['id'], playlist['id'], fields)
 
         playlist['totalLength'] = calcTotalPlaylistLength(playlistTracks['items'])
         print str(playlist['name'].encode('utf8')) + " length: " + str(playlist['totalLength'])
 
-        if numPlaylists == 8:
+        if numPlaylists == 7:
             return
 
         numPlaylists += 1
@@ -339,16 +339,13 @@ def calcTotalPlaylistLength(tracks):
     for track in tracks:
         ms += track['track']['duration_ms']
 
-    hours = float(ms)/float(1000*60*60)
-    print str(hours)
-    rem = ms % (1000*60*60)
-    mins = float(rem)/float(1000*60)
-    print str(mins)
-    rem = rem % (1000*60)
-    secs = float(rem)/float(1000)
-    print str(secs)
+    hours = int(ms/(1000*60*60))
+    print "H: " + str(hours)
+    remainder = ms % (1000*60*60)
+    minutes = int(remainder/(1000*60))
+    print "M: " + str(minutes)
 
-    return ms
+    return str(hours) + " hr " + str(minutes) + " min"
 
 #############################################################
 #                                                           #
