@@ -25,21 +25,29 @@
                 <div class="playlist-overlay playlist-overlay-name">{{ playlist['name'] }}</div>
                 <div class="playlist-overlay playlist-overlay-owner">{{ playlist['owner']['name'] }}</div>
                 <div class="playlist-overlay playlist-overlay-a">
-                    <div class="overlay-container">X: {{ playlist['tracks']['total'] }}</div>
                     <div class="overlay-container">
+                        <div id="overlay-tracks" class="overlay-container-icon"></div>
+                        <div class="overlay-container-text">{{ playlist['tracks']['total'] }}</div>
+                    <div class="overlay-container">
+                        <div id="overlay-followers" class="overlay-container-icon"></div>
+                        <div class="overlay-container-text">
                         {% if 'followers' in playlist %}
-                            Y: {{ playlist['followers']|length }}
+                            {{ playlist['followers']|length }}
                         {% else %}
-                            Y: -
+                            -
                         {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="playlist-overlay playlist-overlay-b">
+                    <div id="overlay-duration" class="overlay-container-icon"></div>
+                    <div class="overlay-container-text">
                     {% if 'totalLength' in playlist %}
-                        Z: {{ playlist['totalLength'] }}
+                        {{ playlist['totalLength'] }}
                     {% else %}
-                        Z: -
+                        -
                     {% endif %}
+                    </div>
                 </div>
             </div>
             <div class="playlist-footer">{{ playlist['name'] }}</div>

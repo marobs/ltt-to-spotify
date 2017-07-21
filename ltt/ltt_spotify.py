@@ -363,6 +363,7 @@ def updateWithPlaylistOwnerNames(userPlaylists):
         for ownerObj in owners[ownerId]:
             ownerObj['name'] = queriedOwner['display_name']
 
+    return userPlaylists
 
 #############################################################
 #                                                           #

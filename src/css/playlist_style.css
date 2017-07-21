@@ -113,8 +113,34 @@
 }
 
 .overlay-container {
+    display: flex;
+    flex-direction: row;
     width: 90px;
     height: 25px;
+}
+
+.overlay-container-icon {
+    height: 25px;
+    width: 25px;
+    background-size: cover;
+    background-position: center;
+}
+
+.overlay-container-text {
+    height: 25px;
+    width: 65px;
+}
+
+#overlay-tracks {
+    background-image: url('../images/track_icon.png');
+}
+
+#overlay-followers {
+    background-image: url('../images/figure_icon.png');
+}
+
+#overlay-duration {
+    background-image: url('../images/clock_icon.png');
 }
 
 /* Playlist footer */
