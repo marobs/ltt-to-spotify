@@ -17,7 +17,7 @@ def generateSpotifyData(postList):
             spotifyEntry['track']['redditData'] = post
             try:
                 print "Found Spotify entry for -- " + str(post['rawTitle'])
-            except  UnicodeEncodeError:
+            except UnicodeEncodeError:
                 print "Foudn Spotify entry for -- " + post['rawTitle'].encode('utf-8')
             spotifyData.append(spotifyEntry)
         else:

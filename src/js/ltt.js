@@ -17,6 +17,9 @@ let switchPlaylistRequest = null;
 
 let switchRedditCategoryRequest = null;
 
+let currentPreviewHowl = null;
+let currentPreviewElement = null;
+
 let dragIndex = -1;
 
 
@@ -24,6 +27,7 @@ const ADD_URL = '/ltt/addTrack';
 const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
 const REDDIT_CATEGORY_URL = '/ltt/reddit';
+const PREVIEW_URL = '/ltt/previewTrack';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
@@ -131,8 +135,6 @@ dragula(dragulaElements, {
         else if (dragIndex >= 0 && source === spotifyTrackContainer) { // Re-order Song
             let playlistId = $('#left-col').find('.selected').attr('data-playlistId');
             let options = new ReorderOptions(dragIndex, $spotifyTrackContainer.children($el).index($el), playlistId);
-            console.log(options);
-            console.log($spotifyTrackContainer.children($el).length);
             sendReorderRequest(options)
             .catch((e) => {
                 // TODO: something with error?
@@ -229,4 +231,59 @@ $rightCol.on('click', '.rch-text', function(e) {
             return;
         });
     }
+});
+
+$rightCol.on('click', '.rt-track-preview', function(e) {
+    let $newPreview = $(e.target).closest('.rt-track-preview');
+
+    if (currentPreviewHowl === null) { // First time preview clicked
+        currentPreviewHowl = new Howl({
+            src: [$newPreview.attr('data-preview-url')],
+            format: ['mp3'],
+            onload: function() {
+                $newPreview.addClass('previewing');
+            }
+        });
+        currentPreviewHowl.play();
+        currentPreviewElement = $newPreview;
+    }
+    else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
+        if (currentPreviewHowl.playing()) {
+            currentPreviewHowl.pause();
+
+            let computedStyle = window.getComputedStyle($newPreview[0]);
+            let backgroundPos = computedStyle.getPropertyValue('background-position');
+
+            $newPreview[0].style.backgroundPosition = backgroundPos;
+            $newPreview.removeClass('previewing');
+            return;
+        }
+
+        let computedStyle = window.getComputedStyle($newPreview[0]);
+        let backgroundPos = computedStyle.getPropertyValue('background-position');
+        let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
+        let timeToComplete = parseFloat(30*percentToComplete/100);
+
+        $newPreview[0].removeAttribute('style');
+        $newPreview.addClass('previewing');
+        $newPreview[0].style.backgroundPosition = 'left';
+        $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
+        currentPreviewHowl.play();
+        return;
+    }
+    else { // Switch Tracks
+        currentPreviewHowl.stop();
+        currentPreviewElement.removeClass('previewing');
+
+        currentPreviewHowl = new Howl({
+            src: [$newPreview.attr('data-preview-url')],
+            format: ['mp3'],
+            onload: function() {
+                $newPreview.addClass('previewing');
+            }
+        });
+        currentPreviewHowl.play();
+        currentPreviewElement = $newPreview;
+    }
+
 });
