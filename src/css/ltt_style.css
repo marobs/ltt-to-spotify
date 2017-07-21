@@ -137,7 +137,7 @@
     background: linear-gradient(to left, white 50%, #CFC2DF 50%);
     background-size: 200% 100%;
     background-position:right;
-    transition:all 0s linear;
+    transition:all 1s ease;
     border-radius: 140px;
 }
 
