@@ -54,7 +54,6 @@ def queryForArtistTopSong(artistId):
 
     return None
 
-
 ##
 ## [GET] Get all albums in albumList
 ##
@@ -140,7 +139,6 @@ def queryForPlaylistTracks(ownerId, playlistId, fields):
 
     return result
 
-
 ##
 ## [POST] Add track to playlist
 ##
@@ -182,7 +180,6 @@ def deleteUnsaveTrackRequest(ids):
     requestHeader = {'Content-Type': 'application/json'}
 
     return global_helpers.query_http(url, params, requestHeader, "Unsave track delete", 'DELETE')
-
 
 ##
 ## [PUT] Reorder playlist

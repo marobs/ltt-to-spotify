@@ -287,33 +287,20 @@ def categorizeGenres(spotifyData):
 
             spotifyEntry['genres'] = genres
 
-#############################################################
-#                                                           #
-#                   Playlist Data                           #
-#                                                           #
-#############################################################
-
+##
+## PLAYLISTS
+##
 def getUserPlaylists():
     return helpers.queryForUserPlaylists()
 
-def printUserPlaylists(playlists):
-    for playlist in playlists:
-        if 'name' in playlist:
-            print "   " + playlist['name'].encode('utf8')
+def getPlaylistData(playlistId, ownerId):
+    return helpers.queryForSelectedPlaylist(playlistId, ownerId)
 
-        if 'tracks' in playlist:
-            print "   " + str(playlist['tracks'])
+def getPlaylistTotalData(playlistId, ownerId):
+    playlist = helpers.queryForSelectedPlaylist(playlistId, ownerId)
+    playlist['tracks'] = helpers.queryForPlaylistTracks(ownerId, playlistId, None)
 
-        print "\n"
-
-
-def getSelectedPlaylist(playlist):
-    if 'id' in playlist and 'owner' in playlist and 'id' in playlist['owner']:
-        playlistId = playlist['id']
-        userId = playlist['owner']['id']
-        return helpers.queryForSelectedPlaylist(playlistId, userId)
-
-    return None
+    return playlist
 
 def batchFirstPlaylists(userPlaylists):
     numPlaylists = 0
@@ -364,6 +351,8 @@ def updateWithPlaylistOwnerNames(userPlaylists):
             ownerObj['name'] = queriedOwner['display_name']
 
     return userPlaylists
+
+
 
 #############################################################
 #                                                           #
