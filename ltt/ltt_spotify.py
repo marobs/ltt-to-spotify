@@ -345,6 +345,24 @@ def calcTotalPlaylistLength(tracks):
 
     return str(hours) + " hr " + str(minutes) + " min"
 
+def updateWithPlaylistOwnerNames(userPlaylists):
+    owners = {}
+    for playlist in userPlaylists:
+        if playlist['owner']['id'] == helpers.userId:
+            playlist['owner']['name'] = helpers.userProfile['display_name']
+
+        else:
+            nonUserId = str(playlist['owner']['id'])
+            if nonUserId in owners:
+                owners[nonUserId].append(playlist['owner'])
+            else:
+                owners[nonUserId] = [playlist['owner']]
+
+    for ownerId in owners:
+        queriedOwner = helpers.queryForUserProfile(ownerId)
+        for ownerObj in owners[ownerId]:
+            ownerObj['name'] = queriedOwner['display_name']
+
 
 #############################################################
 #                                                           #

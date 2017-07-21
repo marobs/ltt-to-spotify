@@ -8,6 +8,13 @@ import json
 ##########################################################################
 
 ##
+## [GET] Get a user's profile
+##
+def queryForUserProfile(userId):
+    url = "https://api.spotify.com/v1/users/" + str(userId)
+    return global_helpers.query_http(url, None, None, "Get user profile", 'GET')
+
+##
 ## [GET] Given artist and song, search Spotify for top artist and song results
 ##
 def queryForSearch(title, artist):
@@ -15,7 +22,7 @@ def queryForSearch(title, artist):
     searchParams = generateSearchParams(title, artist)
     requestHeader = None
 
-    return global_helpers.query_http(url, searchParams, requestHeader, "Search query", "GET")
+    return global_helpers.query_http(url, searchParams, requestHeader, "Search query", 'GET')
 
 ##
 ## [GET] Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
