@@ -32,14 +32,16 @@ function playlistBatchCallback(playlistData) {
 
     alert("Getting next");
     let nextIdPairBatch = getNextIdPairBatch();
-    $.get(GET_DATA_URL, {'idPairList': JSON.stringify(nextIdPairBatch)})
-    .done(function(data) {
-        console.log(data);
-        playlistBatchCallback(data);
-    })
-    .fail(function(data) {
-        console.log(data);
-    });
+    if (nextIdPairBatch.length > 0) {
+        $.get(GET_DATA_URL, {'idPairList': JSON.stringify(nextIdPairBatch)})
+            .done(function (data) {
+                console.log(data);
+                playlistBatchCallback(data);
+            })
+            .fail(function (data) {
+                console.log(data);
+            });
+    }
 }
 
 function getNextIdPairBatch() {
