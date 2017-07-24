@@ -1,6 +1,6 @@
 from flask import *
 import ltt
-
+import helpers;
 
 playlist = Blueprint('playlist', __name__, template_folder='templates')
 
@@ -20,7 +20,7 @@ def playlists_route():
     # Update all playlists with owner names
     userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
 
-    return render_template("playlists.html", playlists=userPlaylists)
+    return render_template("playlists.html", playlists=userPlaylists, userId=userId)
 
 ###
 ### [GET] Get playlist information (including full track and playlist data) for list of

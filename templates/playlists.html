@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js' defer></script>
     <script src="/static/min/lscache.min.js" defer></script>
-    <script src='/static/javascript/ltt.js' defer></script>
+    <script src='/static/javascript/playlist.js' defer></script>
 {% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="/static/css/playlist.css" />
@@ -19,7 +19,11 @@
 
 {% block content %}
     {% for playlist in playlists %}
-        <div class="playlist-container" id="{{ playlist['id'] }}">
+      {% if 'totalLength' in playlist %}
+        <div class="playlist-container" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
+      {% else %}
+        <div class="playlist-container incomplete" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
+      {% endif %}
             <div class="playlist-img-holder">
                 <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
                 <div class="playlist-overlay playlist-overlay-name">{{ playlist['name'] }}</div>
@@ -27,13 +31,17 @@
                 <div class="playlist-overlay playlist-overlay-a">
                     <div class="overlay-container">
                         <div id="overlay-tracks" class="overlay-container-icon"></div>
-                        <div class="overlay-container-text">{{ playlist['tracks']['total'] }}</div>
+                        <div class="overlay-container-text overlay-tracks-text">{{ playlist['tracks']['total'] }}</div>
                     </div>
                     <div class="overlay-container">
                         <div id="overlay-followers" class="overlay-container-icon"></div>
-                        <div class="overlay-container-text">
+                        <div class="overlay-container-text overlay-followers-text">
                         {% if 'followers' in playlist %}
-                            {{ playlist['followers']['total'] + 1 }}
+                            {% if playlist['owner']['id'] == userId %}
+                                {{ playlist['followers']['total'] + 1 }}
+                            {% else %}
+                                {{ playlist['followers']['total'] }}
+                            {% endif %}
                         {% else %}
                             -
                         {% endif %}
@@ -42,7 +50,7 @@
                 </div>
                 <div class="playlist-overlay playlist-overlay-b">
                     <div id="overlay-duration" class="overlay-container-icon"></div>
-                    <div class="overlay-container-text">
+                    <div class="overlay-container-text overlay-length-text">
                     {% if 'totalLength' in playlist %}
                         {{ playlist['totalLength'] }}
                     {% else %}
