@@ -20,7 +20,7 @@ def playlists_route():
     # Update all playlists with owner names
     userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
 
-    return render_template("playlists.html", playlists=userPlaylists, userId=userId)
+    return render_template("playlists.html", playlists=userPlaylists, userId=helpers.userId)
 
 ###
 ### [GET] Get playlist information (including full track and playlist data) for list of
@@ -32,13 +32,16 @@ def ltt_reddit_route():
     if not helpers.checkArgs(['idPairList'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
-    idPairList = request.values['idPairList']
-    playlistData = {}
+    idPairList = json.loads(request.values['idPairList'])
+
+    print json.dumps(idPairList, indent=4)
+
+    playlistData = []
     for idPair in idPairList:
         if 'playlistId' in idPair and 'ownerId' in idPair:
             playlistId = idPair['playlistId']
             ownerId = idPair['ownerId']
             playlistTotalData = ltt.getSelectedPlaylistData(playlistId, ownerId)
-            playlistData[playlistId] = playlistTotalData
+            playlistData.append(playlistTotalData)
 
     return jsonify(playlistData)

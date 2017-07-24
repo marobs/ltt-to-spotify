@@ -25,14 +25,20 @@ function playlistBatchCallback(playlistData) {
 
             let totalLength = playlistData[dataIndex].totalLength;
             $("#" + playlistData[dataIndex].id + " .overlay-length-text").text(totalLength);
+
+            $("#" + playlistData[dataIndex].id).removeClass("incomplete");
         }
     }
 
     alert("Getting next");
     let nextIdPairBatch = getNextIdPairBatch();
-    $.get(GET_DATA_URL, {'idPairList[]': nextIdPairBatch})
+    $.get(GET_DATA_URL, {'idPairList': JSON.stringify(nextIdPairBatch)})
     .done(function(data) {
+        console.log(data);
         playlistBatchCallback(data);
+    })
+    .fail(function(data) {
+        console.log(data);
     });
 }
 
@@ -44,12 +50,8 @@ function getNextIdPairBatch() {
         let playlistId = $(remainingPlaylists[batchIndex]).attr('id');
         let ownerId = $(remainingPlaylists[batchIndex]).data('owner-id');
 
-        console.log("PlaylistId: " + playlistId + " - ownerId " + ownerId);
-
         idPairList.push({'playlistId': playlistId, 'ownerId': ownerId});
     }
-
-    console.log(idPairList);
 
     return idPairList;
 }
