@@ -293,31 +293,15 @@ def categorizeGenres(spotifyData):
 def getUserPlaylists():
     return helpers.queryForUserPlaylists()
 
-def getPlaylistData(playlistId, ownerId):
+def getSelectedPlaylistData(playlistId, ownerId):
     return helpers.queryForSelectedPlaylist(playlistId, ownerId)
 
-def getPlaylistTotalData(playlistId, ownerId):
+def getPlaylistTotalData(playlistId, ownerId):  # Includes track length data
     playlist = helpers.queryForSelectedPlaylist(playlistId, ownerId)
-    playlist['tracks'] = helpers.queryForPlaylistTracks(ownerId, playlistId, None)
+    playlist['tracks'] = helpers.queryForPlaylistTracks(ownerId, playlistId, 'next,items(track(duration_ms))')
+    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks'])
 
     return playlist
-
-def batchFirstPlaylists(userPlaylists):
-    numPlaylists = 0
-    for playlist in userPlaylists:
-        fields = 'next,items(track(duration_ms))'
-        playlistTracks = getPlaylistTracks(playlist['owner']['id'], playlist['id'], fields)
-
-        playlist['totalLength'] = calcTotalPlaylistLength(playlistTracks['items'])
-        print str(playlist['name'].encode('utf8')) + " length: " + str(playlist['totalLength'])
-
-        if numPlaylists == 7:
-            return
-
-        numPlaylists += 1
-
-def getPlaylistTracks(ownerId, playlistId, fields):
-    return helpers.queryForPlaylistTracks(ownerId, playlistId, fields)
 
 def calcTotalPlaylistLength(tracks):
     ms = 0

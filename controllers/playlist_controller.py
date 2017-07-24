@@ -11,7 +11,12 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 def playlists_route():
     userPlaylists = ltt.getUserPlaylists()
     userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
-    ltt.batchFirstPlaylists(userPlaylists)
+
+    # Grab total data for first X playlists
+    for i in xrange(4):
+        playlistId = userPlaylists[i]['id']
+        ownerId = userPlaylists[i]['owner']['id']
+        userPlaylists[i] = ltt.getPlaylistTotalData(playlistId, ownerId)
 
     return render_template("playlists.html", playlists=userPlaylists)
 
@@ -31,7 +36,7 @@ def ltt_reddit_route():
         if 'playlistId' in idPair and 'ownerId' in idPair:
             playlistId = idPair['playlistId']
             ownerId = idPair['ownerId']
-            playlist = ltt.getPlaylistTotalData(playlistId, ownerId)
-            playlistData[playlistId] = playlist
+            playlistTotalData = ltt.getPlaylistTotalData(playlistId, ownerId)
+            playlistData[playlistId] = playlistTotalData
 
     return jsonify(playlistData)
