@@ -325,6 +325,9 @@ def updateWithPlaylistOwnerNames(userPlaylists):
             else:
                 owners[nonUserId] = [playlist['owner']]
 
+
+    print "Querying for " + str(len(owners)) + " owners."
+
     for ownerId in owners:
         queriedOwner = helpers.queryForUserProfile(ownerId)
         for ownerObj in owners[ownerId]:

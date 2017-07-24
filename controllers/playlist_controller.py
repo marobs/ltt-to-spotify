@@ -10,7 +10,6 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 @playlist.route("/playlists")
 def playlists_route():
     userPlaylists = ltt.getUserPlaylists()
-    userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
 
     # Grab total data for first X playlists
     for i in xrange(4):
@@ -18,7 +17,8 @@ def playlists_route():
         ownerId = userPlaylists[i]['owner']['id']
         userPlaylists[i] = ltt.getSelectedPlaylistData(playlistId, ownerId)
 
-    print json.dumps(userPlaylists[0], indent=4)
+    # Update all playlists with owner names
+    userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
 
     return render_template("playlists.html", playlists=userPlaylists)
 
