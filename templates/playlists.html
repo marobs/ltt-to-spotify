@@ -33,7 +33,7 @@
                         <div id="overlay-followers" class="overlay-container-icon"></div>
                         <div class="overlay-container-text">
                         {% if 'followers' in playlist %}
-                            {{ playlist['followers']|length }}
+                            {{ playlist['followers']['total'] + 1 }}
                         {% else %}
                             -
                         {% endif %}

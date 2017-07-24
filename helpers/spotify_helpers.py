@@ -108,10 +108,7 @@ def queryForUserPlaylists():
 ##
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
-    params = {'fields': 'name,description,id,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
-    requestHeader = None
-
-    return global_helpers.query_http(url, params, requestHeader, "Get selected playlist query", 'GET')
+    return global_helpers.query_http(url, None, None, "Get selected playlist query", 'GET')
 
 ##
 ## [GET] Get a playlist's tracks

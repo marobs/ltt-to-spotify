@@ -294,12 +294,8 @@ def getUserPlaylists():
     return helpers.queryForUserPlaylists()
 
 def getSelectedPlaylistData(playlistId, ownerId):
-    return helpers.queryForSelectedPlaylist(playlistId, ownerId)
-
-def getPlaylistTotalData(playlistId, ownerId):  # Includes track length data
     playlist = helpers.queryForSelectedPlaylist(playlistId, ownerId)
-    playlist['tracks'] = helpers.queryForPlaylistTracks(ownerId, playlistId, 'next,items(track(duration_ms))')
-    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks'])
+    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
 
     return playlist
 
@@ -335,7 +331,6 @@ def updateWithPlaylistOwnerNames(userPlaylists):
             ownerObj['name'] = queriedOwner['display_name']
 
     return userPlaylists
-
 
 
 #############################################################
