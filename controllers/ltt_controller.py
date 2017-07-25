@@ -140,12 +140,12 @@ def ltt_reorder_route():
 
     userId = helpers.getUserId()
     playlistId = request.values['playlistId']
-    rangeStart = request.values['rangeStart']
-    rangeLength = request.values['rangeLength']
-    insertBefore = request.values['insertBefore']
+    rangeStart = int(request.values['rangeStart'])
+    rangeLength = int(request.values['rangeLength'])
+    insertBefore = int(request.values['insertBefore'])
 
     response = helpers.reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBefore)
-    if response.status_code not in helpers.okHttpStatusCodes:
-        return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
+    #if response.status_code not in helpers.okHttpStatusCodes:
+        #return jsonify({'Error': "Bad status code returned: " + str(response.status_code)})
 
     return jsonify(response)

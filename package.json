@@ -24,6 +24,7 @@
     "precss": "^2.0.0"
   },
   "dependencies": {
+    "howler": "^2.0.4",
     "package.json": "^2.0.1"
   }
 }
