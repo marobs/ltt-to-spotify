@@ -114,11 +114,7 @@ def queryForSelectedPlaylist(playlistId, userId):
 
     while 'next' in playlistTrackResult and playlistTrackResult['next'] is not None:
         playlistTrackResult = global_helpers.query_http(playlistTrackResult['next'], None, None, "Additional playlist tracks", 'GET')
-
-        log_helpers.logGeneral(json.dumps(playlistTrackResult, indent=4))
-
         playlistResult['tracks']['items'] += playlistTrackResult['items']
-
 
     return playlistResult
 
