@@ -190,6 +190,33 @@ def reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBe
 
     return global_helpers.query_http(url, params, requestHeader, "Reorder playlist", 'PUT')
 
+##
+## [GET] Get audio features for several tracks
+##
+def queryForMultipleAudioFeatures(idList):
+    url = "https://api.spotify.com/v1/audio-features"
+    index = 0
+    tieredList = []
+    while index < len(idList):
+        idList = []
+        for i in xrange(100):
+            if (i + index) < len(idList):
+                idList.append(idList[i+index])
+            else:
+                break
+
+        tieredList.append(idList)
+        index += 100
+
+    audioFeaturesList = []
+    for idListToQuery in tieredList:
+        idListString = ','.join(str(x) for x in idListToQuery)
+        params = {'ids': idListString}
+
+        audioFeaturesList += global_helpers.query_http(url, params, None, "Get Audio Features", 'GET')
+
+    return audioFeaturesList
+
 ##########################################################################
 ##                                                                      ##
 ##                          Miscellaneous                               ##

@@ -301,9 +301,24 @@ def getSelectedPlaylistData(playlistId, ownerId):
 
 def getFullSelectedPlaylistData(playlistId, ownerId):
     playlist = getSelectedPlaylistData(playlistId, ownerId)
-    helpers.logGeneral(json.dumps(playlist, indent=4))
+    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
+    playlist['tracks']['items'] = getTracksAudioFeatures(playlist['tracks']['items'])
 
     return playlist
+
+def getTracksAudioFeatures(trackList):
+    trackIds = []
+    for track in trackList:
+        trackIds.append(track['id'])
+
+    audioFeatures = helpers.queryForMultipleAudioFeatures(trackIds)
+
+    for i in xrange(len(audioFeatures)):
+        trackList[i]['audioFeatures'] = audioFeatures[i]
+
+    helpers.logGeneral(json.dumps(trackList, indent=4))
+
+    return trackList
 
 def calcTotalPlaylistLength(tracks):
     ms = 0
@@ -311,10 +326,8 @@ def calcTotalPlaylistLength(tracks):
         ms += track['track']['duration_ms']
 
     hours = int(ms/(1000*60*60))
-    print "H: " + str(hours)
     remainder = ms % (1000*60*60)
     minutes = int(remainder/(1000*60))
-    print "M: " + str(minutes)
 
     return str(hours) + " hr " + str(minutes) + " min"
 
@@ -330,9 +343,6 @@ def updateWithPlaylistOwnerNames(userPlaylists):
                 owners[nonUserId].append(playlist['owner'])
             else:
                 owners[nonUserId] = [playlist['owner']]
-
-
-    print "Querying for " + str(len(owners)) + " owners."
 
     for ownerId in owners:
         queriedOwner = helpers.queryForUserProfile(ownerId)
