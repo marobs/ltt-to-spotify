@@ -1,5 +1,7 @@
+from __future__ import division
 import helpers
 import json
+
 
 #############################################################
 #                                                           #
@@ -52,9 +54,6 @@ def generateSpotifyData(postList):
 def printSpotifyData(spotifyData):
     print "Printing Spotify Data"
     print json.dumps(spotifyData, indent=2)
-
-def logSpotifyData(spotifyData):
-    helpers.logGeneral(json.dumps(spotifyData, indent=4))
 
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
@@ -285,33 +284,67 @@ def categorizeGenres(spotifyData):
 
             spotifyEntry['genres'] = genres
 
-#############################################################
-#                                                           #
-#                   Playlist Data                           #
-#                                                           #
-#############################################################
-
+##
+## PLAYLISTS
+##
 def getUserPlaylists():
     return helpers.queryForUserPlaylists()
 
-def printUserPlaylists(playlists):
-    for playlist in playlists:
-        if 'name' in playlist:
-            print "   " + playlist['name'].encode('utf8')
+def getSelectedPlaylistData(playlistId, ownerId):
+    playlist = helpers.queryForSelectedPlaylist(playlistId, ownerId)
+    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
 
-        if 'tracks' in playlist:
-            print "   " + str(playlist['tracks'])
+    return playlist
 
-        print "\n"
+def getFullSelectedPlaylistData(playlistId, ownerId):
+    playlist = getSelectedPlaylistData(playlistId, ownerId)
+    playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
+    playlist['tracks']['items'] = getTracksAudioFeatures(playlist['tracks']['items'])
 
+    return playlist
 
-def getSelectedPlaylist(playlist):
-    if 'id' in playlist and 'owner' in playlist and 'id' in playlist['owner']:
-        playlistId = playlist['id']
-        userId = playlist['owner']['id']
-        return helpers.queryForSelectedPlaylist(playlistId, userId)
+def getTracksAudioFeatures(trackList):
+    trackIds = []
+    for track in trackList:
+        trackIds.append(track['track']['id'])
 
-    return None
+    audioFeatures = helpers.queryForMultipleAudioFeatures(trackIds)
+
+    for i in xrange(len(audioFeatures)):
+        trackList[i]['track']['audioFeatures'] = audioFeatures[i]
+
+    return trackList
+
+def calcTotalPlaylistLength(tracks):
+    ms = 0
+    for track in tracks:
+        ms += track['track']['duration_ms']
+
+    hours = int(ms/(1000*60*60))
+    remainder = ms % (1000*60*60)
+    minutes = int(remainder/(1000*60))
+
+    return str(hours) + " hr " + str(minutes) + " min"
+
+def updateWithPlaylistOwnerNames(userPlaylists):
+    owners = {}
+    for playlist in userPlaylists:
+        if playlist['owner']['id'] == helpers.userId:
+            playlist['owner']['name'] = helpers.userProfile['display_name']
+
+        else:
+            nonUserId = str(playlist['owner']['id'])
+            if nonUserId in owners:
+                owners[nonUserId].append(playlist['owner'])
+            else:
+                owners[nonUserId] = [playlist['owner']]
+
+    for ownerId in owners:
+        queriedOwner = helpers.queryForUserProfile(ownerId)
+        for ownerObj in owners[ownerId]:
+            ownerObj['name'] = queriedOwner['display_name']
+
+    return userPlaylists
 
 
 #############################################################

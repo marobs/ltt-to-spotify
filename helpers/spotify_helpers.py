@@ -1,10 +1,19 @@
 import global_helpers
+import json
+import log_helpers
 
 ##########################################################################
 ##                                                                      ##
 ##                          Queries                                     ##
 ##                                                                      ##
 ##########################################################################
+
+##
+## [GET] Get a user's profile
+##
+def queryForUserProfile(userId):
+    url = "https://api.spotify.com/v1/users/" + str(userId)
+    return global_helpers.query_http(url, None, None, "Get user profile", 'GET')
 
 ##
 ## [GET] Given artist and song, search Spotify for top artist and song results
@@ -14,7 +23,7 @@ def queryForSearch(title, artist):
     searchParams = generateSearchParams(title, artist)
     requestHeader = None
 
-    return global_helpers.query_http(url, searchParams, requestHeader, "Search query", "GET")
+    return global_helpers.query_http(url, searchParams, requestHeader, "Search query", 'GET')
 
 ##
 ## [GET] Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
@@ -46,7 +55,6 @@ def queryForArtistTopSong(artistId):
 
     return None
 
-
 ##
 ## [GET] Get all albums in albumList
 ##
@@ -77,20 +85,22 @@ def queryForAllArtists(artistList):
 def queryForUserPlaylists():
     url = "https://api.spotify.com/v1/me/playlists"
     params = {'limit': 50}
-    requestHeader = None
 
-    result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
+    result = global_helpers.query_http(url, params, None, "Get my playlists query", 'GET')
     playlists = result['items']
+    if 'next' in result:
+        url = result['next']
+    else:
+        url = None
 
-    iteration = 1
-    while len(playlists) == 50 * iteration:
-        params = {'limit': 50, 'offset': 50 * iteration}
-        result = global_helpers.query_http(url, params, requestHeader, "Get my playlists query", 'GET')
+    while url is not None:
+        additionalPlaylists = global_helpers.query_http(url, params, None, "Get additional my playlists", 'GET')
+        playlists += additionalPlaylists['items']
 
-        if 'items' in result:
-            playlists = playlists + result['items']
-
-        iteration += 1
+        if 'next' in additionalPlaylists:
+            url = additionalPlaylists['next']
+        else:
+            url = None
 
     return playlists
 
@@ -99,10 +109,40 @@ def queryForUserPlaylists():
 ##
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
-    params = {'fields': 'name,description,id,tracks.items(track(name,href,id,album(name,href,id),artists(name,href,id)))'}
-    requestHeader = None
+    playlistResult = global_helpers.query_http(url, None, None, "Get selected playlist query", 'GET')
+    playlistTrackResult = playlistResult['tracks']
 
-    return global_helpers.query_http(url, params, requestHeader, "Get selected playlist query", 'GET')
+    while 'next' in playlistTrackResult and playlistTrackResult['next'] is not None:
+        playlistTrackResult = global_helpers.query_http(playlistTrackResult['next'], None, None, "Additional playlist tracks", 'GET')
+        playlistResult['tracks']['items'] += playlistTrackResult['items']
+
+    return playlistResult
+
+##
+## [GET] Get a playlist's tracks
+##
+def queryForPlaylistTracks(ownerId, playlistId, fields):
+    url = "https://api.spotify.com/v1/users/" + str(ownerId) + "/playlists/" + str(playlistId) + "/tracks"
+    params = {'limit': 100}
+    if fields is not None:
+        params['fields'] = fields
+
+    result = global_helpers.query_http(url, params, None, "Get playlist tracks query", 'GET')
+    if 'next' in result:
+        url = result['next']
+    else:
+        url = None
+
+    while url is not None:
+        additionalTracks = global_helpers.query_http(url, params, None, "Get additional playlist tracks", 'GET')
+        result['items'] += additionalTracks['items']
+
+        if 'next' in additionalTracks:
+            url = additionalTracks['next']
+        else:
+            url = None
+
+    return result
 
 ##
 ## [POST] Add track to playlist
@@ -146,7 +186,6 @@ def deleteUnsaveTrackRequest(ids):
 
     return global_helpers.query_http(url, params, requestHeader, "Unsave track delete", 'DELETE')
 
-
 ##
 ## [PUT] Reorder playlist
 ##
@@ -158,6 +197,39 @@ def reorderPlaylistRequest(userId, playlistId, rangeStart, rangeLength, insertBe
     requestHeader = {'Content-Type': 'application/json'}
 
     return global_helpers.query_http(url, params, requestHeader, "Reorder playlist", 'PUT')
+
+##
+## [GET] Get audio features for several tracks
+##
+def queryForMultipleAudioFeatures(idList):
+    url = "https://api.spotify.com/v1/audio-features"
+    index = 0
+    tieredList = []
+
+    print str(len(idList)) + " -- length"
+
+    while index < len(idList):
+        idsToQuery = []
+        for i in xrange(100):
+            if (i + index) < len(idList):
+                idsToQuery.append(idList[i+index])
+            else:
+                break
+
+        print "Appending "
+
+        tieredList.append(idsToQuery)
+        index += 100
+
+    audioFeaturesList = []
+    for idListToQuery in tieredList:
+        idListString = ','.join(str(x) for x in idListToQuery)
+        params = {'ids': idListString}
+
+        queryResult = global_helpers.query_http(url, params, None, "Get Audio Features", 'GET')
+        audioFeaturesList += queryResult['audio_features']
+
+    return audioFeaturesList
 
 ##########################################################################
 ##                                                                      ##

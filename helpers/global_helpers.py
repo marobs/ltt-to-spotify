@@ -137,7 +137,7 @@ def setAccessToken(token):
         return 
 
     global accessToken
-    print "Setting access token"
+    print "Setting access token: " + str(token)
     accessToken = token
 
 ##
