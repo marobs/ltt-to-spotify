@@ -11,11 +11,24 @@ $seekContainer.on('click', function(e) {
     $this.find(".slider-left").css({width: clickPercent+"%"});
     $this.find('.slider-thumb').css({left: clickPercent+"%"});
     $this.find(".slider-right").css({width: (100-clickPercent)+"%"});
+
+    if (currentPreviewElement !== null) {
+        currentPreviewHowl.seek(30*clickPos/width);
+    }
+
+    if (windowInterval === -1) {
+        windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+    }
 });
 
 $seekContainer.mousemove(function(e) {
     if (e.which !== 1) {
         return;
+    }
+
+    if (windowInterval !== -1) {
+        clearInterval(windowInterval);
+        windowInterval = -1;
     }
 
     let $this = $(this);

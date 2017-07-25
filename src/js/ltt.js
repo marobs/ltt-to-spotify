@@ -315,3 +315,21 @@ function updateSeekBar(howl) {
         $seekContainer.find(".slider-right").css({width: (100-playPercent)+"%"});
     }
 }
+
+document.body.onkeydown = function(e){
+    e.preventDefault();
+    if(e.keyCode === 32){
+        if (currentPreviewHowl === null) {
+            return;
+        }
+
+        if (currentPreviewHowl.playing()) {
+            currentPreviewHowl.pause();
+            clearInterval(windowInterval);
+        }
+        else {
+            currentPreviewHowl.play();
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        }
+    }
+};
