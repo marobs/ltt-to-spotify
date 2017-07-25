@@ -62,3 +62,11 @@ def playlist_route():
 
     return jsonify(playlistData)
 
+###
+### [GET] Get history
+###
+@playlist.route("/history")
+def history_route():
+    print "Hello"
+    historyData = ltt.getSpotifyHistory()
+    return jsonify(historyData)

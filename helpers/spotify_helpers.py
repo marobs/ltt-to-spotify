@@ -231,6 +231,30 @@ def queryForMultipleAudioFeatures(idList):
 
     return audioFeaturesList
 
+##
+## [GET] Query for history, grabbing in bunches of 50 songs up to batches
+##
+def queryForSpotifyHistory(batches):
+    url = "https://api.spotify.com/v1/me/player/recently-played"
+    params = {'limit': 50}
+
+    index = 0
+    if batches > 20:
+        return
+
+    totalResult = []
+    while index < batches:
+        historyResult = global_helpers.query_http(url, params, None, "Get history", 'GET')
+        totalResult += historyResult['items']
+
+        if 'next' in historyResult and historyResult['next'] is not None:
+            print "history next: " + str(historyResult['next'])
+            url = historyResult['next']
+
+        index += 1
+
+    return totalResult
+
 ##########################################################################
 ##                                                                      ##
 ##                          Miscellaneous                               ##

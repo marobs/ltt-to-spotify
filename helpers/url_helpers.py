@@ -22,6 +22,7 @@ def getScopes():
     scopes.append("user-read-private")
     scopes.append("user-read-birthdate")
     scopes.append("user-top-read")
+    scopes.append("user-read-recently-played")
     return " ".join(scopes)
 
 

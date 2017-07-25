@@ -46,7 +46,6 @@ def generateSpotifyData(postList):
         print "Collected genre information"
 
     spotifyData += cachedEntries
-    logSpotifyData(spotifyData)
     prepareAndCacheSpotifyData(spotifyData, list(notFoundIds))
 
     return spotifyData
@@ -300,6 +299,7 @@ def getFullSelectedPlaylistData(playlistId, ownerId):
     playlist = getSelectedPlaylistData(playlistId, ownerId)
     playlist['totalLength'] = calcTotalPlaylistLength(playlist['tracks']['items'])
     playlist['tracks']['items'] = getTracksAudioFeatures(playlist['tracks']['items'])
+    playlist = calculatePlaylistTrackMetrics(playlist)
 
     return playlist
 
@@ -346,6 +346,8 @@ def updateWithPlaylistOwnerNames(userPlaylists):
 
     return userPlaylists
 
+def calculatePlaylistTrackMetrics(playlist):
+    return "need to average/median/etc audio deets"
 
 #############################################################
 #                                                           #

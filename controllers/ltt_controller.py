@@ -23,7 +23,9 @@ def ltt_route():
 
     selectedPlaylist = None
     if userPlaylists is not None and len(userPlaylists) > 0:
-        selectedPlaylist = ltt.getPlaylistData(userPlaylists['id'], userPlaylists['owner']['id'])
+        selectedPlaylistId = userPlaylists[0]['id']
+        selectedOwnerId = userPlaylists[0]['owner']['id']
+        selectedPlaylist = ltt.getSelectedPlaylistData(selectedPlaylistId, selectedOwnerId)
 
     return render_template("ltt.html", songList=spotifyData, playlists=userPlaylists, selected=selectedPlaylist)
 
