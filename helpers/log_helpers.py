@@ -8,3 +8,8 @@ def logGeneral(toLog):
         f.seek(0)
         f.truncate()
         f.write(str(toLog))
+
+def logAppend(toLog):
+    global logPath
+    with open(logPath, 'a') as f:
+        f.write(str(toLog))

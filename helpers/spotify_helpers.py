@@ -1,4 +1,5 @@
 import global_helpers
+import log_helpers
 import json
 import datetime_helpers
 
@@ -242,6 +243,8 @@ def queryForSpotifyHistory(timestamp, batches):
     if batches > 20:
         return
 
+    log_helpers.logGeneral("")
+
     totalResult = []
     while index < batches:
         print "Querying - " + str(url)
@@ -249,10 +252,11 @@ def queryForSpotifyHistory(timestamp, batches):
         historyResult = global_helpers.query_http(url, params, None, "Get history", 'GET')
         totalResult += historyResult['items']
 
-        print json.dumps(historyResult, indent=4)
+        log_helpers.logAppend(json.dumps(historyResult, indent=4))
+        log_helpers.logAppend("\n\n\n\n====================\n\n\n\n\n")
 
         if len(historyResult['items']):
-            latest = historyResult['items'][-1]['played_at']
+            latest = historyResult['items'][-2]['played_at']
             print "\tconverting " + str(latest)
             params['before'] = datetime_helpers.isoToEpoch(latest)
 
