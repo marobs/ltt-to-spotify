@@ -11,9 +11,9 @@ const playlistBatchSize = 20;
 
 /**
  * @param {object|null} playlistData     Array of playlist data
+ * @param playlistData.length            Built-in javascript length function...
  * @param playlistData.followers.total   Total number of followers of the playlist.
  * @param playlistData.totalLength       String representation of the duration of the playlist in X hr Y min
- *
  */
 function playlistBatchCallback(playlistData) {
     if (playlistData != null) {
@@ -61,5 +61,5 @@ function getNextIdPairBatch() {
 // On document ready
 //
 $(document).ready(function() {
-    playlistBatchCallback(null);
+    //playlistBatchCallback(null);
 });

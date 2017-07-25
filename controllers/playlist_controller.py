@@ -28,14 +28,11 @@ def playlists_route():
 ### JSON
 ###
 @playlist.route("/playlists/data")
-def ltt_reddit_route():
+def playlists_data_route():
     if not helpers.checkArgs(['idPairList'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
     idPairList = json.loads(request.values['idPairList'])
-
-    print json.dumps(idPairList, indent=4)
-
     playlistData = []
     for idPair in idPairList:
         if 'playlistId' in idPair and 'ownerId' in idPair:
@@ -45,3 +42,23 @@ def ltt_reddit_route():
             playlistData.append(playlistTotalData)
 
     return jsonify(playlistData)
+
+###
+### [GET] Get single playlist information
+### HTML
+###
+@playlist.route("/playlist")
+def playlist_route():
+
+    print json.dumps(request.values, indent=4)
+
+    if not helpers.checkArgs(['playlistId','ownerId'], request):
+        return jsonify({'Error': "Malformed playlist request"})
+
+    playlistId = request.values['playlistId']
+    ownerId = request.values['ownerId']
+
+    lttplaylist = ltt.getSelectedPlaylistData(playlistId, ownerId)
+
+    return jsonify(lttplaylist)
+

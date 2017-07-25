@@ -299,6 +299,12 @@ def getSelectedPlaylistData(playlistId, ownerId):
 
     return playlist
 
+def getFullSelectedPlaylistData(playlistId, ownerId):
+    playlist = getSelectedPlaylistData(playlistId, ownerId)
+    helpers.logGeneral(json.dumps(playlist, indent=4))
+
+    return playlist
+
 def calcTotalPlaylistLength(tracks):
     ms = 0
     for track in tracks:
