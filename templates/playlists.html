@@ -19,7 +19,7 @@
 
 {% block content %}
     {% for playlist in playlists %}
-    <a href="/playlist?playlistId={{ playlist['id'] }}&ownerId={{ playlist['owner']['id'] }}">
+    <a class="playlist-link" href="/playlist?playlistId={{ playlist['id'] }}&ownerId={{ playlist['owner']['id'] }}">
       {% if 'totalLength' in playlist %}
         <div class="playlist-container" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
       {% else %}

@@ -162,6 +162,10 @@ body {
     overflow-y: scroll;
 }
 
+.playlist-link {
+    text-decoration: none;
+}
+
 .playlist-container {
     display: flex;
     flex-direction: column;
