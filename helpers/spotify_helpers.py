@@ -235,34 +235,11 @@ def queryForMultipleAudioFeatures(idList):
 ##
 ## [GET] Query for history, grabbing in bunches of 50 songs up to batches
 ##
-def queryForSpotifyHistory(timestamp, batches):
+def queryForSpotifyHistory():
     url = "https://api.spotify.com/v1/me/player/recently-played"
-    params = {'limit': 50, 'before': timestamp}
+    params = {'limit': 50}
 
-    index = 0
-    if batches > 20:
-        return
-
-    log_helpers.logGeneral("")
-
-    totalResult = []
-    while index < batches:
-        print "Querying - " + str(url)
-        print str(params)
-        historyResult = global_helpers.query_http(url, params, None, "Get history", 'GET')
-        totalResult += historyResult['items']
-
-        log_helpers.logAppend(json.dumps(historyResult, indent=4))
-        log_helpers.logAppend("\n\n\n\n====================\n\n\n\n\n")
-
-        if len(historyResult['items']):
-            latest = historyResult['items'][-2]['played_at']
-            print "\tconverting " + str(latest)
-            params['before'] = datetime_helpers.isoToEpoch(latest)
-
-        index += 1
-
-    return totalResult
+    return global_helpers.query_http(url, params, None, "Get history", 'GET')
 
 ##########################################################################
 ##                                                                      ##

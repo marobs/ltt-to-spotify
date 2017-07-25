@@ -68,5 +68,5 @@ def playlist_route():
 @playlist.route("/history")
 def history_route():
     print "Hello"
-    historyData = ltt.getSpotifyHistory()
+    historyData = helpers.queryForSpotifyHistory()
     return jsonify(historyData)
