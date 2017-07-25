@@ -49,4 +49,5 @@
 body {
     font-family: 'Source Sans Pro', sans-serif;
     color: #4B4B4B;
+    overflow-y: hidden;
 }
