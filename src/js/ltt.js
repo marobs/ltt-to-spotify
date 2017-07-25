@@ -235,6 +235,7 @@ $rightCol.on('click', '.rch-text', function(e) {
 
 $rightCol.on('click', '.rt-track-preview', function(e) {
     let $newPreview = $(e.target).closest('.rt-track-preview');
+    $('#footer').removeClass('hidden');
 
     if (currentPreviewHowl === null) { // First time preview clicked
         currentPreviewHowl = new Howl({
@@ -287,3 +288,10 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
     }
 
 });
+
+$('#seek-bar').change((e) => {
+    console.log($(e.target));
+    $('#seek-track::-webkit-slider-runnable-track').style.backgroundPosition = 'left';
+});
+
+

@@ -48,18 +48,21 @@ module.exports = function(grunt) {
                         'src/css/base_style.css',
                         'src/css/genre.css',
                         'src/css/ltt_style.css',
-                        'src/css/style.css'
+                        'src/css/style.css',
+                        'src/css/sliders.css'
                     ],
                     'static/css/index.css': [
                         'src/css/base_style.css',
                         'src/css/index_style.css',
-                        'src/css/style.css'
+                        'src/css/style.css',
+                        'src/css/sliders.css'
                     ],
                     'static/css/playlist.css': [
                         'src/css/base_style.css',
                         'src/css/genre.css',
                         'src/css/playlist_style.css',
-                        'src/css/style.css'
+                        'src/css/style.css',
+                        'src/css/sliders.css'
                     ]
                 },
             },
@@ -104,19 +107,22 @@ module.exports = function(grunt) {
                         'src/postcss/base_style.css',
                         'src/postcss/genre.css',
                         'src/postcss/ltt_style.css',
-                        'src/postcss/style.css'
+                        'src/postcss/style.css',
+                        'src/postcss/sliders.css'
                     ],
                     'static/css/index.css': [
                         'src/postcss/base_style.css',
                         'src/postcss/index_style.css',
-                        'src/postcss/style.css'
+                        'src/postcss/style.css',
+                        'src/postcss/sliders.css'
                     ],
                     'static/css/playlist.css': [
                         'src/postcss/base_style.css',
                         'src/postcss/genre.css',
                         'src/postcss/playlist_style.css',
-                        'src/postcss/style.css'
-                    ],
+                        'src/postcss/style.css',
+                        'src/postcss/sliders.css'
+                    ]
                 }
             }
         },
