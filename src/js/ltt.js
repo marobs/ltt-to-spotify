@@ -259,23 +259,11 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             clearInterval(windowInterval);
             windowInterval = -1;
 
-            let computedStyle = window.getComputedStyle($newPreview[0]);
-            let backgroundPos = computedStyle.getPropertyValue('background-position');
-
-            $newPreview[0].style.backgroundPosition = backgroundPos;
-            $newPreview.removeClass('previewing');
+            pauseRTPreview($newPreview);
             return;
         }
 
-        let computedStyle = window.getComputedStyle($newPreview[0]);
-        let backgroundPos = computedStyle.getPropertyValue('background-position');
-        let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
-        let timeToComplete = parseFloat(30*percentToComplete/100);
-
-        $newPreview[0].removeAttribute('style');
-        $newPreview.addClass('previewing');
-        $newPreview[0].style.backgroundPosition = 'left';
-        $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
+        playRTPreview($newPreview);
         currentPreviewHowl.play();
         updateSeekBar(currentPreviewHowl);
     }
@@ -316,6 +304,31 @@ function updateSeekBar(howl) {
     }
 }
 
+function pauseRTPreview($newPreview) {
+    let computedStyle = window.getComputedStyle($newPreview[0]);
+    $newPreview[0].style.backgroundPosition = computedStyle.getPropertyValue('background-position');
+    $newPreview.removeClass('previewing');
+}
+
+function playRTPreview($newPreview) {
+    let computedStyle = window.getComputedStyle($newPreview[0]);
+    let backgroundPos = computedStyle.getPropertyValue('background-position');
+    let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
+    let timeToComplete = parseFloat(30*percentToComplete/100);
+
+    $newPreview[0].removeAttribute('style');
+    $newPreview.addClass('previewing');
+    $newPreview[0].style.backgroundPosition = 'left';
+    $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
+}
+
+function updateRTPreview($newPreview) {
+    $newPreview.removeClass('previewing');
+    let curSeek = currentPreviewHowl.seek();
+    let currentPercent = ((curSeek/30)*100).toFixed(2);
+    $newPreview[0].style.backgroundPosition = (100-currentPercent)+'% 50%';
+}
+
 document.body.onkeydown = function(e){
     e.preventDefault();
     if(e.keyCode === 32){
@@ -326,10 +339,12 @@ document.body.onkeydown = function(e){
         if (currentPreviewHowl.playing()) {
             currentPreviewHowl.pause();
             clearInterval(windowInterval);
+            pauseRTPreview(currentPreviewElement)
         }
         else {
             currentPreviewHowl.play();
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+            playRTPreview(currentPreviewElement)
         }
     }
 };

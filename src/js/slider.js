@@ -14,6 +14,10 @@ $seekContainer.on('click', function(e) {
 
     if (currentPreviewElement !== null) {
         currentPreviewHowl.seek(30*clickPos/width);
+        updateRTPreview(currentPreviewElement);
+        if (currentPreviewHowl.playing()) {
+            setTimeout(playRTPreview, 1000, currentPreviewElement);
+        }
     }
 
     if (windowInterval === -1) {
