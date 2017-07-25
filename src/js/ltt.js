@@ -8,6 +8,8 @@ let $rightColTracks = $(rightColTracks);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
 
+let windowInterval = -1;
+
 let dragulaElements = Object.keys(rightColTracks).map(function (key) { return rightColTracks[key]; });
 dragulaElements.push(spotifyTrackContainer);
 
@@ -246,11 +248,16 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             }
         });
         currentPreviewHowl.play();
+        currentPreviewHowl.on('play', function() {
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        });
         currentPreviewElement = $newPreview;
     }
     else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
         if (currentPreviewHowl.playing()) {
             currentPreviewHowl.pause();
+            clearInterval(windowInterval);
+            windowInterval = -1;
 
             let computedStyle = window.getComputedStyle($newPreview[0]);
             let backgroundPos = computedStyle.getPropertyValue('background-position');
@@ -270,11 +277,16 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
         $newPreview[0].style.backgroundPosition = 'left';
         $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
         currentPreviewHowl.play();
-        return;
+        updateSeekBar(currentPreviewHowl);
     }
     else { // Switch Tracks
         currentPreviewHowl.stop();
         currentPreviewElement.removeClass('previewing');
+
+        if (windowInterval !== -1) {
+            clearInterval(windowInterval);
+            windowInterval = -1;
+        }
 
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
@@ -284,14 +296,22 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             }
         });
         currentPreviewHowl.play();
+        currentPreviewHowl.on('play', function() {
+            updateSeekBar(currentPreviewHowl);
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        });
         currentPreviewElement = $newPreview;
     }
 
 });
 
-$('#seek-bar').change((e) => {
-    console.log($(e.target));
-    $('#seek-track::-webkit-slider-runnable-track').style.backgroundPosition = 'left';
-});
 
-
+function updateSeekBar(howl) {
+    if (howl.playing()) {
+        let seek = howl.seek();
+        let playPercent = (seek/30)*100;
+        $seekContainer.find(".slider-left").css({width: playPercent+"%"});
+        $seekContainer.find('.slider-thumb').css({left: playPercent+"%"});
+        $seekContainer.find(".slider-right").css({width: (100-playPercent)+"%"});
+    }
+}
