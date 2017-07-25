@@ -58,7 +58,7 @@ def playlist_route():
     playlistId = request.values['playlistId']
     ownerId = request.values['ownerId']
 
-    playlistData = ltt.getSelectedPlaylistData(playlistId, ownerId)
+    playlistData = ltt.getFullSelectedPlaylistData(playlistId, ownerId)
 
     return jsonify(playlistData)
 

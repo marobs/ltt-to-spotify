@@ -7,4 +7,4 @@ def logGeneral(toLog):
     with open(logPath, 'wb') as f:
         f.seek(0)
         f.truncate()
-        f.write(toLog)
+        f.write(str(toLog))

@@ -55,9 +55,6 @@ def printSpotifyData(spotifyData):
     print "Printing Spotify Data"
     print json.dumps(spotifyData, indent=2)
 
-def logSpotifyData(spotifyData):
-    helpers.logGeneral(json.dumps(spotifyData, indent=4))
-
 def searchForPost(post):
     searchResults = helpers.queryForSearch(post['title'], post['artist'])
     return getMatchingTrack(searchResults)
@@ -309,14 +306,12 @@ def getFullSelectedPlaylistData(playlistId, ownerId):
 def getTracksAudioFeatures(trackList):
     trackIds = []
     for track in trackList:
-        trackIds.append(track['id'])
+        trackIds.append(track['track']['id'])
 
     audioFeatures = helpers.queryForMultipleAudioFeatures(trackIds)
 
     for i in xrange(len(audioFeatures)):
-        trackList[i]['audioFeatures'] = audioFeatures[i]
-
-    helpers.logGeneral(json.dumps(trackList, indent=4))
+        trackList[i]['track']['audioFeatures'] = audioFeatures[i]
 
     return trackList
 

@@ -1,5 +1,6 @@
 import global_helpers
 import json
+import log_helpers
 
 ##########################################################################
 ##                                                                      ##
@@ -108,7 +109,18 @@ def queryForUserPlaylists():
 ##
 def queryForSelectedPlaylist(playlistId, userId):
     url = "https://api.spotify.com/v1/users/" + str(userId) + "/playlists/" + str(playlistId)
-    return global_helpers.query_http(url, None, None, "Get selected playlist query", 'GET')
+    playlistResult = global_helpers.query_http(url, None, None, "Get selected playlist query", 'GET')
+    playlistTrackResult = playlistResult['tracks']
+
+    while 'next' in playlistTrackResult and playlistTrackResult['next'] is not None:
+        playlistTrackResult = global_helpers.query_http(playlistTrackResult['next'], None, None, "Additional playlist tracks", 'GET')
+
+        log_helpers.logGeneral(json.dumps(playlistTrackResult, indent=4))
+
+        playlistResult['tracks']['items'] += playlistTrackResult['items']
+
+
+    return playlistResult
 
 ##
 ## [GET] Get a playlist's tracks
@@ -197,15 +209,20 @@ def queryForMultipleAudioFeatures(idList):
     url = "https://api.spotify.com/v1/audio-features"
     index = 0
     tieredList = []
+
+    print str(len(idList)) + " -- length"
+
     while index < len(idList):
-        idList = []
+        idsToQuery = []
         for i in xrange(100):
             if (i + index) < len(idList):
-                idList.append(idList[i+index])
+                idsToQuery.append(idList[i+index])
             else:
                 break
 
-        tieredList.append(idList)
+        print "Appending "
+
+        tieredList.append(idsToQuery)
         index += 100
 
     audioFeaturesList = []
@@ -213,7 +230,8 @@ def queryForMultipleAudioFeatures(idList):
         idListString = ','.join(str(x) for x in idListToQuery)
         params = {'ids': idListString}
 
-        audioFeaturesList += global_helpers.query_http(url, params, None, "Get Audio Features", 'GET')
+        queryResult = global_helpers.query_http(url, params, None, "Get Audio Features", 'GET')
+        audioFeaturesList += queryResult['audio_features']
 
     return audioFeaturesList
 
