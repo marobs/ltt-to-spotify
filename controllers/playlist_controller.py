@@ -67,6 +67,5 @@ def playlist_route():
 ###
 @playlist.route("/history")
 def history_route():
-    print "Hello"
     historyData = helpers.queryForSpotifyHistory()
     return jsonify(historyData)
