@@ -8,6 +8,8 @@ let $rightColTracks = $(rightColTracks);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
 
+let windowInterval = -1;
+
 let dragulaElements = Object.keys(rightColTracks).map(function (key) { return rightColTracks[key]; });
 dragulaElements.push(spotifyTrackContainer);
 
@@ -233,8 +235,12 @@ $rightCol.on('click', '.rch-text', function(e) {
     }
 });
 
+/*------------------------*/
+/* Track Preview Handlers */
+/*------------------------*/
 $rightCol.on('click', '.rt-track-preview', function(e) {
     let $newPreview = $(e.target).closest('.rt-track-preview');
+    $('#footer').removeClass('hidden');
 
     if (currentPreviewHowl === null) { // First time preview clicked
         currentPreviewHowl = new Howl({
@@ -245,35 +251,33 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             }
         });
         currentPreviewHowl.play();
+        currentPreviewHowl.on('play', function() {
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        });
         currentPreviewElement = $newPreview;
     }
     else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
         if (currentPreviewHowl.playing()) {
             currentPreviewHowl.pause();
+            clearInterval(windowInterval);
+            windowInterval = -1;
 
-            let computedStyle = window.getComputedStyle($newPreview[0]);
-            let backgroundPos = computedStyle.getPropertyValue('background-position');
-
-            $newPreview[0].style.backgroundPosition = backgroundPos;
-            $newPreview.removeClass('previewing');
+            pauseRTPreview($newPreview);
             return;
         }
 
-        let computedStyle = window.getComputedStyle($newPreview[0]);
-        let backgroundPos = computedStyle.getPropertyValue('background-position');
-        let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
-        let timeToComplete = parseFloat(30*percentToComplete/100);
-
-        $newPreview[0].removeAttribute('style');
-        $newPreview.addClass('previewing');
-        $newPreview[0].style.backgroundPosition = 'left';
-        $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
+        playRTPreview($newPreview);
         currentPreviewHowl.play();
-        return;
+        updateSeekBar(currentPreviewHowl);
     }
     else { // Switch Tracks
         currentPreviewHowl.stop();
-        currentPreviewElement.removeClass('previewing');
+        resetRTPreview(currentPreviewElement);
+
+        if (windowInterval !== -1) {
+            clearInterval(windowInterval);
+            windowInterval = -1;
+        }
 
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
@@ -283,7 +287,78 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             }
         });
         currentPreviewHowl.play();
+        currentPreviewHowl.on('play', function() {
+            updateSeekBar(currentPreviewHowl);
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        });
         currentPreviewElement = $newPreview;
+        playRTPreview($newPreview);
     }
 
 });
+
+
+function updateSeekBar(howl) {
+    if (howl === null) {
+        return;
+    }
+    if (howl.playing()) {
+        let seek = howl.seek();
+        let playPercent = (seek/30)*100;
+        $seekContainer.find(".slider-left").css({width: playPercent+"%"});
+        $seekContainer.find('.slider-thumb').css({left: playPercent+"%"});
+        $seekContainer.find(".slider-right").css({width: (100-playPercent)+"%"});
+    }
+}
+
+function pauseRTPreview($newPreview) {
+    let computedStyle = window.getComputedStyle($newPreview[0]);
+    $newPreview[0].style.backgroundPosition = computedStyle.getPropertyValue('background-position');
+    $newPreview.removeClass('previewing');
+}
+
+function playRTPreview($newPreview) {
+    let computedStyle = window.getComputedStyle($newPreview[0]);
+    let backgroundPos = computedStyle.getPropertyValue('background-position');
+    let percentToComplete = parseFloat(backgroundPos.split('%')[0]);
+    let timeToComplete = parseFloat(30*percentToComplete/100);
+
+    $newPreview[0].removeAttribute('style');
+    $newPreview.addClass('previewing');
+    $newPreview[0].style.backgroundPosition = 'left';
+    $newPreview[0].style.transition = 'all '+timeToComplete+'s linear';
+}
+
+function updateRTPreview($newPreview) {
+    $newPreview.removeClass('previewing');
+    let curSeek = currentPreviewHowl.seek();
+    let currentPercent = ((curSeek/30)*100).toFixed(2);
+    $newPreview[0].style.transition = 'all 1s linear';
+    $newPreview[0].style.backgroundPosition = (100-currentPercent)+'% 50%';
+}
+
+function resetRTPreview($oldPreview) {
+    $oldPreview.removeClass('previewing');
+    $oldPreview[0].style.transition = 'all 1s linear';
+    $oldPreview[0].style.backgroundPosition = 'right';
+}
+
+document.body.onkeydown = function(e){
+    e.preventDefault();
+    if(e.keyCode === 32){
+        if (currentPreviewHowl === null) {
+            return;
+        }
+
+        if (currentPreviewHowl.playing()) {
+            currentPreviewHowl.pause();
+            clearInterval(windowInterval);
+            pauseRTPreview(currentPreviewElement)
+        }
+        else {
+            currentPreviewHowl.play();
+            windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+            playRTPreview(currentPreviewElement)
+        }
+    }
+};

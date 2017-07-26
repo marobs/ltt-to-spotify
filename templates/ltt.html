@@ -11,6 +11,7 @@
     <script src="/static/min/howler.spatial.js" defer></script>
     <script src="/static/min/lscache.min.js" defer></script>
     <script src='/static/javascript/ltt.js' defer></script>
+    <script src='/static/javascript/slider.js' defer></script>
 {% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="/static/css/ltt.css" />
@@ -93,5 +94,34 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+{% endblock %}
+{% block footer %}
+    <div id="footer" class="">
+        <div class="tc-preview-container">
+            <img src="" id="tc-preview-img"/>
+            <div class="tc-preview-title"></div>
+            <div class="tc-preview-artist"></div>
+        </div>
+        <div class="track-controller-container">
+            <div id="tc-play-button"></div>
+            <div id="seek-bar">
+                <div id='seek-container' class='slider-container'>
+                    <div class='slider-left slider-left-constants'></div>
+                    <div class='slider-thumb slider-thumb-constants slider-thumb-hidden'></div>
+                    <div class='slider-right slider-right-constants'></div>
+                </div>
+            </div>
+        </div>
+        <div class="tc-volume-container">
+            <div class="tc-volume-img"></div>
+            <div id="volume-bar">
+                <div id='volume-container' class='slider-container'>
+                    <div class='slider-left slider-left-constants'></div>
+                    <div class='slider-thumb slider-thumb-constants slider-thumb-hidden'></div>
+                    <div class='slider-right slider-right-constants'></div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
