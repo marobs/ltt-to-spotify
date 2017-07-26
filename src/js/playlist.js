@@ -61,7 +61,7 @@ function getNextIdPairBatch(batchSize) {
 }
 
 function getOwnerNames() {
-    let ownerIdSet = Set();
+    let ownerIdSet = new Set();
     $(".playlist-container").each(function() {
         ownerIdSet.add($(this).data('owner-id'));
     });
