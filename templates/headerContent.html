@@ -1,83 +1,18 @@
 {% macro addHeaderContent(selected) %}
-    {% if selected=='home' %}
         <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
         <div class="header-link-container">
-            <div class='header-link-item header-selected'>
+            <div class='header-link-item {% if selected=='home' %}header-selected{% endif %}'>
                 <a class='header-link' href="/">Home</a>
             </div>
-            <div class='header-link-item'>
+            <div class='header-link-item {% if selected=='ltt' %}header-selected{% endif %}'>
                 <a class='header-link' href="/ltt">ltt</a>
             </div>
-            <div class='header-link-item'>
+            <div class='header-link-item {% if selected=='playlists' %}header-selected{% endif %}'>
                 <a class='header-link' href="/playlists">playlists</a>
             </div>
-            <div class='header-link-item'>
+            <div class='header-link-item {% if selected=='history' %}header-selected{% endif %}'>
                 <a class='header-link' href="/history">history</a>
             </div>
         </div>
-    {% elif selected=='ltt' %}
-        <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
-        <div class="header-link-container">
-            <div class='header-link-item'>
-                <a class='header-link' href="/">Home</a>
-            </div>
-            <div class='header-link-item header-selected'>
-                <a class='header-link' href="/ltt">ltt</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/playlists">playlists</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/history">history</a>
-            </div>
-        </div>
-    {% elif selected=='playlists' %}
-        <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
-        <div class="header-link-container">
-            <div class='header-link-item'>
-                <a class='header-link' href="/">Home</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/ltt">ltt</a>
-            </div>
-            <div class='header-link-item header-selected'>
-                <a class='header-link' href="/playlists">playlists</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/history">history</a>
-            </div>
-        </div>
-    {% elif selected=='history' %}
-        <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
-        <div class="header-link-container">
-            <div class='header-link-item'>
-                <a class='header-link' href="/">Home</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/ltt">ltt</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/playlists">playlists</a>
-            </div>
-            <div class='header-link-item header-selected'>
-                <a class='header-link' href="/history">history</a>
-            </div>
-        </div>
-    {% else %}
-        <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
-        <div class="header-link-container">
-            <div class='header-link-item'>
-                <a class='header-link' href="/">Home</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/ltt">ltt</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/playlists">playlists</a>
-            </div>
-            <div class='header-link-item'>
-                <a class='header-link' href="/history">history</a>
-            </div>
-        </div>
-    {% endif %}
+
 {%- endmacro %}
