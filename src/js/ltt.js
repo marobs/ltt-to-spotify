@@ -353,12 +353,12 @@ document.body.onkeydown = function(e){
         if (currentPreviewHowl.playing()) {
             currentPreviewHowl.pause();
             clearInterval(windowInterval);
-            pauseRTPreview(currentPreviewElement)
+            pauseRTPreview(currentPreviewElement);
         }
         else {
             currentPreviewHowl.play();
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
-            playRTPreview(currentPreviewElement)
+            playRTPreview(currentPreviewElement);
         }
     }
 };
