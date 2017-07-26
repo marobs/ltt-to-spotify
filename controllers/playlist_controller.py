@@ -49,9 +49,6 @@ def playlists_data_route():
 ###
 @playlist.route("/playlist")
 def playlist_route():
-
-    print json.dumps(request.values, indent=4)
-
     if not helpers.checkArgs(['playlistId','ownerId'], request):
         return jsonify({'Error': "Malformed playlist request"})
 

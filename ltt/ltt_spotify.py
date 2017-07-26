@@ -346,21 +346,23 @@ def updateWithPlaylistOwnerNames(userPlaylists):
 
     return userPlaylists
 
-# Acousticness:     float -- 1.0 is acoustic
-# Danceability:     float -- 1.0 is most danceable
-# Energy:           float -- 1.0 is high energy
+# acousticness:     float -- 1.0 is acoustic
+# danceability:     float -- 1.0 is most danceable
+# energy:           float -- 1.0 is high energy
+# valence:          float -- 1.0 is happy 0.0 is sad
 # instrumentalness: float -- 0.5+ is instrumental, higher is more confident
 # key:              int   -- 0 is C, 1 is C#, etc.
-# liveness:         float -- 0.8+ means high likelyhood it was performed live
+# liveness:         float -- 0.8+ means high likelihood it was performed live
 # loudness:         float -- between -60 and 0db
 # mode:             int   -- 1 is major 0 is minor
 # speechiness:      float -- 0.0 to 0.33 is music, 0.33 to 0.66 is rap or layered or sectioned, 0.66+ is speech
 # tempo:            float -- bpm AVERAGE
 # time_signature:   int   -- bars in a measure
-# valence:          float -- 1.0 is happy 0.0 is sad
 def calculatePlaylistTrackMetrics(playlist):
+    helpers.logGeneral(json.dumps(playlist, indent=4))
+    playlist['audioFeatures'] = helpers.calculateAudioFeaturesMetrics(playlist)
 
-    return "need to average/median/etc audio deets"
+    return playlist
 
 #############################################################
 #                                                           #

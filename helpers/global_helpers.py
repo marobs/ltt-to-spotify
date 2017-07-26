@@ -96,7 +96,7 @@ def initializeRefreshToken(bPath):
         with open(bPath + "/../secrets/refresh_token.txt") as f:
             refreshToken = f.read().rstrip("\n")
 
-        print "Found refresh token file. refreshToken"
+        print "Found refresh token file. refreshToken: " + str(refreshToken)
         return refreshToken
 
 def saveRefreshToken(token):
@@ -129,6 +129,7 @@ def queryForAccessToken(refreshToken):
     global clientSecret
     postData = composeAccessTokenRequestData(refreshToken, clientId, clientSecret)
     response = requests.post("https://accounts.spotify.com/api/token", data=postData)
+
     setAccessToken(response.json().get("access_token"))
 
 def setAccessToken(token):
