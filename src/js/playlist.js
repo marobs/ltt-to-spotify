@@ -2,6 +2,7 @@
 // CONST Variables
 //
 const GET_DATA_URL = '/playlists/data';
+const GET_OWNERS_URL = '/playlists/owners';
 
 const playlistBatchSize = 20;
 
@@ -15,9 +16,8 @@ const playlistBatchSize = 20;
  * @param playlistData.followers.total   Total number of followers of the playlist.
  * @param playlistData.totalLength       String representation of the duration of the playlist in X hr Y min
  */
-function playlistBatchCallback(playlistData) {
+function playlistBatchCallback(playlistData, batchSize) {
     if (playlistData != null) {
-        alert("Attempting to fill");
         console.log(playlistData);
         for (let dataIndex = 0; dataIndex < playlistData.length; dataIndex++) {
             let numFollowers = playlistData[dataIndex].followers.total;
@@ -30,12 +30,11 @@ function playlistBatchCallback(playlistData) {
         }
     }
 
-    alert("Getting next");
-    let nextIdPairBatch = getNextIdPairBatch();
+    let nextIdPairBatch = getNextIdPairBatch(batchSize);
     if (nextIdPairBatch.length > 0) {
         $.get(GET_DATA_URL, {'idPairList': JSON.stringify(nextIdPairBatch)})
             .done(function (data) {
-                playlistBatchCallback(data);
+                playlistBatchCallback(data, null);
             })
             .fail(function (data) {
                 console.log(data);
@@ -43,11 +42,15 @@ function playlistBatchCallback(playlistData) {
     }
 }
 
-function getNextIdPairBatch() {
+function getNextIdPairBatch(batchSize) {
     let remainingPlaylists = $(".incomplete");
-    let batchSize = Math.min(remainingPlaylists.length, playlistBatchSize);
+    let requestSize = Math.min(remainingPlaylists.length, playlistBatchSize);
+    if (batchSize != null && batchSize > 0) {
+        requestSize = Math.min(requestSize, batchSize);
+    }
+
     let idPairList = [];
-    for (let batchIndex = 0; batchIndex < batchSize; batchIndex++) {
+    for (let batchIndex = 0; batchIndex < requestSize; batchIndex++) {
         let playlistId = $(remainingPlaylists[batchIndex]).attr('id');
         let ownerId = $(remainingPlaylists[batchIndex]).data('owner-id');
 
@@ -57,9 +60,40 @@ function getNextIdPairBatch() {
     return idPairList;
 }
 
+function getOwnerNames() {
+    let ownerIdSet = Set();
+    $(".playlist-container").each(function() {
+        ownerIdSet.add($(this).data('owner-id'));
+    });
+
+    let ownerIdArray = Array.from(ownerIdSet);
+    $.get(GET_OWNERS_URL, {'ownerIdList': ownerIdArray})
+        .done(function(data) {
+            fillOwnerNames(data);
+        })
+        .fail(function(data) {
+            console.log(data);
+        });
+}
+
+function fillOwnerNames(data) {
+    console.log("Filling owner names");
+    let ownerObj = jQuery.parseJSON(data);
+    console.log(ownerObj);
+
+    $(".no-owner").each(function() {
+        let ownerId = $(this).data('owner-id');
+        if (ownerId in ownerObj) {
+            let ownerName = ownerObj[ownerId];
+            $(this).find(".playlist-overlay-owner").text(ownerName);
+        }
+    });
+}
+
 //
 // On document ready
 //
 $(document).ready(function() {
-    //playlistBatchCallback(null);
+    getOwnerNames();
+    playlistBatchCallback(null);
 });

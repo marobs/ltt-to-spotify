@@ -326,38 +326,14 @@ def calcTotalPlaylistLength(tracks):
 
     return str(hours) + " hr " + str(minutes) + " min"
 
-def updateWithPlaylistOwnerNames(userPlaylists):
-    owners = {}
-    for playlist in userPlaylists:
-        if playlist['owner']['id'] == helpers.userId:
-            playlist['owner']['name'] = helpers.userProfile['display_name']
+def getOwnerNames(ownerIdList):
+    ownerDict = {}
+    for id in ownerIdList:
+        queriedOwner = helpers.queryForUserProfile(id)
+        ownerDict[id] = queriedOwner['display_name']
 
-        else:
-            nonUserId = str(playlist['owner']['id'])
-            if nonUserId in owners:
-                owners[nonUserId].append(playlist['owner'])
-            else:
-                owners[nonUserId] = [playlist['owner']]
+    return ownerDict
 
-    for ownerId in owners:
-        queriedOwner = helpers.queryForUserProfile(ownerId)
-        for ownerObj in owners[ownerId]:
-            ownerObj['name'] = queriedOwner['display_name']
-
-    return userPlaylists
-
-# acousticness:     float -- 1.0 is acoustic
-# danceability:     float -- 1.0 is most danceable
-# energy:           float -- 1.0 is high energy
-# valence:          float -- 1.0 is happy 0.0 is sad
-# instrumentalness: float -- 0.5+ is instrumental, higher is more confident
-# key:              int   -- 0 is C, 1 is C#, etc.
-# liveness:         float -- 0.8+ means high likelihood it was performed live
-# loudness:         float -- between -60 and 0db
-# mode:             int   -- 1 is major 0 is minor
-# speechiness:      float -- 0.0 to 0.33 is music, 0.33 to 0.66 is rap or layered or sectioned, 0.66+ is speech
-# tempo:            float -- bpm AVERAGE
-# time_signature:   int   -- bars in a measure
 def calculatePlaylistTrackMetrics(playlist):
     helpers.logGeneral(json.dumps(playlist, indent=4))
     playlist['audioFeatures'] = helpers.calculateAudioFeaturesMetrics(playlist)

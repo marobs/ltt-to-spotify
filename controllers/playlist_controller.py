@@ -9,16 +9,14 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 ###
 @playlist.route("/playlists")
 def playlists_route():
+    print "Hit route"
     userPlaylists = ltt.getUserPlaylists()
+    print "Done grabbing playlists"
 
-    # Grab total data for first X playlists
-    for i in xrange(4):
-        playlistId = userPlaylists[i]['id']
-        ownerId = userPlaylists[i]['owner']['id']
-        userPlaylists[i] = ltt.getSelectedPlaylistData(playlistId, ownerId)
-
-    # Update all playlists with owner names
-    userPlaylists = ltt.updateWithPlaylistOwnerNames(userPlaylists)
+    # Update all user-owned playlist with user name
+    for plist in userPlaylists:
+        if plist['owner']['id'] == helpers.userId:
+            plist['owner']['name'] = helpers.userProfile['display_name']
 
     return render_template("playlists.html", playlists=userPlaylists, userId=helpers.userId)
 
@@ -36,12 +34,26 @@ def playlists_data_route():
     playlistData = []
     for idPair in idPairList:
         if 'playlistId' in idPair and 'ownerId' in idPair:
-            playlistId = idPair['playlistId']
-            ownerId = idPair['ownerId']
-            playlistTotalData = ltt.getSelectedPlaylistData(playlistId, ownerId)
+            playlistTotalData = ltt.getSelectedPlaylistData(idPair['playlistId'], idPair['ownerId'])
             playlistData.append(playlistTotalData)
 
     return jsonify(playlistData)
+
+###
+### [GET] Get owner names from ownerid list
+### JSON
+###
+@playlist.route("/playlists/owners")
+def playlists_owner_route():
+
+    print json.dumps(request.values, indent=4)
+
+    if not helpers.checkArgs(['ownerIdList'], request):
+        return jsonify({'Error': "Malformed owner id request"})
+
+    ownerIdList = request.values['ownerIdList']
+
+    return jsonify(ltt.getOwnerNames(ownerIdList))
 
 ###
 ### [GET] Get single playlist information

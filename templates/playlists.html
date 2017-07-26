@@ -20,10 +20,10 @@
 {% block content %}
     {% for playlist in playlists %}
     <a class="playlist-link" href="/playlist?playlistId={{ playlist['id'] }}&ownerId={{ playlist['owner']['id'] }}">
-      {% if 'totalLength' in playlist %}
-        <div class="playlist-container" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
-      {% else %}
+      {% if 'name' in playlist['owner'] and playlist['owner']['name'] != "" %}
         <div class="playlist-container incomplete" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
+      {% else %}
+        <div class="playlist-container incomplete no-owner" id="{{ playlist['id'] }}" data-owner-id="{{ playlist['owner']['id'] }}">
       {% endif %}
             <div class="playlist-img-holder">
                 <div class="playlist-img"  style="background-image:url('{{ playlist['images'][0]['url'] }}')"></div>
