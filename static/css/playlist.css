@@ -1,4 +1,4 @@
-/*!  - v - 2017-07-25 */.wrapper {
+/*!  - v - 2017-07-26 */.wrapper {
     height: 100vh;
     display: flex;
     flex-direction: column
@@ -21,6 +21,14 @@
 .header-link-container {
     position: absolute;
     right: 10px;
+    width: 288px;
+    display: flex;
+    flex-direction: row;
+}
+
+.header-link-container-left {
+    position: absolute;
+    left: 10px;
 }
 
 .header-link {
@@ -33,6 +41,13 @@
     text-decoration: none;
     width: 60px;
     padding: 6px;
+}
+
+.header-selected {
+    display: inline-block;
+    height: 100%;
+    width: 72px;
+    background-color: #8863BD;
 }
 
 .header-link:hover {
