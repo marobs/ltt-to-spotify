@@ -43,10 +43,13 @@
     padding: 6px;
 }
 
-.header-selected {
+.header-link-item {
     display: inline-block;
     height: 100%;
     width: 72px;
+}
+
+.header-selected {
     background-color: #8863BD;
 }
 
