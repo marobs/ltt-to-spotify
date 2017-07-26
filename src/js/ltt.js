@@ -235,6 +235,9 @@ $rightCol.on('click', '.rch-text', function(e) {
     }
 });
 
+/*------------------------*/
+/* Track Preview Handlers */
+/*------------------------*/
 $rightCol.on('click', '.rt-track-preview', function(e) {
     let $newPreview = $(e.target).closest('.rt-track-preview');
     $('#footer').removeClass('hidden');
@@ -269,7 +272,7 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
     }
     else { // Switch Tracks
         currentPreviewHowl.stop();
-        currentPreviewElement.removeClass('previewing');
+        resetRTPreview(currentPreviewElement);
 
         if (windowInterval !== -1) {
             clearInterval(windowInterval);
@@ -289,12 +292,16 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
         });
         currentPreviewElement = $newPreview;
+        playRTPreview($newPreview);
     }
 
 });
 
 
 function updateSeekBar(howl) {
+    if (howl === null) {
+        return;
+    }
     if (howl.playing()) {
         let seek = howl.seek();
         let playPercent = (seek/30)*100;
@@ -326,7 +333,14 @@ function updateRTPreview($newPreview) {
     $newPreview.removeClass('previewing');
     let curSeek = currentPreviewHowl.seek();
     let currentPercent = ((curSeek/30)*100).toFixed(2);
+    $newPreview[0].style.transition = 'all 1s linear';
     $newPreview[0].style.backgroundPosition = (100-currentPercent)+'% 50%';
+}
+
+function resetRTPreview($oldPreview) {
+    $oldPreview.removeClass('previewing');
+    $oldPreview[0].style.transition = 'all 1s linear';
+    $oldPreview[0].style.backgroundPosition = 'right';
 }
 
 document.body.onkeydown = function(e){
