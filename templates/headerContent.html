@@ -1,16 +1,18 @@
 {% macro addHeaderContent(selected) %}
-    {% if selected=="home" %}
-        <a href="/" class="selected">Home</a>
-        <a href="/ltt" class="selected">ltt</a>
-        <a href="/playlist" class="selected">playlists</a>
-        <a href="/history" class="selected">history</a>
-    {% else %}
-        <img id="header-icon" src="/static/images/snoo.png"/>
+        <a href="/"><img id="header-icon" src="/static/images/snoo.png"/></a>
         <div class="header-link-container">
-            <div class='header-link' href="/">Home</div>
-            <div class='header-link' href="/ltt">ltt</div>
-            <div class='header-link' href="/playlist">playlists</div>
-            <div class='header-link' href="/history">history</div>
+            <div class='header-link-item {% if selected=='home' %}header-selected{% endif %}'>
+                <a class='header-link' href="/">Home</a>
+            </div>
+            <div class='header-link-item {% if selected=='ltt' %}header-selected{% endif %}'>
+                <a class='header-link' href="/ltt">ltt</a>
+            </div>
+            <div class='header-link-item {% if selected=='playlists' %}header-selected{% endif %}'>
+                <a class='header-link' href="/playlists">playlists</a>
+            </div>
+            <div class='header-link-item {% if selected=='history' %}header-selected{% endif %}'>
+                <a class='header-link' href="/history">history</a>
+            </div>
         </div>
-    {% endif %}
+
 {%- endmacro %}

@@ -21,6 +21,14 @@
 .header-link-container {
     position: absolute;
     right: 10px;
+    width: 288px;
+    display: flex;
+    flex-direction: row;
+}
+
+.header-link-container-left {
+    position: absolute;
+    left: 10px;
 }
 
 .header-link {
@@ -33,6 +41,16 @@
     text-decoration: none;
     width: 60px;
     padding: 6px;
+}
+
+.header-link-item {
+    display: inline-block;
+    height: 100%;
+    width: 72px;
+}
+
+.header-selected {
+    background-color: #8863BD;
 }
 
 .header-link:hover {
@@ -49,4 +67,5 @@
 body {
     font-family: 'Source Sans Pro', sans-serif;
     color: #4B4B4B;
+    overflow-y: hidden;
 }
