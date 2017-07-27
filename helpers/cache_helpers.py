@@ -126,7 +126,7 @@ def saveToIDCache(spotifyId, name):
     if not checkCacheEnabled("save to idcache"):
         return
 
-    global idCachedict
+    global idCacheDict
     idCacheDict[spotifyId] = name
 
 def getFromIDCache(spotifyId):
@@ -150,7 +150,7 @@ def initializeIDCache():
     if not checkCacheEnabled("initializing idCache"):
         return
 
-    print "Initializing SCache"
+    print "Initializing idCache"
     global idCacheDict
 
     if not os.path.isfile(idCachePath):
