@@ -1,6 +1,6 @@
 from flask import *
 import ltt
-import helpers;
+import helpers
 
 playlist = Blueprint('playlist', __name__, template_folder='templates')
 
@@ -14,9 +14,12 @@ def playlists_route():
     print "Done grabbing playlists"
 
     # Update all user-owned playlist with user name
+    userProfile = helpers.getUserProfile()
     for plist in userPlaylists:
-        if plist['owner']['id'] == helpers.userId:
-            plist['owner']['name'] = helpers.userProfile['display_name']
+        if plist['owner']['id'] == userProfile['id']:
+            plist['owner']['name'] = userProfile['display_name']
+
+    helpers.logGeneral(json.dumps(userPlaylists, indent=4))
 
     return render_template("playlists.html", playlists=userPlaylists, userId=helpers.userId)
 
@@ -53,8 +56,8 @@ def playlists_owner_route():
 
     ownerIdList = json.loads(request.values['ownerIdList'])
 
-    print json.dumps(ownerIdList, indent=4)
-
+    print "Returning"
+    
     return jsonify(ltt.getOwnerNames(ownerIdList))
 
 ###

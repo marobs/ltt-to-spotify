@@ -53,6 +53,10 @@ def getUserId():
     global userId
     return userId
 
+def getUserProfile():
+    global userProfile
+    return userProfile
+
 ##
 ## Client Secret
 ##

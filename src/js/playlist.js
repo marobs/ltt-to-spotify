@@ -75,6 +75,7 @@ function getOwnerNames() {
     let requestData = {'ownerIdList': JSON.stringify(ownerIdArray)};
     $.get(GET_OWNERS_URL, requestData)
         .done(function(data) {
+            console.log(data);
             fillOwnerNames(data);
         })
         .fail(function(data) {
@@ -83,15 +84,10 @@ function getOwnerNames() {
 }
 
 function fillOwnerNames(data) {
-    console.log("Filling owner names");
-    console.log(data);
-    let ownerObj = jQuery.parseJSON(data);
-    console.log(ownerObj);
-
     $(".no-owner").each(function() {
         let ownerId = $(this).data('owner-id');
-        if (ownerId in ownerObj) {
-            let ownerName = ownerObj[ownerId];
+        if (ownerId in data) {
+            let ownerName = data[ownerId];
             $(this).find(".playlist-overlay-owner").text(ownerName);
         }
     });
