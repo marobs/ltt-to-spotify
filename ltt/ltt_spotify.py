@@ -328,10 +328,17 @@ def calcTotalPlaylistLength(tracks):
 
 def getOwnerNames(ownerIdList):
     ownerDict = {}
-    for id in ownerIdList:
-        queriedOwner = helpers.queryForUserProfile(id)
-        ownerDict[id] = queriedOwner['display_name']
+    for ownerId in ownerIdList:
+        cachedId = helpers.getFromIDCache(ownerId)
+        if cachedId is None or cachedId == helpers.VALUE_NOT_FOUND:
+            queriedOwner = helpers.queryForUserProfile(ownerId)
+            ownerDict[ownerId] = queriedOwner['display_name']
+            helpers.saveToIDCache(ownerId, queriedOwner['display_name'])
 
+        else:
+            ownerDict[ownerId] = cachedId
+
+    helpers.flushIDCache()
     return ownerDict
 
 def calculatePlaylistTrackMetrics(playlist):

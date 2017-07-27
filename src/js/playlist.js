@@ -87,5 +87,5 @@ function fillOwnerNames(data) {
 
 $(document).ready(function() {
     getOwnerNames();
-    playlistBatchCallback(null);
+    playlistBatchCallback(null, 4);
 });

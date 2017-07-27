@@ -72,10 +72,6 @@ def initializeClientSecret(bPath):
 ##
 ## Flask Secret
 ##
-def getFlaskSecret():
-    global flaskSecret
-    return flaskSecret
-
 def initializeFlaskSecret(bPath):
     print "Initializing Flask Secret"
     global flaskSecret
@@ -123,9 +119,9 @@ def initializeAccessToken():
     refresh = getRefreshToken()
     queryForAccessToken(refresh)
 
-def queryForAccessToken(refreshToken):
+def queryForAccessToken(rToken):
     print "Querying for Access Token"
-    if refreshToken is None:
+    if rToken is None:
         print "Can't query for access token because refresh token is None"
         return None
 

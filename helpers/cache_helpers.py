@@ -8,22 +8,18 @@ from helpers import flag_helpers
 ### Objects
 ###
 
-notFoundValue = "VALUE_NOT_FOUND"
+VALUE_NOT_FOUND = "VALUE_NOT_FOUND"
 rCacheDict = {}
 sCacheDict = {}
 sCachePath = basePath + '/../cache/spotifyCache.pkl'
+idCacheDict = {}
+idCachePath = basePath + '/../cache/idCache.pkl'
 
 #####################################################
 #                                                   #
 #                   Spotify                         #
 #                                                   #
 #####################################################
-
-# Need to cache by reddit title/artist to get benefit out of caching (don't have to search)
-# Also need to cache by id? Not sure
-# Should cache top songs as well but those won't be cached by reddit post
-# Add reddit data and top song data to reddit songs to be able to grab the top song with just the other one?
-# Think about when stuff is needed/not needed/inputs/outputs/etc
 
 def saveToSCacheByKeyList(spotifyTrack, keyList):
     if not checkCacheEnabled("save to SCache"):
@@ -119,3 +115,62 @@ def checkCacheEnabled(action):
         return False
 
     return True
+
+#####################################################
+#                                                   #
+#                     Ids                           #
+#                                                   #
+#####################################################
+
+def saveToIDCache(spotifyId, name):
+    if not checkCacheEnabled("save to idcache"):
+        return
+
+    global idCachedict
+    idCacheDict[spotifyId] = name
+
+def getFromIDCache(spotifyId):
+    if not checkCacheEnabled("get from idCache"):
+        return None
+
+    global notFoundValue
+    global sCacheDict
+
+    if spotifyId in idCacheDict:
+        if idCacheDict[spotifyId] is not None:
+            return idCacheDict[spotifyId]
+
+        else:  # Not found entry
+            return notFoundValue
+
+    else:
+        return None
+
+def initializeIDCache():
+    if not checkCacheEnabled("initializing idCache"):
+        return
+
+    print "Initializing SCache"
+    global idCacheDict
+
+    if not os.path.isfile(idCachePath):
+        return {}
+
+    with open(idCachePath, 'rb') as f:
+        obj = cPickle.load(f)
+
+        if obj is not None:
+            idCacheDict = obj
+
+        else:
+            idCacheDict = {}
+
+def flushIDCache():
+    if not checkCacheEnabled("flushing idCacheDict"):
+        return
+
+    global sCacheDict
+    with open(idCachePath, 'wb') as f:
+        f.seek(0)
+        f.truncate()
+        cPickle.dump(idCacheDict, f, cPickle.HIGHEST_PROTOCOL)

@@ -48,14 +48,10 @@ def playlists_data_route():
 ###
 @playlist.route("/playlists/owners")
 def playlists_owner_route():
-
-    print json.dumps(request.values, indent=4)
-
     if not helpers.checkArgs(['ownerIdList'], request):
         return jsonify({'Error': "Malformed owner id request"})
 
     ownerIdList = json.loads(request.values['ownerIdList'])
-
     return jsonify(ltt.getOwnerNames(ownerIdList))
 
 ###

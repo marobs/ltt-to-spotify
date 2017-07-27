@@ -11,3 +11,4 @@ from audiofeatures_helpers import *
 
 initializeHelpers()
 initializeSCache()
+initializeIDCache()
