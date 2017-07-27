@@ -350,8 +350,8 @@ function resetRTPreview($oldPreview) {
 }
 
 document.body.onkeydown = function(e){
-    e.preventDefault();
     if(e.keyCode === 32){
+        e.preventDefault();
         if (currentPreviewHowl === null) {
             return;
         }
