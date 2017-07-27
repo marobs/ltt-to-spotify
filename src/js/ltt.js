@@ -7,6 +7,7 @@ let rightColTracks = document.getElementsByClassName('rt-track-container');
 let $rightColTracks = $(rightColTracks);
 let rightCol = document.getElementById('right-col');
 let $rightCol = $(rightCol);
+let $tcPlayButton = $('#tc-play-button');
 
 let windowInterval = -1;
 
@@ -30,6 +31,9 @@ const REORDER_URL = '/ltt/reorder';
 const PLAYLIST_URL = '/ltt/playlist';
 const REDDIT_CATEGORY_URL = '/ltt/reddit';
 const PREVIEW_URL = '/ltt/previewTrack';
+
+const PLAY_IMAGE = '../../static/images/play_white.png';
+const PAUSE_IMAGE = '../../static/images/pause.png';
 
 function AddOptions(uris, position, playlist) {
     this.trackURI = uris;
@@ -259,6 +263,7 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
         currentPreviewHowl.on('play', function() {
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
         });
+        setButtonPause();
         currentPreviewElement = $newPreview;
     }
     else if (currentPreviewElement[0] === $newPreview[0]) { // Pause
@@ -267,11 +272,13 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             clearInterval(windowInterval);
             windowInterval = -1;
 
+            setButtonPlay();
             pauseRTPreview($newPreview);
             return;
         }
 
         playRTPreview($newPreview);
+        setButtonPause();
         currentPreviewHowl.play();
         updateSeekBar(currentPreviewHowl);
     }
@@ -297,6 +304,7 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
             updateSeekBar(currentPreviewHowl);
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
         });
+        setButtonPause();
         currentPreviewElement = $newPreview;
         playRTPreview($newPreview);
     }
@@ -349,6 +357,25 @@ function resetRTPreview($oldPreview) {
     $oldPreview[0].style.backgroundPosition = 'right';
 }
 
+$('#tc-play-button').on('click', function(e) {
+    if (currentPreviewHowl === null) {
+        return;
+    }
+
+    if (currentPreviewHowl.playing()) {
+        currentPreviewHowl.pause();
+        clearInterval(windowInterval);
+        setButtonPlay();
+        pauseRTPreview(currentPreviewElement);
+    }
+    else {
+        currentPreviewHowl.play();
+        windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+        setButtonPause();
+        playRTPreview(currentPreviewElement);
+    }
+});
+
 document.body.onkeydown = function(e){
     if(e.keyCode === 32){
         e.preventDefault();
@@ -359,12 +386,22 @@ document.body.onkeydown = function(e){
         if (currentPreviewHowl.playing()) {
             currentPreviewHowl.pause();
             clearInterval(windowInterval);
+            setButtonPlay();
             pauseRTPreview(currentPreviewElement);
         }
         else {
             currentPreviewHowl.play();
             windowInterval = setInterval(updateSeekBar, 50, currentPreviewHowl);
+            setButtonPause();
             playRTPreview(currentPreviewElement);
         }
     }
 };
+
+function setButtonPlay() {
+    $tcPlayButton.css('background-image', 'url('+PLAY_IMAGE+')');
+}
+
+function setButtonPause() {
+    $tcPlayButton.css('background-image', 'url('+PAUSE_IMAGE+')');
+}
