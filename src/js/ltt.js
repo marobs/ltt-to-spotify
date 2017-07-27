@@ -163,6 +163,10 @@ window.onload = () => {
     // Store playlist information
     let playlistId = $leftCol.find('.selected').attr('data-ownerId');
     playlists[playlistId] = $spotifyTrackContainer[0].innerHTML;
+
+    $volumeContainer.find(".slider-left").css({width: "50%"});
+    $volumeContainer.find('.slider-thumb').css({left: "50%"});
+    $volumeContainer.find(".slider-right").css({width: "50%"});
 };
 
 
@@ -246,6 +250,7 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
             format: ['mp3'],
+            volume: currentVolume/100,
             onload: function() {
                 $newPreview.addClass('previewing');
             }
@@ -282,6 +287,7 @@ $rightCol.on('click', '.rt-track-preview', function(e) {
         currentPreviewHowl = new Howl({
             src: [$newPreview.attr('data-preview-url')],
             format: ['mp3'],
+            volume: currentVolume/100,
             onload: function() {
                 $newPreview.addClass('previewing');
             }

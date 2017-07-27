@@ -1,5 +1,6 @@
 let $seekContainer = $('#seek-container');
 let $volumeContainer = $('#volume-container');
+let currentVolume = 50;
 
 $seekContainer.on('click', function(e) {
     let $this = $(this);
@@ -62,6 +63,9 @@ $volumeContainer.on('click', function(e) {
     $this.find(".slider-left").css({width: clickPercent+"%"});
     $this.find('.slider-thumb').css({left: clickPercent+"%"});
     $this.find(".slider-right").css({width: (100-clickPercent)+"%"});
+
+    currentPreviewHowl.volume(clickPercent/100);
+    currentVolume = clickPercent;
 });
 
 $volumeContainer.mousemove(function(e) {
@@ -78,6 +82,9 @@ $volumeContainer.mousemove(function(e) {
     $this.find(".slider-left").css({width: clickPercent+"%"});
     $this.find('.slider-thumb').css({left: clickPercent+"%"});
     $this.find(".slider-right").css({width: (100-clickPercent)+"%"});
+
+    currentPreviewHowl.volume(clickPercent/100);
+    currentVolume = clickPercent;
 });
 
 $volumeContainer.hover(function() {
