@@ -1,6 +1,7 @@
 import global_helpers
-import json
 import log_helpers
+import json
+import datetime_helpers
 
 ##########################################################################
 ##                                                                      ##
@@ -234,26 +235,11 @@ def queryForMultipleAudioFeatures(idList):
 ##
 ## [GET] Query for history, grabbing in bunches of 50 songs up to batches
 ##
-def queryForSpotifyHistory(batches):
+def queryForSpotifyHistory():
     url = "https://api.spotify.com/v1/me/player/recently-played"
     params = {'limit': 50}
 
-    index = 0
-    if batches > 20:
-        return
-
-    totalResult = []
-    while index < batches:
-        historyResult = global_helpers.query_http(url, params, None, "Get history", 'GET')
-        totalResult += historyResult['items']
-
-        if 'next' in historyResult and historyResult['next'] is not None:
-            print "history next: " + str(historyResult['next'])
-            url = historyResult['next']
-
-        index += 1
-
-    return totalResult
+    return global_helpers.query_http(url, params, None, "Get history", 'GET')
 
 ##########################################################################
 ##                                                                      ##

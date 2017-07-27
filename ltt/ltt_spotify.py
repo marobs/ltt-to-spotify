@@ -326,28 +326,26 @@ def calcTotalPlaylistLength(tracks):
 
     return str(hours) + " hr " + str(minutes) + " min"
 
-def updateWithPlaylistOwnerNames(userPlaylists):
-    owners = {}
-    for playlist in userPlaylists:
-        if playlist['owner']['id'] == helpers.userId:
-            playlist['owner']['name'] = helpers.userProfile['display_name']
+def getOwnerNames(ownerIdList):
+    ownerDict = {}
+    for ownerId in ownerIdList:
+        cachedId = helpers.getFromIDCache(ownerId)
+        if cachedId is None or cachedId == helpers.VALUE_NOT_FOUND:
+            queriedOwner = helpers.queryForUserProfile(ownerId)
+            ownerDict[ownerId] = queriedOwner['display_name']
+            helpers.saveToIDCache(ownerId, queriedOwner['display_name'])
 
         else:
-            nonUserId = str(playlist['owner']['id'])
-            if nonUserId in owners:
-                owners[nonUserId].append(playlist['owner'])
-            else:
-                owners[nonUserId] = [playlist['owner']]
+            ownerDict[ownerId] = cachedId
 
-    for ownerId in owners:
-        queriedOwner = helpers.queryForUserProfile(ownerId)
-        for ownerObj in owners[ownerId]:
-            ownerObj['name'] = queriedOwner['display_name']
-
-    return userPlaylists
+    helpers.flushIDCache()
+    return ownerDict
 
 def calculatePlaylistTrackMetrics(playlist):
-    return "need to average/median/etc audio deets"
+    helpers.logGeneral(json.dumps(playlist, indent=4))
+    playlist['audioFeatures'] = helpers.calculateAudioFeaturesMetrics(playlist)
+
+    return playlist
 
 #############################################################
 #                                                           #

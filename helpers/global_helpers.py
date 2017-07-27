@@ -53,6 +53,10 @@ def getUserId():
     global userId
     return userId
 
+def getUserProfile():
+    global userProfile
+    return userProfile
+
 ##
 ## Client Secret
 ##
@@ -68,10 +72,6 @@ def initializeClientSecret(bPath):
 ##
 ## Flask Secret
 ##
-def getFlaskSecret():
-    global flaskSecret
-    return flaskSecret
-
 def initializeFlaskSecret(bPath):
     print "Initializing Flask Secret"
     global flaskSecret
@@ -96,7 +96,7 @@ def initializeRefreshToken(bPath):
         with open(bPath + "/../secrets/refresh_token.txt") as f:
             refreshToken = f.read().rstrip("\n")
 
-        print "Found refresh token file. refreshToken"
+        print "Found refresh token file. refreshToken: " + str(refreshToken)
         return refreshToken
 
 def saveRefreshToken(token):
@@ -119,9 +119,9 @@ def initializeAccessToken():
     refresh = getRefreshToken()
     queryForAccessToken(refresh)
 
-def queryForAccessToken(refreshToken):
+def queryForAccessToken(rToken):
     print "Querying for Access Token"
-    if refreshToken is None:
+    if rToken is None:
         print "Can't query for access token because refresh token is None"
         return None
 
@@ -129,6 +129,7 @@ def queryForAccessToken(refreshToken):
     global clientSecret
     postData = composeAccessTokenRequestData(refreshToken, clientId, clientSecret)
     response = requests.post("https://accounts.spotify.com/api/token", data=postData)
+
     setAccessToken(response.json().get("access_token"))
 
 def setAccessToken(token):

@@ -6,6 +6,9 @@ from spotify_helpers import *
 from genre_helpers import *
 from cache_helpers import *
 from log_helpers import *
+from datetime_helpers import *
+from audiofeatures_helpers import *
 
 initializeHelpers()
 initializeSCache()
+initializeIDCache()
