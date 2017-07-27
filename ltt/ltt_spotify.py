@@ -20,7 +20,7 @@ def generateSpotifyData(postList):
             try:
                 print "Found Spotify entry for -- " + str(post['rawTitle'])
             except UnicodeEncodeError:
-                print "Foudn Spotify entry for -- " + post['rawTitle'].encode('utf-8')
+                print "Found Spotify entry for -- " + post['rawTitle'].encode('utf-8')
             spotifyData.append(spotifyEntry)
         else:
             notFoundIds.add(post['redditId'])
@@ -181,16 +181,15 @@ def emplaceAlbumResult(albumResult, spotifyData):
         print "NO MATCH FOUND - Album"
 
 def buildAlbumObject(albumObject):
-    spotifyEntry = {}
-    spotifyEntry['genres'] = albumObject['genres']
-    spotifyEntry['id'] = albumObject['id']
-    spotifyEntry['images'] = albumObject['images']
-    spotifyEntry['name'] = albumObject['name']
-    spotifyEntry['popularity'] = albumObject['popularity']
-    spotifyEntry['release_date'] = albumObject['release_date']
-    spotifyEntry['release_date_precision'] = albumObject['release_date_precision']
-
-    return spotifyEntry
+    return {
+        'genres': albumObject['genres'],
+        'id': albumObject['id'],
+        'images': albumObject['images'],
+        'name': albumObject['name'],
+        'popularity': albumObject['popularity'],
+        'release_date': albumObject['release_date'],
+        'release_date_precision': albumObject['release_date_precision']
+    }
 
 ##
 ## ARTISTS
@@ -217,14 +216,13 @@ def replaceArtistObjects(spotifyData, artistSet):
                 print "NO MATCH FOUND - Artist"
 
 def buildArtistObject(artistObject):
-    spotifyEntry = {}
-    spotifyEntry['genres'] = artistObject['genres']
-    spotifyEntry['id'] = artistObject['id']
-    spotifyEntry['images'] = artistObject['images']
-    spotifyEntry['name'] = artistObject['name']
-    spotifyEntry['popularity'] = artistObject['popularity']
-
-    return spotifyEntry
+    return {
+        'genres': artistObject['genres'],
+        'id': artistObject['id'],
+        'images': artistObject['images'],
+        'name': artistObject['name'],
+        'popularity': artistObject['popularity']
+    }
 
 ##
 ## GENRES

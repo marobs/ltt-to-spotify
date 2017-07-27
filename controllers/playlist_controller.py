@@ -6,6 +6,7 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 
 ###
 ### [GET] Base /playlist endpoint
+### HTML
 ###
 @playlist.route("/playlists")
 def playlists_route():
@@ -43,7 +44,7 @@ def playlists_data_route():
     return jsonify(playlistData)
 
 ###
-### [GET] Get owner names from ownerid list
+### [GET] Get owner names from ownerId list
 ### JSON
 ###
 @playlist.route("/playlists/owners")
@@ -60,7 +61,7 @@ def playlists_owner_route():
 ###
 @playlist.route("/playlist")
 def playlist_route():
-    if not helpers.checkArgs(['playlistId','ownerId'], request):
+    if not helpers.checkArgs(['playlistId', 'ownerId'], request):
         return jsonify({'Error': "Malformed playlist request"})
 
     playlistId = request.values['playlistId']
@@ -72,6 +73,7 @@ def playlist_route():
 
 ###
 ### [GET] Get history
+### JSON
 ###
 @playlist.route("/history")
 def history_route():
