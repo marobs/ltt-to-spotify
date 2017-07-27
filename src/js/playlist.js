@@ -63,11 +63,17 @@ function getNextIdPairBatch(batchSize) {
 function getOwnerNames() {
     let ownerIdSet = new Set();
     $(".playlist-container").each(function() {
-        ownerIdSet.add($(this).data('owner-id'));
+        owner_id = $(this).data('owner-id');
+        ownerIdSet.add(owner_id);
     });
 
     let ownerIdArray = Array.from(ownerIdSet);
-    $.get(GET_OWNERS_URL, {'ownerIdList': ownerIdArray})
+
+    console.log("OWNER ARRAY:");
+    console.log(ownerIdArray);
+
+    let requestData = {'ownerIdList': JSON.stringify(ownerIdArray)};
+    $.get(GET_OWNERS_URL, requestData)
         .done(function(data) {
             fillOwnerNames(data);
         })
@@ -78,6 +84,7 @@ function getOwnerNames() {
 
 function fillOwnerNames(data) {
     console.log("Filling owner names");
+    console.log(data);
     let ownerObj = jQuery.parseJSON(data);
     console.log(ownerObj);
 

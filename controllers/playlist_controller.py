@@ -51,7 +51,9 @@ def playlists_owner_route():
     if not helpers.checkArgs(['ownerIdList'], request):
         return jsonify({'Error': "Malformed owner id request"})
 
-    ownerIdList = request.values['ownerIdList']
+    ownerIdList = json.loads(request.values['ownerIdList'])
+
+    print json.dumps(ownerIdList, indent=4)
 
     return jsonify(ltt.getOwnerNames(ownerIdList))
 
