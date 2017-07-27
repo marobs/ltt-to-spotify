@@ -56,8 +56,6 @@ def playlists_owner_route():
 
     ownerIdList = json.loads(request.values['ownerIdList'])
 
-    print "Returning"
-    
     return jsonify(ltt.getOwnerNames(ownerIdList))
 
 ###
