@@ -37,7 +37,7 @@ def getFromSCache(trackId):
     if not checkCacheEnabled("get from SCache"):
         return None
 
-    global notFoundValue
+    global VALUE_NOT_FOUND
     global sCacheDict
 
     if trackId in sCacheDict:
@@ -45,7 +45,7 @@ def getFromSCache(trackId):
             return sCacheDict[trackId]
 
         else:  # Not found entry
-            return notFoundValue
+            return VALUE_NOT_FOUND
 
     else:
         return None
@@ -133,7 +133,7 @@ def getFromIDCache(spotifyId):
     if not checkCacheEnabled("get from idCache"):
         return None
 
-    global notFoundValue
+    global VALUE_NOT_FOUND
     global sCacheDict
 
     if spotifyId in idCacheDict:
@@ -141,7 +141,7 @@ def getFromIDCache(spotifyId):
             return idCacheDict[spotifyId]
 
         else:  # Not found entry
-            return notFoundValue
+            return VALUE_NOT_FOUND
 
     else:
         return None

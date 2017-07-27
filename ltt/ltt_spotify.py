@@ -374,7 +374,7 @@ def getCachedEntries(postList):
                     cachedEntries.append(cachedSpotifyEntry)
                     cachedIds.add(post['redditId'])
 
-            elif cachedTrack == helpers.notFoundValue:
+            elif cachedTrack == helpers.VALUE_NOT_FOUND:
                 cachedNotFoundIds.add(post['redditId'])
 
     remainingIds = list((postIds - cachedIds) - cachedNotFoundIds)
