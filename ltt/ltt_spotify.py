@@ -74,10 +74,11 @@ def fillWithArtistTopSongs(spotifyData):
         # If artist exists, query for top song
         if 'artists' in entry['track'] and len(entry['track']['artists']):
 
-            print "Querying for artist: " + str(entry['track']['artists'][0]['name']) + " -- " + str(entry['track']['artists'][0]['id'].encode('utf8'))
-            topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
+            print "Querying for artist: " + \
+                  str(entry['track']['artists'][0]['name'].encode('utf8')) + " -- " + \
+                  str(entry['track']['artists'][0]['id'])
 
-            # If top song is different than reddit track, save to entry['top'] and save album id
+            topSong = helpers.queryForArtistTopSong(entry['track']['artists'][0]['id'])
             if topSong is not None:
                 if topSong['id'] == entry['track']['id'] or topSong['name'] == entry['track']['name']:
                     entry['track']['top'] = None
