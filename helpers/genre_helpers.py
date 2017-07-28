@@ -1,6 +1,9 @@
 from global_helpers import basePath
 
+genreDict = None
+
 def initializeGenreDict():
+    global genreDict
     initDict = {}
 
     with open(basePath + "/../static/genres.txt", "r") as genreFile:
@@ -18,9 +21,14 @@ def initializeGenreDict():
 
             i += 1  # Skip blank line
 
-    return initDict
+    genreDict = initDict
 
-genreDict = initializeGenreDict()
+def categorizeGenres(genreList):
+    categorizedGenres = []
+    for genre in genreList:
+        categorizedGenres.append({'genre': genre, 'class': getGenreClass(genre)})
+
+    return categorizedGenres
 
 def getGenreClass(genre):
     global genreDict
@@ -35,3 +43,14 @@ def getGenreClass(genre):
     else:
         return 'unclassified'
 
+def splitRedditGenres(genreString):
+    if genreString is None:
+        return set()
+
+    splitChar = ' '
+    if '/' in genreString:
+        splitChar = '/'
+
+    genres = genreString.split(splitChar)
+    genres = [x.strip() for x in genres]
+    return set(genres)
