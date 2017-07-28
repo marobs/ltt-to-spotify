@@ -37,6 +37,8 @@ def queryForArtists(artistIdList):
 
         index += MAX_QUERIED_ARTISTS
 
+    return queriedArtists
+
 def emplaceArtistResult(artistResult, spotifyData):
     found = False
     for spotifyEntry in spotifyData:

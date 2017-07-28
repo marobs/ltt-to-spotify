@@ -12,7 +12,7 @@ def replaceTrackObjects(spotifyData):
 def generateTrackIdList(spotifyData):
     trackSet = set()
     for spotifyEntry in spotifyData:
-        trackSet.add(spotifyEntry['track'])
+        trackSet.add(spotifyEntry['track']['id'])
 
     return trackSet
 
@@ -32,6 +32,8 @@ def queryForTracks(trackIdList):
             queriedTracks += trackResults
 
         index += MAX_QUERIED_TRACKS
+
+    return queriedTracks
 
 def emplaceTrackResult(track, spotifyData):
     found = False

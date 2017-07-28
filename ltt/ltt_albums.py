@@ -37,6 +37,8 @@ def queryForAlbums(albumIdList):
 
         index += MAX_QUERIED_ALBUMS
 
+    return queriedAlbums
+
 def emplaceAlbumResult(albumResult, spotifyData):
     found = False
     for spotifyEntry in spotifyData:
