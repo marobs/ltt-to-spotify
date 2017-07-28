@@ -25,9 +25,6 @@ def queryForTracks(trackIdList):
 
     while index < len(trackIdSet):
         queryIds = trackIdSet[index:index+MAX_QUERIED_TRACKS]
-
-        print str(queryIds)
-
         trackResults = helpers.queryForFullTrackObjects(queryIds)
 
         if trackResults is None:
@@ -45,8 +42,8 @@ def emplaceTrackResult(track, spotifyData):
     for spotifyEntry in spotifyData:
         if spotifyEntry['track']['id'] == track['id']:
             track['redditData'] = spotifyEntry['track']['redditData']
-            track['top'] = spotifyEntry['top']
-            track['isTop'] = spotifyEntry['isTop']
+            track['top'] = spotifyEntry['track']['top']
+            track['isTop'] = spotifyEntry['track']['isTop']
 
             spotifyEntry['track'] = track
             found = True

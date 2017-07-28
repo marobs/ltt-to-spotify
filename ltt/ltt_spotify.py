@@ -94,6 +94,11 @@ def fillWithArtistTopSongs(spotifyData):
                 entry['track']['top'] = None
                 entry['track']['isTop'] = False
 
+        else:
+            print "No artist found"
+            entry['track']['top'] = None
+            entry['track']['isTop'] = False
+
 ##
 ## Genres
 ##
