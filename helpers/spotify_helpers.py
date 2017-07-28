@@ -29,11 +29,10 @@ def queryForSearch(title, artist):
 ##
 ## [GET] Given initial Spotify data (a list of dicts including 'track' keys), get full track data for those tracks
 ##
-def queryForFullTrackObjects(initialSpotifyData):
+def queryForFullTrackObjects(trackIdList):
     ids = ""
-    for result in initialSpotifyData:
-        if 'track' in result:
-            ids += result['track']['id'] + ","
+    for trackId in trackIdList:
+        ids += trackId + ","
 
     params = {'ids': ids[:-1]}
     url = "https://api.spotify.com/v1/tracks"
@@ -51,7 +50,7 @@ def queryForArtistTopSong(artistId):
 
     result = global_helpers.query_http(url, params, requestHeader, "Top tracks query", 'GET')
 
-    if 'tracks' in result and len(result['tracks']) >= 1:
+    if 'tracks' in result and len(result['tracks']):
         return result['tracks'][0]
 
     return None

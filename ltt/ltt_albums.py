@@ -3,13 +3,13 @@ import helpers
 MAX_QUERIED_ALBUMS = 20
 
 def replaceAlbumObjects(spotifyData):
-    albumIdSet = generateAlbumIdSet(spotifyData)
-    albumResults = queryForAlbums(albumIdSet)
+    albumIdList = generateAlbumIdList(spotifyData)
+    albumResults = queryForAlbums(albumIdList)
 
     for album in albumResults:
         emplaceAlbumResult(album, spotifyData)
 
-def generateAlbumIdSet(spotifyData):
+def generateAlbumIdList(spotifyData):
     albumSet = set()
 
     for spotifyEntry in spotifyData:

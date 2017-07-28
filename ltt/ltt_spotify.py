@@ -1,5 +1,6 @@
-from ltt_albums import *
-from ltt_artists import *
+import ltt_tracks
+import ltt_albums
+import ltt_artists
 import helpers
 
 #############################################################
@@ -26,16 +27,16 @@ def generateSpotifyData(postList):
     print "Got base spotify objects"
 
     if len(spotifyData):
-        replaceTrackObjects(spotifyData)
-        print "Replaced track objects"
-
         fillWithArtistTopSongs(spotifyData)
         print "Got top song data"
 
-        replaceAlbumObjects(spotifyData)
+        ltt_tracks.replaceTrackObjects(spotifyData)
+        print "Replaced track objects"
+
+        ltt_albums.replaceAlbumObjects(spotifyData)
         print "Got album objects"
 
-        replaceArtistObjects(spotifyData)
+        ltt_artists.replaceArtistObjects(spotifyData)
         print "Got artist objects"
 
         collectPostGenres(spotifyData)
@@ -66,20 +67,8 @@ def getMatchingTrack(searchResults):
     return match
 
 ##
-## Tracks
+## Top track
 ##
-def replaceTrackObjects(spotifyData):
-    trackResults = helpers.queryForFullTrackObjects(spotifyData)
-
-    if trackResults is None:
-        return None
-
-    for trackResult in trackResults['tracks']:
-        for initialResult in spotifyData:
-            if 'track' in initialResult and initialResult['track']['id'] == trackResult['id']:
-                trackResult['redditData'] = initialResult['track']['redditData']
-                initialResult['track'] = trackResult
-
 def fillWithArtistTopSongs(spotifyData):
     for entry in spotifyData:
         # If artist exists, query for top song
@@ -105,7 +94,7 @@ def fillWithArtistTopSongs(spotifyData):
                 entry['track']['isTop'] = False
 
 ##
-## GENRES
+## Genres
 ##
 def collectPostGenres(spotifyData):
     for spotifyEntry in spotifyData:

@@ -3,13 +3,13 @@ import helpers
 MAX_QUERIED_ARTISTS = 50
 
 def replaceArtistObjects(spotifyData):
-    artistSet = generateArtistIdSet(spotifyData)
-    artistResults = queryForArtists(artistSet)
+    artistList = generateArtistIdList(spotifyData)
+    artistResults = queryForArtists(artistList)
 
     for artist in artistResults:
         emplaceArtistResult(artist, spotifyData)
 
-def generateArtistIdSet(spotifyData):
+def generateArtistIdList(spotifyData):
     artistSet = set()
 
     for spotifyEntry in spotifyData:
