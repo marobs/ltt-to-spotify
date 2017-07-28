@@ -79,6 +79,56 @@ def flushSCache():
         f.truncate()
         cPickle.dump(sCacheDict, f, cPickle.HIGHEST_PROTOCOL)
 
+def getCachedEntries(postList):
+    remainingPosts = []
+    cachedEntries = []
+    for post in postList:
+        cachedTrack = getFromSCache(post['redditId'])
+
+        # If None, must query for track
+        if cachedTrack is None:
+            remainingPosts.append(post)
+
+        # If VALUE_NOT_FOUND, already queried and no Spotify result so don't re-query
+        elif cachedTrack == VALUE_NOT_FOUND:
+            continue
+
+        # If there is a result but it doesn't include top, found but not handled correctly; re-query
+        elif 'top' not in cachedTrack:
+            remainingPosts.append(post)
+
+        # Otherwise it is a correctly handled cache entry and is both 'top' and 'track'
+        elif cachedTrack['top'] is None:
+            cachedEntries.append({'track': cachedTrack})
+
+        # Otherwise, this is 'track' (must query for 'top')
+        else:
+            cachedTop = getFromSCache(cachedTrack['top'])
+            if cachedTop is not None:
+                cachedEntries.append({'track': cachedTrack, 'top': cachedTop})
+            else:
+                remainingPosts.append(post)
+
+    print "Found " + str(len(cachedEntries)) + " full cached entries."
+    print "Found " + str(len(remainingPosts) - len(cachedEntries)) + " entries with no Spotify data"
+    print "Remaining entries: " + str(len(remainingPosts)) + " of total " + str(len(postList))
+
+    return remainingPosts, cachedEntries
+
+def cacheSpotifyData(spotifyData, notFoundPosts):
+    for entry in spotifyData:
+        trackKeyList = [entry['track']['id'], entry['track']['redditData']['redditId']]
+        saveToSCacheByKeyList(entry['track'], trackKeyList)
+
+        if 'top' in entry:
+            saveToSCacheByKeyList(entry['top'], [entry['top']['id']])
+
+    for postId in notFoundPosts:
+        saveToSCacheByKeyList(None, [postId])
+
+    # Make permanent by flushing to disk
+    flushSCache()
+
 #####################################################
 #                                                   #
 #                   Reddit                          #

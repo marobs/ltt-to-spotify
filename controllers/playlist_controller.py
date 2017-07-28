@@ -11,7 +11,7 @@ playlist = Blueprint('playlist', __name__, template_folder='templates')
 @playlist.route("/playlists")
 def playlists_route():
     print "Hit route"
-    userPlaylists = ltt.getUserPlaylists()
+    userPlaylists = helpers.queryForUserPlaylists()
     print "Done grabbing playlists"
 
     # Update all user-owned playlist with user name

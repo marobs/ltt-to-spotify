@@ -19,7 +19,7 @@ def ltt_route():
 
     redditPosts = ltt.getRedditPosts(redditQuery)
     spotifyData = ltt.generateSpotifyData(redditPosts)
-    userPlaylists = ltt.getUserPlaylists()
+    userPlaylists = helpers.queryForUserPlaylists()
 
     selectedPlaylist = None
     if userPlaylists is not None and len(userPlaylists) > 0:
