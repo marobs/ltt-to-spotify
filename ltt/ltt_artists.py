@@ -33,7 +33,7 @@ def queryForArtists(artistIdList):
             return queriedArtists
 
         else:
-            queriedArtists += artistResults
+            queriedArtists += artistResults['artists']
 
         index += MAX_QUERIED_ARTISTS
 

@@ -1,4 +1,5 @@
 import helpers
+import json
 
 MAX_QUERIED_TRACKS = 50
 
@@ -7,6 +8,7 @@ def replaceTrackObjects(spotifyData):
     trackResults = queryForTracks(trackIdList)
 
     for track in trackResults:
+        print json.dumps(track, indent=4)
         emplaceTrackResult(track, spotifyData)
 
 def generateTrackIdList(spotifyData):
@@ -23,13 +25,16 @@ def queryForTracks(trackIdList):
 
     while index < len(trackIdSet):
         queryIds = trackIdSet[index:index+MAX_QUERIED_TRACKS]
+
+        print str(queryIds)
+
         trackResults = helpers.queryForFullTrackObjects(queryIds)
 
         if trackResults is None:
             return queriedTracks
 
         else:
-            queriedTracks += trackResults
+            queriedTracks += trackResults['tracks']
 
         index += MAX_QUERIED_TRACKS
 

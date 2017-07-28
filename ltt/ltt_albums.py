@@ -33,7 +33,7 @@ def queryForAlbums(albumIdList):
             return queriedAlbums
 
         else:
-            queriedAlbums += albumResults
+            queriedAlbums += albumResults['albums']
 
         index += MAX_QUERIED_ALBUMS
 
