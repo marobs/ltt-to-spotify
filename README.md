@@ -1,6 +1,18 @@
 # ltt-to-spotify
 A web app that adds a little bit of functionality and integration between the front page of reddit.com/r/listentothis and Spotify.
 
+## To run
+
+```
+vagrant up
+vagrant ssh
+cd /vagrant
+source venv/bin/activate
+python app.py
+
+localhost:3000
+```
+
 ## Features and Routes
 
 
